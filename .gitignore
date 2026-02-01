@@ -1,0 +1,22 @@
+# macOS
+.DS_Store
+
+# Claude Code temporary/cache directories
+cache/
+debug/
+file-history/
+paste-cache/
+plans/
+projects/
+session-env/
+shell-snapshots/
+statsig/
+telemetry/
+todos/
+
+# Claude Code cache files
+history.jsonl
+stats-cache.json
+
+# Nested claude config
+.claude/
