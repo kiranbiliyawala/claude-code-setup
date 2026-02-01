@@ -1,0 +1,616 @@
+diff --git a/build.gradle b/build.gradle
+index 55fde9b8a5..338e96cfc5 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -207,7 +207,7 @@ dependencies {
+         exclude group: 'org.slf4j', module: 'slf4j-simple'
+     }
+ 
+-    implementation('in.dreamplug.external:digio-provider-client:1.0.12') {
++    implementation('in.dreamplug.external:digio-provider-client:1.0.13') {
+         exclude group: 'org.slf4j', module: 'slf4j-simple'
+     }
+ 
+diff --git a/src/main/java/in/dreamplug/darwin/controller/v2/DigioWebhookController.java b/src/main/java/in/dreamplug/darwin/controller/v2/DigioWebhookController.java
+index 97fd4306ec..1a4e5fa92f 100644
+--- a/src/main/java/in/dreamplug/darwin/controller/v2/DigioWebhookController.java
++++ b/src/main/java/in/dreamplug/darwin/controller/v2/DigioWebhookController.java
+@@ -8,10 +8,12 @@
+ import in.dreamplug.darwin.service.commons.PaymentProviderEntityAuditService;
+ import in.dreamplug.darwin.util.serializer.DefaultJsonObjectMapper;
+ import in.dreamplug.darwin.v2.workflow.get.PaymentAttemptFetchWorkflow;
++import in.dreamplug.darwin.v2.workflow.get.RefundAttemptFetchWorkflow;
+ import in.dreamplug.external.digio.models.webhook.DigioMandateWebhook;
+ import in.dreamplug.external.digio.models.webhook.MandateWebhookEntity;
+ import in.dreamplug.mandate.client.MandateServiceClient;
+ import in.dreamplug.payments.domain.payment.v2.PaymentAttempt;
++import in.dreamplug.payments.domain.refunds.RefundAttempt;
+ import java.util.Arrays;
+ import java.util.List;
+ import java.util.Objects;
+@@ -31,6 +33,8 @@
+ public class DigioWebhookController {
+     private final PaymentAttemptFetchWorkflow paymentAttemptFetchWorkflow;
+ 
++    private final RefundAttemptFetchWorkflow refundAttemptFetchWorkflow;
++
+     private final PaymentProviderEntityAuditService auditService;
+ 
+     private final MandateServiceClient mandateServiceClient;
+@@ -56,6 +60,8 @@ public void onWebhookReceive(@RequestBody String webhookString) {
+                 case mandate:
+                     sendWebhookToMandateService(webhook);
+                     break;
++                case refund_payment:
++                    processRefundPayment(webhook, webhook.getPayload().getRefundPaymentData());
+                 default:
+                     throw new IllegalStateException(webhookEntity + " is not supported in payment-service");
+             }
+@@ -103,4 +109,20 @@ private void sendWebhookToMandateService(DigioMandateWebhook data) {
+             log.error("error while sending webhook to mandate service", e);
+         }
+     }
++
++    private void processRefundPayment(
++            DigioMandateWebhook webhook, DigioMandateWebhook.RefundPaymentData refundPaymentData) {
++        String providerReferenceId = refundPaymentData.getId();
++        try {
++            RefundAttempt attempt = refundAttemptFetchWorkflow.fetchByProviderReferenceId(providerReferenceId);
++            auditService.auditProviderData(
++                    webhook,
++                    attempt.getExternalId(),
++                    PaymentProviderKey.DIGIO,
++                    FlowType.WEB_HOOK,
++                    EntityType.REFUND_ATTEMPT);
++        } catch (Exception e) {
++            log.error("error while processing digio refund webhook {} -> {}", providerReferenceId, e.getMessage());
++        }
++    }
+ }
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractDigioMandateProviderAdapter.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractDigioMandateProviderAdapter.java
+index a34a920b4e..1a238d5884 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractDigioMandateProviderAdapter.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractDigioMandateProviderAdapter.java
+@@ -59,6 +59,16 @@ protected Object syncRefund(RefundAttemptEntity refundAttemptEntity) {
+         throw new UnsupportedOperationException();
+     }
+ 
++    protected void evaluateAndRaiseExceptions(BaseResponse<?> baseResponse) {
++        evaluateAndReturnErrorIfAny(baseResponse).ifPresent(error -> {
++            throw Error.provider_api_failure
++                    .getBuilder()
++                    .errorCode(error.getCode())
++                    .message(error.getMessage())
++                    .build();
++        });
++    }
++
+     protected void evaluateAndRaiseExceptionsIfAnyForSyncFlows(BaseResponse<?> baseResponse) {
+         // do not throw exception for 4xx
+         if (Objects.nonNull(baseResponse) && baseResponse.getHttpStatusCode() == 404) {
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/DigioMandateDebitProviderAdapter.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/DigioMandateDebitProviderAdapter.java
+index 7e2f1d9760..b49605d824 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/DigioMandateDebitProviderAdapter.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/DigioMandateDebitProviderAdapter.java
+@@ -3,22 +3,38 @@
+ import in.dreamplug.darwin.dto.commons.provider_account_configurations.DigioProviderAccountConfiguration;
+ import in.dreamplug.darwin.entity.ProviderCustomerEntity;
+ import in.dreamplug.darwin.entity.v2.PaymentAttemptV2Entity;
++import in.dreamplug.darwin.entity.v2.ProviderRequestStatus;
++import in.dreamplug.darwin.entity.v2.RefundAttemptEntity;
+ import in.dreamplug.darwin.error.Error;
++import in.dreamplug.darwin.util.Constant;
+ import in.dreamplug.darwin.v2.workflow.create.paymentattempts.PaymentAttemptCreateContext;
++import in.dreamplug.darwin.v2.workflow.create.refundattempts.RefundAttemptCreateContext;
++import in.dreamplug.external.digio.models.enums.RefundAction;
++import in.dreamplug.external.digio.models.enums.RefundPurposeCode;
+ import in.dreamplug.external.digio.models.request.debit.MandateDebitRequest;
++import in.dreamplug.external.digio.models.request.debit.RefundPaymentActionRequest;
++import in.dreamplug.external.digio.models.request.debit.RegisterRefundRequest;
+ import in.dreamplug.external.digio.models.response.common.BaseResponse;
++import in.dreamplug.external.digio.models.response.common.ErrorResponse;
++import in.dreamplug.external.digio.models.response.common.ResponseStatus;
+ import in.dreamplug.external.digio.models.response.debit.MandateDebitResponse;
+ import in.dreamplug.external.digio.models.response.debit.MandateDebitScheduleStatus;
++import in.dreamplug.external.digio.models.response.debit.RefundPaymentResponse;
+ import in.dreamplug.payments.domain.instrument.InstrumentType;
+ import in.dreamplug.payments.domain.order.PaymentAttemptStatus;
++import in.dreamplug.payments.domain.refunds.RefundStatus;
++import in.dreamplug.payments.domain.refunds.RefundType;
++import in.dreamplug.payments.dto.response.ErrorInfo;
+ import in.dreamplug.payments.enums.OrderType;
+-import java.util.Objects;
+-import java.util.Optional;
+-import javax.annotation.Nullable;
+ import lombok.extern.slf4j.Slf4j;
++import org.apache.commons.lang3.StringUtils;
+ import org.apache.commons.lang3.tuple.Pair;
+ import org.springframework.stereotype.Service;
+ 
++import javax.annotation.Nullable;
++import java.util.Objects;
++import java.util.Optional;
++
+ @Slf4j
+ @Service
+ public class DigioMandateDebitProviderAdapter extends AbstractDigioMandateProviderAdapter {
+@@ -48,7 +64,8 @@ public ProviderPaymentResponse createPaymentAttempt(
+         return ProviderPaymentResponse.builder()
+                 .providerError(null)
+                 .providerReferenceId(mandateDebitResponse.getMandateDebitId())
+-                .gatewayReferenceId(mandateDebitResponse.getMandateDebitId())
++                .gatewayReferenceId(
++                        mandateDebitResponse.getUpcomingTransaction().getId())
+                 .providerResponseObject(mandateDebitResponse)
+                 .status(fromProviderStatus(mandateDebitResponse))
+                 .providerStatus(mandateDebitResponse.getStatus().name())
+@@ -63,6 +80,25 @@ private Pair<BaseResponse<MandateDebitResponse>, ProviderError> createMandateDeb
+         return Pair.of(baseResponse, evaluateAndReturnErrorIfAny(baseResponse).orElse(null));
+     }
+ 
++    private Pair<BaseResponse<RefundPaymentResponse>, ProviderError> registerRefundPayment(
++            RefundAttemptCreateContext refundAttemptCreateContext) {
++        RefundAttemptEntity refundAttemptEntity = refundAttemptCreateContext.getRequest();
++        RegisterRefundRequest registerRequest = getRegisterRefundRequest(refundAttemptEntity);
++        BaseResponse<RefundPaymentResponse> baseResponse = digioClient.registerRefundPayment(
++                registerRequest, getAuthConfigWrapper(refundAttemptEntity.getProviderAccountEntity()));
++        return Pair.of(baseResponse, evaluateAndReturnErrorIfAny(baseResponse).orElse(null));
++    }
++
++    private Pair<BaseResponse<RefundPaymentResponse>, ProviderError> refundPaymentAction(
++            RefundAttemptCreateContext refundAttemptCreateContext, RefundPaymentResponse registerRefundBaseResponse) {
++        RefundAttemptEntity refundAttemptEntity = refundAttemptCreateContext.getRequest();
++        RefundPaymentActionRequest refundPaymentActionRequest =
++                getRefundPaymentActionRequest(registerRefundBaseResponse);
++        BaseResponse<RefundPaymentResponse> baseResponse = digioClient.refundPaymentAction(
++                refundPaymentActionRequest, getAuthConfigWrapper(refundAttemptEntity.getProviderAccountEntity()));
++        return Pair.of(baseResponse, evaluateAndReturnErrorIfAny(baseResponse).orElse(null));
++    }
++
+     private MandateDebitRequest getMandateDebitRequest(
+             PaymentAttemptCreateContext context, DigioProviderAccountConfiguration providerAccountConfiguration) {
+         return MandateDebitRequest.builder()
+@@ -77,6 +113,26 @@ private MandateDebitRequest getMandateDebitRequest(
+                 .build();
+     }
+ 
++    private RegisterRefundRequest getRegisterRefundRequest(RefundAttemptEntity refundAttemptEntity) {
++        return RegisterRefundRequest.builder()
++                .originalTxnId(refundAttemptEntity.getPaymentAttempt().getGatewayReferenceId())
++                .transactionType("NACH_PAYMENT_TXN")
++                .purposeCode(
++                        RefundType.DOUBLE_DEBIT.equals(
++                                        refundAttemptEntity.getRefund().getRefundType())
++                                ? RefundPurposeCode.RC01
++                                : RefundPurposeCode.RC03)
++                .corporateReference(refundAttemptEntity.getExternalId())
++                .build();
++    }
++
++    private RefundPaymentActionRequest getRefundPaymentActionRequest(RefundPaymentResponse registerRefundBaseResponse) {
++        return RefundPaymentActionRequest.builder()
++                .refundPaymentId(registerRefundBaseResponse.getId())
++                .action(RefundAction.APPROVE)
++                .build();
++    }
++
+     @Override
+     protected Object syncPaymentAttemptWithProviderId(PaymentAttemptV2Entity paymentAttemptEntity) {
+         BaseResponse<MandateDebitResponse> baseResponse = digioClient.getMandateDebit(
+@@ -107,6 +163,107 @@ protected Object syncPaymentAttemptWithProviderId(PaymentAttemptV2Entity payment
+         return mandateDebitResponse;
+     }
+ 
++    @Override
++    public ProviderRefundCreateResponse createRefund(RefundAttemptCreateContext refundAttemptCreateContext) {
++
++        // Register refund payment
++        Pair<BaseResponse<RefundPaymentResponse>, ProviderError> registerRefundBaseResponseAndError =
++                registerRefundPayment(refundAttemptCreateContext);
++
++        BaseResponse<RefundPaymentResponse> registerRefundBaseResponse = registerRefundBaseResponseAndError.getLeft();
++        ProviderError registerRefundError = registerRefundBaseResponseAndError.getRight();
++
++        if (Objects.isNull(registerRefundBaseResponse)
++                || !registerRefundBaseResponse.getResponseStatus().equals(ResponseStatus.SUCCESS)) {
++            log.error("Refund registration failed: {}", registerRefundError);
++            return mapRefundResponseToProviderResponseEntity(registerRefundBaseResponse);
++        }
++
++        if (registerRefundBaseResponse.getResponse().getStatus()
++                != in.dreamplug.external.digio.models.enums.RefundStatus.NEW) {
++            log.error(
++                    "Refund registration status not NEW: {}",
++                    registerRefundBaseResponse.getResponse().getStatus());
++            ProviderRefundCreateResponse resp = mapRefundResponseToProviderResponseEntity(registerRefundBaseResponse);
++            resp.setRefundStatus(RefundStatus.FAILED);
++            return resp;
++        }
++
++        // Action on refund payment
++        Pair<BaseResponse<RefundPaymentResponse>, ProviderError> refundPaymentActionBaseResponseAndError =
++                refundPaymentAction(refundAttemptCreateContext, registerRefundBaseResponse.getResponse());
++
++        return mapRefundResponseToProviderResponseEntity(refundPaymentActionBaseResponseAndError.getLeft());
++    }
++
++    private ProviderRefundCreateResponse mapRefundResponseToProviderResponseEntity(
++            BaseResponse<RefundPaymentResponse> refundResponse) {
++
++        ProviderRefundCreateResponse.ProviderRefundCreateResponseBuilder providerRefundCreateResponseBuilder =
++                ProviderRefundCreateResponse.builder().providerResponse(refundResponse);
++
++        if (Objects.nonNull(refundResponse.getError())
++                && Objects.nonNull(refundResponse.getError().getCode())) {
++            ErrorResponse error = refundResponse.getError();
++            ErrorInfo errorInfo = new ErrorInfo();
++            errorInfo.setErrorCode(error.getCode());
++            errorInfo.setErrorMessage(error.getMessage());
++            providerRefundCreateResponseBuilder.error(errorInfo);
++        }
++
++        if (ResponseStatus.SUCCESS.equals(refundResponse.getResponseStatus())) {
++            providerRefundCreateResponseBuilder.refundStatus(
++                    fromProviderRefundStatus(refundResponse.getResponse().getStatus()));
++            providerRefundCreateResponseBuilder.providerReferenceId(
++                    refundResponse.getResponse().getId());
++            providerRefundCreateResponseBuilder.gatewayReferenceId(
++                    refundResponse.getResponse().getId());
++            providerRefundCreateResponseBuilder.providerStatus(
++                    refundResponse.getResponse().getStatus().name());
++            providerRefundCreateResponseBuilder.providerRequestStatus(ProviderRequestStatus.REQUEST_SUCCESS);
++        } else if (ResponseStatus.TIMED_OUT.equals(refundResponse.getResponseStatus())) {
++            providerRefundCreateResponseBuilder.providerRequestStatus(ProviderRequestStatus.TIMED_OUT);
++        } else if (ResponseStatus.BAD_REQUEST.equals(refundResponse.getResponseStatus())) {
++            providerRefundCreateResponseBuilder.providerRequestStatus(ProviderRequestStatus.NON_RETRY_ABLE_FAILURE);
++        } else {
++            providerRefundCreateResponseBuilder.providerRequestStatus(ProviderRequestStatus.RETRY_ABLE_FAILURE);
++        }
++        return providerRefundCreateResponseBuilder.build();
++    }
++
++    @Override
++    protected Object syncRefund(RefundAttemptEntity refundAttemptEntity) {
++        if (StringUtils.isEmpty(refundAttemptEntity.getProviderReferenceId())) {
++            log.error("No provider reference id found for refund attempt: {}", refundAttemptEntity.getId());
++            return null;
++        }
++
++        BaseResponse<RefundPaymentResponse> baseResponse = digioClient.getRefundPayment(
++                refundAttemptEntity.getProviderReferenceId(),
++                getAuthConfigWrapper(refundAttemptEntity.getProviderAccountEntity()));
++        evaluateAndRaiseExceptions(baseResponse);
++
++        RefundPaymentResponse refundPaymentResponse = baseResponse.getResponse();
++        refundAttemptEntity.setProviderStatus(refundPaymentResponse.getStatus().name());
++        refundAttemptEntity.setRefundStatus(fromProviderRefundStatus(refundPaymentResponse.getStatus()));
++
++        if (Objects.nonNull(refundPaymentResponse.getErrorCode())
++                || Objects.nonNull(refundPaymentResponse.getErrorDescription())) {
++            refundAttemptEntity.setErrorCode(refundPaymentResponse.getErrorCode());
++            refundAttemptEntity.setErrorMessage(refundPaymentResponse.getErrorDescription());
++        }
++
++        addRefundAttemptAttributes(refundAttemptEntity, refundPaymentResponse);
++
++        return refundPaymentResponse;
++    }
++
++    private void addRefundAttemptAttributes(RefundAttemptEntity refundAttemptEntity, RefundPaymentResponse response) {
++        Optional.ofNullable(response.getRefundUtrNumber())
++                .ifPresent(refundUtrNumber -> refundAttemptEntity.addAttributes(
++                        Constant.RefundAttemptAttributeConstant.ARN, refundUtrNumber));
++    }
++
+     private PaymentAttemptStatus fromProviderStatus(MandateDebitResponse mandateDebitResponse) {
+         MandateDebitScheduleStatus debitScheduleStatus = mandateDebitResponse.getStatus();
+         switch (debitScheduleStatus) {
+@@ -134,4 +291,19 @@ private PaymentAttemptStatus fromProviderStatus(MandateDebitResponse mandateDebi
+         }
+         return PaymentAttemptStatus.PROCESSING;
+     }
++
++    private RefundStatus fromProviderRefundStatus(
++            in.dreamplug.external.digio.models.enums.RefundStatus providerRefundStatus) {
++        switch (providerRefundStatus) {
++            case SUCCESS:
++                return RefundStatus.COMPLETED;
++            case FAILED, EXPIRED:
++                return RefundStatus.FAILED;
++            case NEW, APPROVED, CANCELLED, READY, INITIATED:
++                return RefundStatus.PROCESSING;
++            default:
++                log.error("Unknown refund status received from digio: {}", providerRefundStatus);
++                throw Error.unknown_state_found.getBuilder().build();
++        }
++    }
+ }
+diff --git a/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/DigioMandateDebitProviderAdapterTest.java b/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/DigioMandateDebitProviderAdapterTest.java
+index 2917f3ead8..191004b377 100644
+--- a/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/DigioMandateDebitProviderAdapterTest.java
++++ b/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/DigioMandateDebitProviderAdapterTest.java
+@@ -4,22 +4,20 @@
+ import in.dreamplug.darwin.entity.ClientEntity;
+ import in.dreamplug.darwin.entity.OrderEntity;
+ import in.dreamplug.darwin.entity.ProviderAccountEntity;
+-import in.dreamplug.darwin.entity.v2.PaymentAttemptV2Entity;
+-import in.dreamplug.darwin.entity.v2.PaymentV2Entity;
+-import in.dreamplug.darwin.entity.v2.ProviderRequestStatus;
++import in.dreamplug.darwin.entity.v2.*;
+ import in.dreamplug.darwin.processors.instrumenttype.InstrumentTypeProcessorResult;
+ import in.dreamplug.darwin.v2.workflow.create.paymentattempts.PaymentAttemptCreateContext;
++import in.dreamplug.darwin.v2.workflow.create.refundattempts.RefundAttemptCreateContext;
+ import in.dreamplug.external.digio.models.response.common.BaseResponse;
+ import in.dreamplug.external.digio.models.response.common.ErrorResponse;
+ import in.dreamplug.external.digio.models.response.common.ResponseStatus;
+-import in.dreamplug.external.digio.models.response.debit.MandateDebitResponse;
+-import in.dreamplug.external.digio.models.response.debit.MandateDebitScheduleStatus;
+-import in.dreamplug.external.digio.models.response.debit.MandateDebitTransactionData;
+-import in.dreamplug.external.digio.models.response.debit.MandateDebitTransactionStatus;
++import in.dreamplug.external.digio.models.response.debit.*;
+ import in.dreamplug.mandate.Mandate;
+ import in.dreamplug.payments.domain.instrument.v2.MandatePaymentInstrument;
+ import in.dreamplug.payments.domain.order.PaymentAttemptStatus;
+ import in.dreamplug.payments.domain.payment.v2.CreatePaymentAttemptRequest;
++import in.dreamplug.payments.domain.refunds.RefundStatus;
++import in.dreamplug.payments.domain.refunds.RefundType;
+ import in.dreamplug.payments.enums.PaymentInstrumentGroup;
+ import java.math.BigDecimal;
+ import java.util.Objects;
+@@ -29,16 +27,19 @@
+ import org.junit.Test;
+ import org.junit.runner.RunWith;
+ import org.junit.runners.JUnit4;
+-import org.mockito.ArgumentMatchers;
+-import org.mockito.InjectMocks;
+-import org.mockito.Mockito;
+-import org.mockito.MockitoAnnotations;
++import org.mockito.*;
+ 
+ @RunWith(JUnit4.class)
+ public class DigioMandateDebitProviderAdapterTest extends AbstractDigioMandateProviderAdapterTest {
+     @InjectMocks
+     private DigioMandateDebitProviderAdapter digioMandateDebitProviderAdapter;
+ 
++    @Mock
++    private PaymentAttemptV2Entity paymentAttemptEntity;
++
++    @Mock
++    private RefundEntity refundEntity;
++
+     private final String DUMMY_INSTRUMENT_ID = "ef1775ff-722c-46a8-a498-5e50299274ba";
+ 
+     private final String DUMMY_MANDATE_DEBIT_ID = "NSP230201160436760TBDQG6XQKWJL6R";
+@@ -53,7 +54,14 @@ public void initMocks() {
+     @Test
+     public void test_CreatePayment_Created_Case() {
+         mockGetProviderAccountConfiguration();
+-        mockCreateMandateDebit(MandateDebitScheduleStatus.active, null, null, null, 200, ResponseStatus.SUCCESS, null);
++        mockCreateMandateDebit(
++                MandateDebitScheduleStatus.active,
++                MandateDebitTransactionStatus.scheduled,
++                null,
++                null,
++                200,
++                ResponseStatus.SUCCESS,
++                null);
+ 
+         ProviderPaymentResponse providerPaymentResponse =
+                 digioMandateDebitProviderAdapter.createPaymentAttempt(generatePaymentAttemptCreateContext(), null);
+@@ -65,7 +73,13 @@ public void test_CreatePayment_Created_Case() {
+     public void test_CreatePayment_Failed_Case() {
+         mockGetProviderAccountConfiguration();
+         mockCreateMandateDebit(
+-                MandateDebitScheduleStatus.cancelled, null, null, null, 200, ResponseStatus.SUCCESS, null);
++                MandateDebitScheduleStatus.cancelled,
++                MandateDebitTransactionStatus.failed,
++                null,
++                null,
++                200,
++                ResponseStatus.SUCCESS,
++                null);
+ 
+         ProviderPaymentResponse providerPaymentResponse =
+                 digioMandateDebitProviderAdapter.createPaymentAttempt(generatePaymentAttemptCreateContext(), null);
+@@ -298,7 +312,198 @@ private MandateDebitResponse getMandateDebitResponse(
+             details.setFailureReason(failureReason);
+             mandateDebitTransactionData.setDetails(details);
+             mandateDebitResponse.setLastTransaction(mandateDebitTransactionData);
++            mandateDebitResponse.setUpcomingTransaction(mandateDebitTransactionData);
+         }
+         return mandateDebitResponse;
+     }
++
++    @Test
++    public void test_CreateRefund_Successful() {
++        mockGetProviderAccountConfiguration();
++
++        ProviderAccountEntity providerAccountEntity = getProviderAccountEntity();
++        RefundAttemptEntity refundAttemptEntity = new RefundAttemptEntity();
++        refundAttemptEntity.setPaymentAttempt(paymentAttemptEntity);
++        refundAttemptEntity.setExternalId("refund_123");
++        refundAttemptEntity.setRefund(refundEntity);
++
++        refundAttemptEntity.setProviderAccountEntity(providerAccountEntity);
++
++        RefundAttemptCreateContext refundAttemptCreateContext = RefundAttemptCreateContext.builder(
++                        refundAttemptEntity, java.util.Collections.emptyList())
++                .providerAccountEntity(providerAccountEntity)
++                .build();
++
++        // Mock registerRefundPayment returns SUCCESS and status NEW
++        RefundPaymentResponse registerRefundResponseObj = new RefundPaymentResponse();
++        registerRefundResponseObj.setId("refund-id");
++        registerRefundResponseObj.setStatus(in.dreamplug.external.digio.models.enums.RefundStatus.NEW);
++
++        @SuppressWarnings("unchecked")
++        BaseResponse<RefundPaymentResponse> registerRefundResponse = Mockito.mock(BaseResponse.class);
++        Mockito.when(registerRefundResponse.getResponse()).thenReturn(registerRefundResponseObj);
++        Mockito.when(registerRefundResponse.getResponseStatus()).thenReturn(ResponseStatus.SUCCESS);
++
++        // Mock refundPaymentAction returns SUCCESS and status SUCCESS
++        RefundPaymentResponse actionRefundResponseObj = new RefundPaymentResponse();
++        actionRefundResponseObj.setId("refund-id");
++        actionRefundResponseObj.setStatus(in.dreamplug.external.digio.models.enums.RefundStatus.SUCCESS);
++
++        @SuppressWarnings("unchecked")
++        BaseResponse<RefundPaymentResponse> actionRefundResponse = Mockito.mock(BaseResponse.class);
++        Mockito.when(actionRefundResponse.getResponse()).thenReturn(actionRefundResponseObj);
++        Mockito.when(actionRefundResponse.getResponseStatus()).thenReturn(ResponseStatus.SUCCESS);
++
++        Mockito.when(digioClient.registerRefundPayment(ArgumentMatchers.any(), ArgumentMatchers.any()))
++                .thenReturn(registerRefundResponse);
++        Mockito.when(digioClient.refundPaymentAction(ArgumentMatchers.any(), ArgumentMatchers.any()))
++                .thenReturn(actionRefundResponse);
++
++        // Act
++        ProviderRefundCreateResponse response =
++                digioMandateDebitProviderAdapter.createRefund(refundAttemptCreateContext);
++
++        // Assert
++        Assert.assertEquals(
++                in.dreamplug.darwin.entity.v2.ProviderRequestStatus.REQUEST_SUCCESS,
++                response.getProviderRequestStatus());
++        Assert.assertEquals(RefundStatus.COMPLETED, response.getRefundStatus());
++        Assert.assertNull(response.getError());
++    }
++
++    private void setupCommonRefundMocks(
++            RefundAttemptCreateContext refundAttemptCreateContext,
++            RefundAttemptEntity refundAttemptEntity,
++            RefundEntity refundEntity,
++            PaymentAttemptV2Entity paymentAttempt,
++            ProviderAccountEntity providerAccountEntity) {
++        Mockito.when(refundAttemptCreateContext.getRequest()).thenReturn(refundAttemptEntity);
++        Mockito.when(refundAttemptEntity.getRefund()).thenReturn(refundEntity);
++        Mockito.when(refundEntity.getRefundType()).thenReturn(RefundType.DOUBLE_DEBIT);
++        Mockito.when(refundAttemptEntity.getProviderAccountEntity()).thenReturn(providerAccountEntity);
++        Mockito.when(refundAttemptEntity.getPaymentAttempt()).thenReturn(paymentAttempt);
++        Mockito.when(paymentAttempt.getGatewayReferenceId()).thenReturn("gateway-ref-id");
++        Mockito.when(paymentAttempt.getProviderAccountEntity()).thenReturn(providerAccountEntity);
++        Mockito.when(refundAttemptEntity.getExternalId()).thenReturn("refund-ext-id");
++    }
++
++    @Test
++    public void test_CreateRefund_RegistrationFailure() {
++        mockGetProviderAccountConfiguration();
++
++        RefundAttemptCreateContext refundAttemptCreateContext = Mockito.mock(RefundAttemptCreateContext.class);
++        RefundAttemptEntity refundAttemptEntity = Mockito.mock(RefundAttemptEntity.class);
++        RefundEntity refundEntity = Mockito.mock(RefundEntity.class);
++        PaymentAttemptV2Entity paymentAttempt = Mockito.mock(PaymentAttemptV2Entity.class);
++        ProviderAccountEntity providerAccountEntity = Mockito.mock(ProviderAccountEntity.class);
++
++        setupCommonRefundMocks(
++                refundAttemptCreateContext, refundAttemptEntity, refundEntity, paymentAttempt, providerAccountEntity);
++
++        // Mock registerRefundPayment returns FAILURE
++        RefundPaymentResponse registerRefundResponseObj = new RefundPaymentResponse();
++        registerRefundResponseObj.setId("refund-id");
++        registerRefundResponseObj.setStatus(in.dreamplug.external.digio.models.enums.RefundStatus.FAILED);
++
++        @SuppressWarnings("unchecked")
++        BaseResponse<RefundPaymentResponse> registerRefundResponse = Mockito.mock(BaseResponse.class);
++        Mockito.when(registerRefundResponse.getResponse()).thenReturn(registerRefundResponseObj);
++        Mockito.when(registerRefundResponse.getResponseStatus()).thenReturn(ResponseStatus.BAD_REQUEST);
++
++        Mockito.when(digioClient.registerRefundPayment(ArgumentMatchers.any(), ArgumentMatchers.any()))
++                .thenReturn(registerRefundResponse);
++
++        // Act
++        ProviderRefundCreateResponse response =
++                digioMandateDebitProviderAdapter.createRefund(refundAttemptCreateContext);
++
++        // Assert
++        Assert.assertNotEquals(
++                in.dreamplug.darwin.entity.v2.ProviderRequestStatus.REQUEST_SUCCESS,
++                response.getProviderRequestStatus());
++        Assert.assertNotEquals(RefundStatus.COMPLETED, response.getRefundStatus());
++    }
++
++    @Test
++    public void test_CreateRefund_RegistrationStatusNotNew() {
++        mockGetProviderAccountConfiguration();
++
++        RefundAttemptCreateContext refundAttemptCreateContext = Mockito.mock(RefundAttemptCreateContext.class);
++        RefundAttemptEntity refundAttemptEntity = Mockito.mock(RefundAttemptEntity.class);
++        RefundEntity refundEntity = Mockito.mock(RefundEntity.class);
++        PaymentAttemptV2Entity paymentAttempt = Mockito.mock(PaymentAttemptV2Entity.class);
++        ProviderAccountEntity providerAccountEntity = Mockito.mock(ProviderAccountEntity.class);
++
++        setupCommonRefundMocks(
++                refundAttemptCreateContext, refundAttemptEntity, refundEntity, paymentAttempt, providerAccountEntity);
++
++        // Mock registerRefundPayment returns SUCCESS but status is FAILED
++        RefundPaymentResponse registerRefundResponseObj = new RefundPaymentResponse();
++        registerRefundResponseObj.setId("refund-id");
++        registerRefundResponseObj.setStatus(in.dreamplug.external.digio.models.enums.RefundStatus.FAILED);
++
++        @SuppressWarnings("unchecked")
++        BaseResponse<RefundPaymentResponse> registerRefundResponse = Mockito.mock(BaseResponse.class);
++        Mockito.when(registerRefundResponse.getResponse()).thenReturn(registerRefundResponseObj);
++        Mockito.when(registerRefundResponse.getResponseStatus()).thenReturn(ResponseStatus.SUCCESS);
++
++        Mockito.when(digioClient.registerRefundPayment(ArgumentMatchers.any(), ArgumentMatchers.any()))
++                .thenReturn(registerRefundResponse);
++
++        // Act
++        ProviderRefundCreateResponse response =
++                digioMandateDebitProviderAdapter.createRefund(refundAttemptCreateContext);
++
++        // Assert
++        Assert.assertEquals(RefundStatus.FAILED, response.getRefundStatus());
++    }
++
++    @Test
++    public void test_CreateRefund_ActionFailure() {
++        mockGetProviderAccountConfiguration();
++
++        RefundAttemptCreateContext refundAttemptCreateContext = Mockito.mock(RefundAttemptCreateContext.class);
++        RefundAttemptEntity refundAttemptEntity = Mockito.mock(RefundAttemptEntity.class);
++        RefundEntity refundEntity = Mockito.mock(RefundEntity.class);
++        PaymentAttemptV2Entity paymentAttempt = Mockito.mock(PaymentAttemptV2Entity.class);
++        ProviderAccountEntity providerAccountEntity = Mockito.mock(ProviderAccountEntity.class);
++
++        setupCommonRefundMocks(
++                refundAttemptCreateContext, refundAttemptEntity, refundEntity, paymentAttempt, providerAccountEntity);
++
++        // Mock registerRefundPayment returns SUCCESS and status NEW
++        RefundPaymentResponse registerRefundResponseObj = new RefundPaymentResponse();
++        registerRefundResponseObj.setId("refund-id");
++        registerRefundResponseObj.setStatus(in.dreamplug.external.digio.models.enums.RefundStatus.NEW);
++
++        @SuppressWarnings("unchecked")
++        BaseResponse<RefundPaymentResponse> registerRefundResponse = Mockito.mock(BaseResponse.class);
++        Mockito.when(registerRefundResponse.getResponse()).thenReturn(registerRefundResponseObj);
++        Mockito.when(registerRefundResponse.getResponseStatus()).thenReturn(ResponseStatus.SUCCESS);
++
++        // Mock refundPaymentAction returns FAILURE
++        RefundPaymentResponse actionRefundResponseObj = new RefundPaymentResponse();
++        actionRefundResponseObj.setId("refund-id");
++        actionRefundResponseObj.setStatus(in.dreamplug.external.digio.models.enums.RefundStatus.FAILED);
++
++        @SuppressWarnings("unchecked")
++        BaseResponse<RefundPaymentResponse> actionRefundResponse = Mockito.mock(BaseResponse.class);
++        Mockito.when(actionRefundResponse.getResponse()).thenReturn(actionRefundResponseObj);
++        Mockito.when(actionRefundResponse.getResponseStatus()).thenReturn(ResponseStatus.BAD_REQUEST);
++
++        Mockito.when(digioClient.registerRefundPayment(ArgumentMatchers.any(), ArgumentMatchers.any()))
++                .thenReturn(registerRefundResponse);
++        Mockito.when(digioClient.refundPaymentAction(ArgumentMatchers.any(), ArgumentMatchers.any()))
++                .thenReturn(actionRefundResponse);
++
++        // Act
++        ProviderRefundCreateResponse response =
++                digioMandateDebitProviderAdapter.createRefund(refundAttemptCreateContext);
++
++        // Assert
++        Assert.assertNotEquals(RefundStatus.COMPLETED, response.getRefundStatus());
++        Assert.assertNotEquals(
++                in.dreamplug.darwin.entity.v2.ProviderRequestStatus.REQUEST_SUCCESS,
++                response.getProviderRequestStatus());
++    }
+ }
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   120    0   120    0     0    181      0 --:--:-- --:--:-- --:--:--   182

@@ -1,0 +1,21 @@
+# MPO PR Reviews - Archana Badagi
+
+## Note on MPO Repository Access
+
+The MPO repository could not be located during the review process. The following PRs were listed for review but could not be accessed:
+
+### PR #190 - PPI Authentication Support
+**Status:** Unable to review (repository not accessible)
+
+### PR #196 - PPI Debit Call Error Message Handling
+**Status:** Unable to review (repository not accessible)
+
+---
+
+## Recommendation
+
+To complete the full review, please verify:
+1. The correct repository name for MPO (possible names: `mpo`, `merchant-payment-operations`, `ppi`)
+2. Repository access permissions
+
+Based on the PR descriptions, these appear to be related to PPI (Prepaid Payment Instrument) functionality, which would add valuable context to Archana's payment domain expertise evaluation.

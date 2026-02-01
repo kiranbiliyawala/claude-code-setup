@@ -1,0 +1,91 @@
+# Loading Capability Manager (LCM) PR Reviews - Archana Badagi
+
+## PR #192 - Preference Maker Checker and Reserved UDF Contract Fix
+**Merged:** May 14, 2025 | **Size:** +72/-18 | **Files:** 6
+
+### Summary
+Fixed preference status handling and reserved UDF contract implementation.
+
+### Key Changes
+- Changed `enabled` boolean field to `MerchantPreferenceStatus` enum in `MerchantPreferenceDto`
+- Updated cache version (V5 -> V6) to handle schema change
+- Added new `extractCombinedDimensionValueForReservedUdf()` method
+- Updated preference filtering to use `MerchantPreferenceStatus.LIVE`
+- Added status filtering at repository level
+
+### Code Quality
+Proper status enum usage:
+```java
+.filter(entity -> MerchantPreferenceStatus.LIVE.equals(entity.getStatus()))
+```
+
+Clean dimension value merging logic for reserved UDFs.
+
+### Positive Aspects
+- Cache version bump ensures clean migration
+- Good separation of repeatable dimension and reserved UDF processing
+- Proper status-based filtering
+
+### Rating: 4/5
+---
+
+## PR #221 - Token Type Support for Resolve Terminal Flow
+**Merged:** September 19, 2025 | **Size:** +99/-6 | **Files:** 6
+
+### Summary
+Added token type dimension support for card payment method in LCM resolve terminal flow.
+
+### Key Changes
+- Extended `CardTokenTypeDimensionProcessor` to implement `IPaymentMethodDimensionProcessor`
+- Added `validateMethodDimensionEnabledWithDimensionConfigs()` method
+- Safe token type parsing with error handling
+- Comprehensive test coverage (72 lines)
+
+### Code Quality
+Safe enum parsing:
+```java
+TokenType parsedTokenType = Optional.ofNullable(tokenType)
+    .map(type -> {
+        try {
+            return TokenType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            log.error("Invalid token type: {}", type, e);
+            return null;
+        }
+    })
+    .orElse(null);
+```
+
+### Positive Aspects
+- Defensive error handling for enum parsing
+- Good test coverage for matching/non-matching scenarios
+- Clean interface implementation
+
+### Rating: 4.5/5
+---
+
+## PR #223 - Cashback Wallet Support for Mandate with Pay Flow
+**Merged:** November 12, 2025 | **Size:** +825/-16 | **Files:** 12
+
+### Summary
+Large feature enabling cashback wallet support during mandate with pay flow.
+
+### Key Changes
+- Added transaction type handling with `getTransactionTypeOrDefault()` helper
+- Extended `WalletMethodListingProcessor` for mandate_with_pay support
+- Added `PaymentDomainUtils` with wallet validation methods
+- Comprehensive test suite:
+  - `DiscoverMerchantPaymentMethodsManagerMandateWithPayTest` (182 lines)
+  - `WalletMethodListingProcessorMandateWithPayTest` (268 lines)
+  - `PaymentDomainUtilsMandateWithPayTest` (324 lines)
+
+### Positive Aspects
+- Excellent test coverage (774+ lines of tests)
+- Clean utility method extraction
+- Good separation of concerns
+- Proper transaction type handling
+
+### Areas for Improvement
+- Large PR could potentially be split
+
+### Rating: 4/5

@@ -1,0 +1,260 @@
+tenantonboarding/main/models/transaction_config.go:5:type TransactionConfig struct {
+tenantonboarding/main/models/transaction_config.go-6-	TransactionType                   string `csv:"transaction_type"`
+tenantonboarding/main/models/transaction_config.go-7-	SourcePartnerID                   string `csv:"source_partner_id"`
+tenantonboarding/main/models/transaction_config.go-8-	SourcePartnerType                 string `csv:"source_partner_type"`
+tenantonboarding/main/models/transaction_config.go-9-	SourceAccountType                 string `csv:"source_account_type"`
+tenantonboarding/main/models/transaction_config.go-10-	SourceAccountClassification       string `csv:"source_account_classification"`
+tenantonboarding/main/models/transaction_config.go-11-	SourceOperation                  string `csv:"source_operation"`
+tenantonboarding/main/models/transaction_config.go-12-	DestinationPartnerID              string `csv:"destination_partner_id"`
+tenantonboarding/main/models/transaction_config.go-13-	DestinationPartnerType            string `csv:"destination_partner_type"`
+tenantonboarding/main/models/transaction_config.go-14-	DestinationAccountType            string `csv:"destination_account_type"`
+tenantonboarding/main/models/transaction_config.go-15-	DestinationAccountClassification  string `csv:"destination_account_classification"`
+tenantonboarding/main/models/transaction_config.go-16-	DestinationOperation             string `csv:"destination_operation"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/transaction_config.go-17-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/transaction_config.go-18-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/transaction_config.go-19-// String returns a formatted string representation of the TransactionConfig
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/transaction_config.go-20-func (tc TransactionConfig) String() string {
+--
+internal/transactiontype/model.go:10:type TransactionType struct {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-11-	ID             uint
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-12-	CreatedAt      time.Time
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-13-	UpdatedAt      time.Time
+internal/transactiontype/model.go-14-	DeletedAt      soft_delete.DeletedAt `gorm:"column:deleted_at_unix"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-15-	ExternalID     string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-16-	TenantID       string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-17-	Name           string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-18-	Nature         string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-19-	MetadataSchema string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-20-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-21-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-22-func (*TransactionType) TableName() string {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-23-	return "transaction_types"
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-24-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiontype/model.go-25-
+--
+tenantonboarding/main/models/json_models.go:20:type TransactionType struct {
+tenantonboarding/main/models/json_models.go-21-	TransactionType           string `json:"transaction_type"`
+tenantonboarding/main/models/json_models.go-22-	TransactionTypeNature     string `json:"transaction_type_nature"`
+tenantonboarding/main/models/json_models.go-23-	SourcePartnerAccType      string `json:"source_partner_acc_type"`
+tenantonboarding/main/models/json_models.go-24-	SourcePartnerNature       string `json:"source_partner_nature"`
+tenantonboarding/main/models/json_models.go-25-	DestinationPartnerAccType string `json:"destination_partner_acc_type"`
+tenantonboarding/main/models/json_models.go-26-	DestinationPartnerNature  string `json:"destination_partner_nature"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/json_models.go-27-}
+--
+tenantonboarding/main/models/generated_models.go:72:type TransactionCodeDetail struct {
+tenantonboarding/main/models/generated_models.go-73-	ClientID        string   `json:"client_id"`
+tenantonboarding/main/models/generated_models.go-74-	ProductID       string   `json:"product_id"`
+tenantonboarding/main/models/generated_models.go-75-	ProductVersion  int      `json:"product_version"`
+tenantonboarding/main/models/generated_models.go-76-	TransactionCode string   `json:"transaction_code"`
+tenantonboarding/main/models/generated_models.go-77-	Attributes      []string `json:"attributes"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-78-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-79-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-80-// TransactionCode represents a transaction code
+tenantonboarding/main/models/generated_models.go:81:type TransactionCode struct {
+tenantonboarding/main/models/generated_models.go-82-	TransactionCode TransactionCodeDetail `json:"transaction_code"`
+tenantonboarding/main/models/generated_models.go-83-	TransactionType string                `json:"transaction_type"`
+tenantonboarding/main/models/generated_models.go-84-	AmountNature    string                `json:"amount_nature"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-85-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-86-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-87-// Percentage represents a percentage value
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-88-type Percentage struct {
+tenantonboarding/main/models/generated_models.go-89-	Value string `json:"value"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-90-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-91-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-92-// PercentageComputeStrategy represents a percentage compute strategy
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-93-type PercentageComputeStrategy struct {
+tenantonboarding/main/models/generated_models.go-94-	Percentage      Percentage `json:"percentage"`
+tenantonboarding/main/models/generated_models.go-95-	AmountFieldName string     `json:"amount_field_name"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-96-}
+--
+tenantonboarding/main/models/generated_models.go:113:type TransactionAccountSplit struct {
+tenantonboarding/main/models/generated_models.go-114-	AccountNo       string    `json:"account_no"`
+tenantonboarding/main/models/generated_models.go-115-	AmountNature    string    `json:"amount_nature"`
+tenantonboarding/main/models/generated_models.go-116-	SplitRule       SplitRule `json:"split_rule"`
+tenantonboarding/main/models/generated_models.go-117-	AccountNoPrefix string    `json:"account_no_prefix"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-118-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-119-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-120-// TransactionCodeAccountMap represents a transaction code account map
+tenantonboarding/main/models/generated_models.go:121:type TransactionCodeAccountMap struct {
+tenantonboarding/main/models/generated_models.go-122-	ClientID                 string                    `json:"client_id"`
+tenantonboarding/main/models/generated_models.go-123-	ProductID                string                    `json:"product_id"`
+tenantonboarding/main/models/generated_models.go-124-	ProductVersion           int                       `json:"product_version"`
+tenantonboarding/main/models/generated_models.go-125-	TransactionCode          string                    `json:"transaction_code"`
+tenantonboarding/main/models/generated_models.go-126-	TransactionAccountSplits []TransactionAccountSplit `json:"transaction_account_splits"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-127-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-128-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-129-// RequestTime represents request time
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-130-type RequestTime struct {
+tenantonboarding/main/models/generated_models.go-131-	Nanos   int    `json:"nanos"`
+tenantonboarding/main/models/generated_models.go-132-	Seconds string `json:"seconds"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-133-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-134-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-135-// Context represents context
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenantonboarding/main/models/generated_models.go-136-type Context struct {
+--
+tenant-configs/converter/main.go:128:type TransactionCodeDetail struct {
+tenant-configs/converter/main.go-129-	ClientID        string   `json:"client_id"`
+tenant-configs/converter/main.go-130-	ProductID       string   `json:"product_id"`
+tenant-configs/converter/main.go-131-	ProductVersion  int      `json:"product_version"`
+tenant-configs/converter/main.go-132-	TransactionCode string   `json:"transaction_code"`
+tenant-configs/converter/main.go-133-	Attributes      []string `json:"attributes"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-134-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-135-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-136-// TransactionCode represents a transaction code
+tenant-configs/converter/main.go:137:type TransactionCode struct {
+tenant-configs/converter/main.go-138-	TransactionCode TransactionCodeDetail `json:"transaction_code"`
+tenant-configs/converter/main.go-139-	TransactionType string                `json:"transaction_type"`
+tenant-configs/converter/main.go-140-	AmountNature    string                `json:"amount_nature"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-141-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-142-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-143-// Percentage represents a percentage value
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-144-type Percentage struct {
+tenant-configs/converter/main.go-145-	Value string `json:"value"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-146-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-147-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-148-// PercentageComputeStrategy represents a percentage compute strategy
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-149-type PercentageComputeStrategy struct {
+tenant-configs/converter/main.go-150-	Percentage      Percentage `json:"percentage"`
+tenant-configs/converter/main.go-151-	AmountFieldName string     `json:"amount_field_name"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-152-}
+--
+tenant-configs/converter/main.go:169:type TransactionAccountSplit struct {
+tenant-configs/converter/main.go-170-	AccountNo       string    `json:"account_no"`
+tenant-configs/converter/main.go-171-	AmountNature    string    `json:"amount_nature"`
+tenant-configs/converter/main.go-172-	SplitRule       SplitRule `json:"split_rule"`
+tenant-configs/converter/main.go-173-	AccountNoPrefix string    `json:"account_no_prefix"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-174-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-175-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-176-// TransactionCodeAccountMap represents a transaction code account map
+tenant-configs/converter/main.go:177:type TransactionCodeAccountMap struct {
+tenant-configs/converter/main.go-178-	ClientID                 string                    `json:"client_id"`
+tenant-configs/converter/main.go-179-	ProductID                string                    `json:"product_id"`
+tenant-configs/converter/main.go-180-	ProductVersion           int                       `json:"product_version"`
+tenant-configs/converter/main.go-181-	TransactionCode          string                    `json:"transaction_code"`
+tenant-configs/converter/main.go-182-	TransactionAccountSplits []TransactionAccountSplit `json:"transaction_account_splits"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-183-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-184-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-185-// RequestTime represents request time
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-186-type RequestTime struct {
+tenant-configs/converter/main.go-187-	Nanos   int    `json:"nanos"`
+tenant-configs/converter/main.go-188-	Seconds string `json:"seconds"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-189-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-190-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-191-// Context represents context
+/Users/kiranbiliyawala/code/cred/finhq/settlement/tenant-configs/converter/main.go-192-type Context struct {
+--
+internal/transactiongroup/model.go:15:type TransactionGroup struct {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-16-	ID                    uint
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-17-	CreatedAt             time.Time
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-18-	UpdatedAt             time.Time
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-19-	TenantID              string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-20-	TransactionGroupID    string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-21-	SettlementEligibility SettlementEligibility
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-22-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-23-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-24-// Status ENUM(unspecified, pending, eligible, not_eligible)
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-25-//
+internal/transactiongroup/model.go-26-/go:generate go-enum --marshal
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-27-type SettlementEligibility string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-28-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/transactiongroup/model.go-29-var settlementEligibilityValidTransitions = map[SettlementEligibility][]SettlementEligibility{
+internal/transactiongroup/model.go-30-	SettlementEligibilityUnspecified: {SettlementEligibilityPending},
+--
+internal/databricks/dao.go:15:type TransactionDao struct {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-16-	databricksConfig    config.DatabricksConfig
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-17-	batchPlatformConfig config.BatchPlatformSourceConfig
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-18-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-19-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-20-type Page[T any] struct {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-21-	Items    T
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-22-	NextItem func() (*Page[T], error)
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-23-	Close    func() error
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-24-	Empty    bool
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-25-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-26-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-27-func ParseTxnData(rawTxn *TransactionRow) (*TransactionData, error) {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-28-
+internal/databricks/dao.go-29-	money, err := util.ConvertFloatToMoney(rawTxn.Amount, rawTxn.CurrencyCode)
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dao.go-30-	if err != nil {
+--
+internal/databricks/dto.go:10:type TransactionRow struct {
+internal/databricks/dto.go-11-	TransactionID   string    `json:"transaction_id,omitempty"`
+internal/databricks/dto.go-12-	TransactionTime time.Time `json:"transaction_time"`
+internal/databricks/dto.go-13-	Amount          float64   `json:"amount,omitempty"`
+internal/databricks/dto.go-14-	SubType         string    `json:"sub_type"`
+internal/databricks/dto.go-15-	AmountNature    string    `json:"amount_nature,omitempty"`
+internal/databricks/dto.go-16-	CurrencyCode    string    `json:"currency_code,omitempty"`
+internal/databricks/dto.go-17-	TransactionMeta string    `json:"metadata,omitempty"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-18-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-19-
+internal/databricks/dto.go:20:type TransactionData struct {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-21-	TransactionID   string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-22-	TransactionTime time.Time
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-23-	Amount          *money.Money
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-24-	AmountNature    bookkeeping.AmountNature
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-25-	SubType         commons.TransactionSubType
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-26-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-27-
+internal/databricks/dto.go:28:type TransactionGroup struct {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-29-	GroupID      string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-30-	OrderID      int64
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-31-	Transactions []*TransactionData
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/databricks/dto.go-32-}
+--
+internal/settlement/dto.go:30:type TransactionGroup struct {
+internal/settlement/dto.go-31-	GroupID      string              `csv:"transaction_group_id"`
+internal/settlement/dto.go-32-	OrderID      int64               `csv:"order_field"`
+internal/settlement/dto.go-33-	Transactions *DBKTransactionList `csv:"json_field"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-34-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-35-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-36-// TransactionGroupQueryResult is used in findManyTransactionGroupsBySettlements as the result of the query.
+internal/settlement/dto.go:37:type TransactionGroupQueryResult struct {
+internal/settlement/dto.go-38-	TransactionGroupID string `json:"transaction_group_id"`
+internal/settlement/dto.go-39-	SettlementID       string `json:"settlement_id"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-40-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-41-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-42-type DBKTransaction struct {
+internal/settlement/dto.go-43-	SourceTransactionID string                     `json:"source_transaction_id,omitempty"`
+internal/settlement/dto.go-44-	TransactionTime     time.Time                  `json:"transaction_time"`
+internal/settlement/dto.go-45-	Amount              *money.Money               `json:"amount,omitempty"`
+internal/settlement/dto.go-46-	AmountNature        bookkeeping.AmountNature   `json:"amount_nature,omitempty"`
+internal/settlement/dto.go-47-	SubType             commons.TransactionSubType `json:"sub_type,omitempty"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-48-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-49-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-50-type DBKTransactionList struct {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-51-	Txns []*DBKTransaction
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/dto.go-52-}
+--
+internal/bookkeeping/transaction/model.go:11:type Transaction struct {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/bookkeeping/transaction/model.go-12-	gorm.Model
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/bookkeeping/transaction/model.go-13-	TenantID              string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/bookkeeping/transaction/model.go-14-	PartnerType           string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/bookkeeping/transaction/model.go-15-	PartnerID             string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/bookkeeping/transaction/model.go-16-	TransactionID         string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/bookkeeping/transaction/model.go-17-	ParentTransactionID   string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/bookkeeping/transaction/model.go-18-	TransactionGroupId    string
+internal/bookkeeping/transaction/model.go-19-	MetadataBytes         []byte                                 `gorm:"column:metadata"`
+internal/bookkeeping/transaction/model.go-20-	MetadataInternalBytes []byte                                 `gorm:"column:internal_metadata"`
+internal/bookkeeping/transaction/model.go-21-	MetadataV2Bytes       []byte                                 `gorm:"column:metadata_v2"`
+internal/bookkeeping/transaction/model.go-22-	Metadata              *commonspb.TransactionMetadata         `gorm:"-"`
+internal/bookkeeping/transaction/model.go-23-	InternalMetadata      *commonspb.TransactionInternalMetadata `gorm:"-"`
+internal/bookkeeping/transaction/model.go-24-	MetadataV2            *structpb.Struct                       `gorm:"-"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/bookkeeping/transaction/model.go-25-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/bookkeeping/transaction/model.go-26-
+--
+internal/settlement/model.go:36:type Transaction struct {
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-37-	gorm.Model
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-38-	TenantID               string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-39-	PartnerType            string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-40-	PartnerID              string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-41-	SettlementID           string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-42-	DBKTransactionID       string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-43-	DBKSourceTransactionID string
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-44-	DBKAccountNumber       string
+internal/settlement/model.go-45-	Settlement             Settlement `gorm:"references:SettlementID"`
+internal/settlement/model.go-46-	TransactionTime        time.Time  `gorm:"-"`
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-47-}
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-48-
+/Users/kiranbiliyawala/code/cred/finhq/settlement/internal/settlement/model.go-49-type Metadata struct {
+internal/settlement/model.go-50-	FromTransactionTime time.Time `json:"from_transaction_time"`
+internal/settlement/model.go-51-	ToTransactionTime   time.Time `json:"to_transaction_time"`

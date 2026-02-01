@@ -1,0 +1,279 @@
+# Archana Badagi - Technical Skills Assessment
+
+## Executive Summary
+
+**Candidate:** Archana Badagi
+**Role Evaluated For:** L3 Backend Engineer (Google Equivalent)
+**PRs Reviewed:** 27 (across 5 repositories)
+**Review Period:** March 2025 - January 2026
+**Repositories:** Payment Service, Loading Capability Manager (LCM), Mandate Service, Genie, MPO
+
+---
+
+## Overall Assessment
+
+### L3 Google Equivalent Bar: **MEETS EXPECTATIONS**
+
+Archana demonstrates solid backend engineering skills consistent with an L3/SDE-2 level. She shows strong ability to work independently on well-defined features, handles payment domain complexity appropriately, and produces readable, maintainable code with good test coverage.
+
+---
+
+## Dimensional Evaluation
+
+### 1. Modularity (Rating: 3.5/5)
+
+**Strengths:**
+- Consistently separates concerns across service layers
+- Creates reusable utility methods (e.g., `MandateUtil.java`, `CommonUtils.java`)
+- Extracts common logic into abstract classes (e.g., `AbstractRPMandateProviderAdapter`, `AbstractWalletProviderAdapter`)
+- Good use of the adapter pattern for provider integrations
+
+**Areas for Improvement:**
+- Some PRs have monolithic changes that could be broken into smaller, more focused commits
+- PR 1077 (Autopay cashback) touches 18 files - could benefit from better modularization
+
+**Examples:**
+- PR 917: Clean separation of RRN enrichment into `addPaymentAttemptAttributes()` method
+- PR 1118: Good refactoring of error handling into `handleBilldeskErrorResponse()` and `updateRefundAttemptEntity()` methods
+
+---
+
+### 2. Code Quality (Rating: 4/5)
+
+**Strengths:**
+- Consistent coding style following project conventions
+- Clear, descriptive naming conventions (e.g., `isMastercardCvvDisabled`, `syncRefundWithPaymentId`)
+- Proper use of Optional for nullable values
+- Good use of Java streams and functional programming
+- Appropriate logging for debugging and monitoring
+
+**Areas for Improvement:**
+- Some PRs have empty PR descriptions/bodies
+- Occasional verbose code that could be simplified
+
+**Examples:**
+- PR 1037: Clean refactoring of mandate status update logic with early returns
+- PR 1213: Clear filter chain for refund eligibility with proper null checks
+
+---
+
+### 3. Language Expertise - Kotlin/Java (Rating: 4/5)
+
+**Strengths:**
+- Excellent use of Java 17+ features (switch expressions, pattern matching)
+- Proper use of `Optional.ofNullable()` chains
+- Good understanding of stream operations and collectors
+- Effective use of builder patterns
+- Appropriate use of annotations (`@Slf4j`, `@Transactional`, etc.)
+
+**Examples:**
+```java
+// PR 1059 - Clean switch expression
+private String getTokenType(TokenType tokenType) {
+    return switch (tokenType) {
+        case COF -> COF.getValue();
+        case DEVICE_TOKEN -> DEVICE.getValue();
+        default -> null;
+    };
+}
+
+// PR 900 - Clean Optional chain
+.corporateAccountNumber(Optional.ofNullable(context.getRoutesBreakup())
+    .map(routesBreakup -> routesBreakup.getRouteInformationList())
+    .filter(routeInformationList -> !routeInformationList.isEmpty())
+    .map(routeInformation -> routeInformation.get(0).getProviderRouteId())
+    .orElse(providerAccountConfiguration.getCorporateAccountNumber()))
+```
+
+---
+
+### 4. Error Handling (Rating: 3.5/5)
+
+**Strengths:**
+- Consistent error handling patterns across PRs
+- Good use of domain-specific error types (`Error.invalid_mandate`, `Error.provider_api_failure`)
+- Appropriate null checks before operations
+- PR 1118 shows good handling of HTTP error codes (404 handling)
+
+**Areas for Improvement:**
+- Some PRs could benefit from more defensive coding
+- Error messages could be more descriptive in some cases
+
+**Examples:**
+- PR 891: Added null check for redirectionParams to prevent NPE
+- PR 1103: Good validation of refund adjustment amounts with clear error messages
+
+---
+
+### 5. Design Patterns (Rating: 3.5/5)
+
+**Strengths:**
+- Good use of adapter pattern for provider integrations
+- Factory pattern usage for workflow creation
+- Builder pattern for complex object construction
+- Strategy pattern for provider-specific implementations
+- Template method pattern in abstract classes
+
+**Patterns Observed:**
+- Adapter Pattern: Provider adapters (Billdesk, Razorpay, Digio, etc.)
+- Factory Pattern: `PaymentCreateWorkflowFactory`
+- Builder Pattern: Request builders for external APIs
+- Template Method: `AbstractWalletProviderAdapter`, `CybersourceRequestBuilder`
+
+---
+
+### 6. Testing (Rating: 4/5)
+
+**Strengths:**
+- Comprehensive unit test coverage in major PRs
+- Good use of parameterized tests (PR 112 - AxisUPIMandateProviderAdapterTest)
+- Test cases cover edge cases and error scenarios
+- Proper mocking of dependencies
+- Tests are readable and well-structured
+
+**Notable Test Coverage:**
+- PR 832: 552 additions including extensive test coverage for CVV disablement
+- PR 1047: 218 lines of test code for Digio refund integration
+- PR 1118: 310 lines of comprehensive Billdesk error handling tests
+- PR 1131: 459 lines testing Cybersource request builder
+- PR 1077: 915 additions with substantial test coverage for cashback utilization
+
+**Test Quality Examples:**
+```java
+// PR 1118 - Well-documented test cases
+/**
+ * Test case: handleBilldeskErrorResponse with 404 status code
+ * Scenario: When BillDesk API returns a 404 (Not Found) response
+ * Expected behavior: Refund status should be set to FAILED
+ */
+@Test
+void testHandleBilldeskErrorResponse_404_NotFound() {
+    // Clear arrange-act-assert pattern
+}
+```
+
+---
+
+### 7. Security Awareness (Rating: 3.5/5)
+
+**Strengths:**
+- Appropriate handling of sensitive payment data
+- No hardcoded credentials observed
+- Proper validation at API boundaries
+- Good use of authorized application annotations
+
+**Examples:**
+- PR 1103: Admin API properly protected with `@AuthorizedApplication`
+- Payment provider configurations handled through secure config management
+
+---
+
+### 8. Problem Solving (Rating: 4/5)
+
+**Strengths:**
+- Shows ability to debug and fix complex issues
+- Good understanding of payment domain requirements
+- Tackles cross-service integration challenges effectively
+- Demonstrates incremental improvement approach
+
+**Complex Problems Solved:**
+- PR 1037: Fixed mandate token enrichment on failed payment attempt with proper state handling
+- PR 1041: Resolved wallet stuck in CREATE state issue
+- PR 682 (Genie): UTR-22 handling - large feature (2256 additions) with comprehensive solution
+- PR 110 (Mandate): UPI mandate revoke flow - complex integration with proper deployment checklist
+
+---
+
+## PR Complexity Distribution
+
+| Complexity | Count | Examples |
+|------------|-------|----------|
+| Small (<50 LOC) | 8 | PR 891, PR 944, PR 1191 |
+| Medium (50-200 LOC) | 11 | PR 917, PR 1037, PR 1059 |
+| Large (200-500 LOC) | 5 | PR 1047, PR 1118, PR 1131 |
+| Very Large (>500 LOC) | 3 | PR 832, PR 1077, PR 682 |
+
+---
+
+## Repository-Specific Observations
+
+### Payment Service (17 PRs)
+- Core domain expertise demonstrated
+- Handles multiple provider integrations (Razorpay, Billdesk, Digio, Cybersource, ICICI UPI)
+- Good understanding of payment lifecycle states
+- Strong refund handling experience
+
+### Loading Capability Manager (3 PRs)
+- Shows understanding of configuration management
+- Good dimension processing logic
+- Proper cache versioning
+
+### Mandate Service (3 PRs)
+- Complex UPI mandate lifecycle handling
+- Webhook integration expertise
+- State machine understanding
+
+### Genie (2 PRs - 1 OPEN)
+- Large feature implementation (UTR-22)
+- Good test coverage
+- PR 645 (Balance Check APIs) is still open/unmerged
+
+### MPO (2 PRs - Not Accessible)
+- PRs 190 and 196 could not be reviewed (repository access issue)
+
+---
+
+## Strengths Summary
+
+1. **Consistent Test Coverage**: Almost all PRs include corresponding unit tests
+2. **Payment Domain Expertise**: Deep understanding of payment processing, refunds, mandates
+3. **Clean Code Practices**: Readable, maintainable code following project conventions
+4. **Modern Java Usage**: Effective use of Java 17+ features
+5. **Provider Integration**: Strong experience with multiple payment providers
+
+---
+
+## Areas for Growth
+
+1. **PR Documentation**: Most PRs have empty descriptions; better context would help reviewers
+2. **Smaller PRs**: Some PRs (especially 1077, 682) are quite large and could be broken down
+3. **Design Documentation**: Complex features would benefit from design docs or diagrams
+4. **Error Message Quality**: Could be more descriptive for debugging purposes
+
+---
+
+## L3 Bar Assessment Details
+
+| Criteria | L3 Expectation | Archana's Demonstration |
+|----------|---------------|------------------------|
+| Independent feature implementation | Implements well-defined features independently | ✅ Strong - Multiple end-to-end features |
+| Code quality | Clean, readable, maintainable code | ✅ Strong - Consistent quality |
+| Testing | Good unit test coverage | ✅ Strong - Comprehensive testing |
+| Debugging ability | Can identify and fix bugs | ✅ Strong - Multiple bug fixes |
+| Basic system design | Understands component interactions | ✅ Meets - Provider integrations |
+| Error handling | Appropriate error handling | ✅ Meets - Good error patterns |
+| Collaboration | Works well with team | ⚪ Not directly evaluated |
+
+---
+
+## Recommendation
+
+**Verdict: Archana meets the L3 backend engineering bar.**
+
+She demonstrates:
+- Strong implementation skills in the payment domain
+- Consistent code quality with good test coverage
+- Ability to handle complex integrations and bug fixes
+- Good understanding of Java/Kotlin and modern patterns
+
+For growth toward L4:
+- Take ownership of larger system design decisions
+- Document architectural choices
+- Mentor junior engineers
+- Lead cross-team initiatives
+
+---
+
+## Appendix: PR Summary
+
+See individual PR review files in `/reviews/` directory for detailed analysis of each PR.

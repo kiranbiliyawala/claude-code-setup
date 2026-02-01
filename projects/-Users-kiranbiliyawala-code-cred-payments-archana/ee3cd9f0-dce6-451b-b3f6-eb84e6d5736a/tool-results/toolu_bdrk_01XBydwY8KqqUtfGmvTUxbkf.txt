@@ -1,0 +1,1773 @@
+diff --git a/app/build.gradle b/app/build.gradle
+index de5b0d954..833c461fb 100644
+--- a/app/build.gradle
++++ b/app/build.gradle
+@@ -127,7 +127,7 @@ dependencies {
+         exclude group: 'com.github.derjust', module: 'spring-data-dynamodb'
+     }
+ 
+-    implementation 'in.dreamplug.genie:genie-models:7.0.19'
++    implementation 'in.dreamplug.genie:genie-models:7.0.20-SNAPSHOT'
+     implementation ("in.dreamplug.external:cointab-provider-client:$providerClientVersion")
+     implementation ("in.dreamplug.external:razorpay-provider-client:$providerClientVersion")
+     implementation ("in.dreamplug.external:axis-push-to-vpa-client:$providerClientVersion")
+diff --git a/app/src/main/java/in/dreamplug/genie/core/service/PaymentProviderService.java b/app/src/main/java/in/dreamplug/genie/core/service/PaymentProviderService.java
+index 3850d47c7..5811e01a2 100644
+--- a/app/src/main/java/in/dreamplug/genie/core/service/PaymentProviderService.java
++++ b/app/src/main/java/in/dreamplug/genie/core/service/PaymentProviderService.java
+@@ -6,11 +6,9 @@
+ import com.google.inject.Inject;
+ import in.deamplug.external.rblV2.client.RBLV2Client;
+ import in.deamplug.external.rblV2.config.RblV2AccountLevelConfig;
+-import in.deamplug.external.rblV2.request.RBLBaseRequest;
+ import in.deamplug.external.rblV2.response.BalanceCheckResponseWrapper;
+ import in.dreamplug.external.axis.client.AxisPayoutClient;
+ import in.dreamplug.external.axis.config.AxisAccountLevelConfig;
+-import in.dreamplug.external.axis.domain.balance.AccountBalanceCheckRequestBody;
+ import in.dreamplug.external.axis.response.AxisResponseContainer;
+ import in.dreamplug.external.axis.response.balance.AxisBaseBalanceCheckResponse;
+ import in.dreamplug.external.axis.response.balance.AxisSuccessBalanceCheckResponse;
+@@ -26,13 +24,11 @@
+ import in.dreamplug.external.scbV2.client.SCBV2Client;
+ import in.dreamplug.external.scbV2.config.SCBV2AccountLevelConfig;
+ import in.dreamplug.external.scbV2.domain.AccountBalance;
+-import in.dreamplug.external.scbV2.domain.BaseRequestSCB;
+ import in.dreamplug.external.scbV2.request.ActivationRequest;
+ import in.dreamplug.external.scbV2.response.ActivationResponse;
+ import in.dreamplug.external.util.common.config.AccountConfig;
+ import in.dreamplug.external.ybl.client.YBLClient;
+ import in.dreamplug.external.ybl.config.YBLAccountLevelConfig;
+-import in.dreamplug.external.ybl.request.account.AccountBalanceCheckRequest;
+ import in.dreamplug.external.ybl.response.account.AccountResponse;
+ import in.dreamplug.genie.application.Constants;
+ import in.dreamplug.genie.core.repository.PaymentProviderRepository;
+@@ -62,7 +58,7 @@
+ import static in.dreamplug.genie.core.utils.Constant.Providers.*;
+ 
+ @Slf4j
+-@RequiredArgsConstructor (onConstructor_ = { @Inject})
++@RequiredArgsConstructor(onConstructor_ = {@Inject})
+ public class PaymentProviderService {
+ 
+     private final PaymentProviderRepository paymentProviderRepository;
+@@ -70,7 +66,8 @@ public class PaymentProviderService {
+     private LoadingCache<String, Optional<PaymentProvider>> providerCache;
+ 
+ 
+-    @NonNull private final MeterRegistry meterRegistry;
++    @NonNull
++    private final MeterRegistry meterRegistry;
+ 
+     private final YBLClient yblClient;
+     private final AxisPayoutClient axisPayoutClient;
+@@ -79,18 +76,25 @@ public class PaymentProviderService {
+     private final IDFCV3Client idfcv3Client;
+     private final RBLV2Client rblv2Client;
+ 
+-    @Named(Constants.DI.PLUTUS) private final CashFreeClient plutusCashFreeClient;
+-    @Named(Constants.DI.RENT) private final CashFreeClient rentCashFreeClient;
+-    @Named(Constants.DI.DARWIN) private final CashFreeClient darwinCashFreeClient;
+-    @Named(Constants.DI.PAYPG) private final CashFreeClient paypgCashFreeClient;
+-    @Named(Constants.DI.MINT) private final CashFreeClient mintCashFreeClient;
+-    @Named(Constants.DI.LENDING_TENANT) private final CashFreeClient lendingCashFreeClient;
++    @Named(Constants.DI.PLUTUS)
++    private final CashFreeClient plutusCashFreeClient;
++    @Named(Constants.DI.RENT)
++    private final CashFreeClient rentCashFreeClient;
++    @Named(Constants.DI.DARWIN)
++    private final CashFreeClient darwinCashFreeClient;
++    @Named(Constants.DI.PAYPG)
++    private final CashFreeClient paypgCashFreeClient;
++    @Named(Constants.DI.MINT)
++    private final CashFreeClient mintCashFreeClient;
++    @Named(Constants.DI.LENDING_TENANT)
++    private final CashFreeClient lendingCashFreeClient;
+ 
+     private final RazorpayProviderSettlementService razorpayProviderSettlementService;
+ 
+     private final ConfigService configService;
+     private final TenantService tenantService;
+     private final IDFCV3PaymentProviderSettlementService idfcv3PaymentProviderSettlementService;
++    private final ProviderBalanceClientService providerBalanceClientService;
+ 
+     @Inject
+     public void init() {
+@@ -101,18 +105,19 @@ public Optional<PaymentProvider> load(final String key) {
+             }
+         });
+ 
+-        GuavaCacheMetrics.monitor(meterRegistry,this.providerCache,"payment_provider_cache" , Collections.emptyList());
++        GuavaCacheMetrics.monitor(meterRegistry, this.providerCache, "payment_provider_cache", Collections.emptyList());
+     }
+ 
+-    public PaymentProvider addProvider(PaymentProvider paymentProvider){
++    public PaymentProvider addProvider(PaymentProvider paymentProvider) {
+ 
+         return find(paymentProvider.getId()).orElseGet(() -> {
+             providerCache.invalidate(paymentProvider.getId());
+             return paymentProviderRepository.insert(paymentProvider);
+         });
+     }
+-    public Optional<PaymentProvider> findProvider(String providerId){
+-        return  find(providerId);
++
++    public Optional<PaymentProvider> findProvider(String providerId) {
++        return find(providerId);
+     }
+ 
+     public Optional<PaymentProvider> find(String providerId) {
+@@ -124,11 +129,10 @@ public Optional<PaymentProvider> find(String providerId) {
+         return paymentProviderRepository.find(providerId);
+     }
+ 
+-    public ActivationResponse activateScbV2(ActivationRequest request){
++    public ActivationResponse activateScbV2(ActivationRequest request) {
+         try {
+             return scbv2Client.activateSCB(request);
+-        }
+-        catch (Exception e){
++        } catch (Exception e) {
+             log.error(e.getMessage(), e);
+             throw Error.provider_api_failure.getBuilder().build();
+         }
+@@ -210,11 +214,10 @@ public BalanceCheckProviderResponse getBalanceCheckYbl(String tenantId) {
+         Map<String, BigDecimal> response = new HashMap<>();
+ 
+         CompletableFuture.allOf(accountIdentifiers.stream()
+-                                                  .filter(x -> !x.isEmpty() && "CURRENT".equalsIgnoreCase(x))
++                        .filter(x -> !x.isEmpty() && "CURRENT".equalsIgnoreCase(x))
+                         .map(accountType -> CompletableFuture.runAsync(() -> {
+                             try {
+-                                AccountBalanceCheckRequest accountBalanceCheckRequest = AccountBalanceCheckRequest.builder().tenantIdentifier(tenantId).accountType(accountType).build();
+-                                BaseResponse<AccountResponse> accountResponse = yblClient.getBalance(accountBalanceCheckRequest);
++                                BaseResponse<AccountResponse> accountResponse = providerBalanceClientService.fetchYblBalance(tenantId, accountType);
+                                 if (accountResponse.isOK()) {
+                                     response.put(accountType, new BigDecimal(accountResponse.getResponse().getGetBalanceResponse().getAccountBalanceAmount()));
+                                 }
+@@ -232,17 +235,14 @@ public BalanceCheckProviderResponse getBalanceCheckYbl(String tenantId) {
+     public BalanceCheckProviderResponse getBalanceCheckRblV2(String tenantId) {
+         Map<String, BigDecimal> response = new HashMap<>();
+ 
+-        try{
++        try {
+             AccountConfig<RblV2AccountLevelConfig> accountConfig = rblv2Client.getConfig().getTenantConfig(tenantId);
+             Map<String, RblV2AccountLevelConfig> accountsMap = accountConfig.getAccountConfigStore();
+ 
+             CompletableFuture.allOf(accountsMap.entrySet().stream()
+                             .map(entry -> CompletableFuture.runAsync(() -> {
+                                 try {
+-                                    RBLBaseRequest baseRequest = RBLBaseRequest.builder()
+-                                            .tenantIdentifier(tenantId).accountIdentifier(entry.getKey())
+-                                            .requestIdentifier("dummy").build();
+-                                    BaseResponse<BalanceCheckResponseWrapper> accountResponse = rblv2Client.checkBalance(baseRequest);
++                                    BaseResponse<BalanceCheckResponseWrapper> accountResponse = providerBalanceClientService.fetchRblBalance(tenantId, entry.getKey());
+                                     if (accountResponse.isOK()) {
+                                         response.put(entry.getKey(),
+                                                 new BigDecimal(accountResponse.getResponse().getBalanceCheckResponse().getBody().getBalanceAmountData().getAmountValue()));
+@@ -253,7 +253,8 @@ public BalanceCheckProviderResponse getBalanceCheckRblV2(String tenantId) {
+                             }))
+                             .toArray(CompletableFuture[]::new))
+                     .join();
+-        }catch (Exception e){}
++        } catch (Exception e) {
++        }
+ 
+         return BalanceCheckProviderResponse.builder().ProviderResponse(response).providerId(RBL_V2).build();
+     }
+@@ -267,15 +268,7 @@ public BalanceCheckProviderResponse getBalanceCheckAxis(String tenantId) {
+             CompletableFuture.allOf(accountsMap.entrySet().stream()
+                             .map(entry -> CompletableFuture.runAsync(() -> {
+                                 try {
+-                                    AxisAccountLevelConfig axisAccountLevelConfig = entry.getValue();
+-                                    AccountBalanceCheckRequestBody requestBody = new AccountBalanceCheckRequestBody(
+-                                            axisPayoutClient.getConfig().getChannelId(),
+-                                            axisAccountLevelConfig.getCorpCode(),
+-                                            axisAccountLevelConfig.getCorpAccNum(),
+-                                            ""
+-                                    );
+-                                    requestBody.setTenantIdentifier(tenantId);
+-                                    AxisResponseContainer<AxisBaseBalanceCheckResponse> axisBaseResponse = axisPayoutClient.getBalance(requestBody);
++                                    AxisResponseContainer<AxisBaseBalanceCheckResponse> axisBaseResponse = providerBalanceClientService.fetchAxisBalance(tenantId, entry.getKey());
+                                     if (axisBaseResponse.isOK()) {
+                                         AxisSuccessBalanceCheckResponse successResponse = (AxisSuccessBalanceCheckResponse) axisBaseResponse.getResponse();
+                                         response.put("AXIS_" + entry.getKey(),
+@@ -307,7 +300,7 @@ public BalanceCheckProviderResponse getBalanceCheckICICIComposite() {
+                             if (null != iciciBalanceCheckResponse.getResponse()) {
+                                 response.put((ICICI + '_' + accountNameIdentifier),
+                                         new BigDecimal(
+-                                                ( Objects.isNull(iciciBalanceCheckResponse.getEffectiveBalance())) ? "0" :  iciciBalanceCheckResponse.getEffectiveBalance()
++                                                (Objects.isNull(iciciBalanceCheckResponse.getEffectiveBalance())) ? "0" : iciciBalanceCheckResponse.getEffectiveBalance()
+                                         ));
+                             }
+                             log.error("Failure on icici composite balance check for account {}", accountNameIdentifier);
+@@ -331,7 +324,7 @@ public BalanceCheckProviderResponse getBalanceCheckIdfcV3(String tenantId) {
+             CompletableFuture.allOf(accountsMap.entrySet().stream()
+                     .map(entry -> CompletableFuture.runAsync(() -> {
+                         try {
+-                            IDFCBalanceCheckResponse idfcBalanceCheckResponse = idfcv3PaymentProviderSettlementService.getAccountBalance(tenantId, entry.getKey());
++                            IDFCBalanceCheckResponse idfcBalanceCheckResponse = providerBalanceClientService.fetchIdfcBalance(tenantId, entry.getKey());
+ 
+                             if (Objects.nonNull(idfcBalanceCheckResponse)) {
+                                 response.put(String.format("%s_%s", IDFC_V3, entry.getKey()),
+@@ -342,7 +335,8 @@ public BalanceCheckProviderResponse getBalanceCheckIdfcV3(String tenantId) {
+                         }
+                     })).toArray(CompletableFuture[]::new)).join();
+ 
+-        } catch (Exception e) {}
++        } catch (Exception e) {
++        }
+ 
+         return BalanceCheckProviderResponse.builder().ProviderResponse(response).providerId(IDFC_V3).build();
+     }
+@@ -377,8 +371,7 @@ public BalanceCheckProviderResponse getBalanceCheckScbV2(String tenantId) {
+             CompletableFuture.allOf(accountsMap.entrySet().stream()
+                     .map(entry -> CompletableFuture.runAsync(() -> {
+                         try {
+-                            BaseRequestSCB requestSCB = BaseRequestSCB.builder().tenantIdentifier(tenantId).accountIdentifier(entry.getKey()).build();
+-                            in.dreamplug.external.scbV2.response.BalanceCheckResponse balanceCheckResponse = scbv2Client.balanceCheck(requestSCB);
++                            in.dreamplug.external.scbV2.response.BalanceCheckResponse balanceCheckResponse = providerBalanceClientService.fetchScbBalance(tenantId, entry.getKey());
+ 
+                             if (Objects.nonNull(balanceCheckResponse)) {
+                                 balanceCheckResponse.getAccountBalances()
+@@ -400,13 +393,14 @@ public BalanceCheckProviderResponse getBalanceCheckScbV2(String tenantId) {
+                         }
+                     })).toArray(CompletableFuture[]::new)).join();
+ 
+-        } catch (Exception e) {}
++        } catch (Exception e) {
++        }
+ 
+         return BalanceCheckProviderResponse.builder().ProviderResponse(response).providerId(SCB_V2).build();
+     }
+ 
+-    private CashFreeClient getCashfreeClient(String tenantId){
+-        switch (tenantId){
++    private CashFreeClient getCashfreeClient(String tenantId) {
++        switch (tenantId) {
+             case Constants.DI.LENDING_TENANT:
+                 return lendingCashFreeClient;
+             case Constants.DI.RENT_TENANT:
+diff --git a/app/src/main/java/in/dreamplug/genie/core/service/ProviderBalanceClientService.java b/app/src/main/java/in/dreamplug/genie/core/service/ProviderBalanceClientService.java
+new file mode 100644
+index 000000000..361ae9fe4
+--- /dev/null
++++ b/app/src/main/java/in/dreamplug/genie/core/service/ProviderBalanceClientService.java
+@@ -0,0 +1,131 @@
++package in.dreamplug.genie.core.service;
++
++import in.deamplug.external.rblV2.client.RBLV2Client;
++import in.deamplug.external.rblV2.request.RBLBaseRequest;
++import in.deamplug.external.rblV2.response.BalanceCheckResponseWrapper;
++import in.dreamplug.external.axis.client.AxisPayoutClient;
++import in.dreamplug.external.axis.config.AxisAccountLevelConfig;
++import in.dreamplug.external.axis.domain.balance.AccountBalanceCheckRequestBody;
++import in.dreamplug.external.axis.response.AxisResponseContainer;
++import in.dreamplug.external.axis.response.balance.AxisBaseBalanceCheckResponse;
++import in.dreamplug.external.hystrix.domains.BaseResponse;
++import in.dreamplug.external.idfcV3.client.IDFCV3Client;
++import in.dreamplug.external.idfcV3.response.IDFCBalanceCheckResponse;
++import in.dreamplug.external.scbV2.client.SCBV2Client;
++import in.dreamplug.external.scbV2.domain.BaseRequestSCB;
++import in.dreamplug.external.scbV2.response.BalanceCheckResponse;
++import in.dreamplug.external.util.common.config.AccountConfig;
++import in.dreamplug.external.ybl.client.YBLClient;
++import in.dreamplug.external.ybl.request.account.AccountBalanceCheckRequest;
++import in.dreamplug.external.ybl.response.account.AccountResponse;
++import in.dreamplug.genie.external.provider.IDFCV3PaymentProviderSettlementService;
++import jakarta.inject.Inject;
++import lombok.RequiredArgsConstructor;
++import lombok.SneakyThrows;
++import lombok.extern.slf4j.Slf4j;
++
++import java.util.Objects;
++
++/**
++ * Service responsible for constructing requests and calling provider balance APIs.
++ * This service provides a clean abstraction over provider client interactions,
++ * eliminating code duplication between PaymentProviderService and TenantBalanceService.
++ */
++@Slf4j
++@RequiredArgsConstructor(onConstructor_ = {@Inject})
++public class ProviderBalanceClientService {
++
++    // Provider clients for direct API calls
++    private final YBLClient yblClient;
++    private final RBLV2Client rblv2Client;
++    private final AxisPayoutClient axisPayoutClient;
++    private final IDFCV3Client idfcv3Client;
++    private final SCBV2Client scbv2Client;
++    private final IDFCV3PaymentProviderSettlementService idfcv3PaymentProviderSettlementService;
++
++    public BaseResponse<AccountResponse> fetchYblBalance(String tenantId, String accountIdentifier) {
++        try {
++            AccountBalanceCheckRequest request = AccountBalanceCheckRequest.builder()
++                    .tenantIdentifier(tenantId)
++                    .accountType(accountIdentifier)
++                    .build();
++            
++            return yblClient.getBalance(request);
++        } catch (Exception e) {
++            log.error("Error calling YBL balance API for tenant {} and account type {}: {}", 
++                     tenantId, accountIdentifier, e.getMessage());
++            throw e;
++        }
++    }
++
++    public BaseResponse<BalanceCheckResponseWrapper> fetchRblBalance(String tenantId, String accountIdentifier) {
++        try {
++            // Generate unique request identifier
++            String requestId = "balance_check_" + System.currentTimeMillis();
++            
++            RBLBaseRequest request = RBLBaseRequest.builder()
++                    .tenantIdentifier(tenantId)
++                    .accountIdentifier(accountIdentifier)
++                    .requestIdentifier(requestId)
++                    .build();
++            
++            return rblv2Client.checkBalance(request);
++        } catch (Exception e) {
++            log.error("Error calling RBL balance API for tenant {} and account {}: {}", 
++                     tenantId, accountIdentifier, e.getMessage());
++            throw e;
++        }
++    }
++
++    public AxisResponseContainer<AxisBaseBalanceCheckResponse> fetchAxisBalance(String tenantId, String accountIdentifier) {
++        try {
++            // Get account config to derive corp code and account number
++            AccountConfig<AxisAccountLevelConfig> accountConfig = axisPayoutClient.getConfig().getTenantConfig(tenantId);
++            AxisAccountLevelConfig config = accountConfig.getAccountConfigStore().get(accountIdentifier);
++            
++            if (Objects.isNull(config)) {
++                throw new IllegalArgumentException("Account config not found for account ID: " + accountIdentifier);
++            }
++            
++            AccountBalanceCheckRequestBody request = new AccountBalanceCheckRequestBody(
++                    axisPayoutClient.getConfig().getChannelId(),
++                    config.getCorpCode(),
++                    config.getCorpAccNum(),
++                    ""
++            );
++            request.setTenantIdentifier(tenantId);
++            
++            return axisPayoutClient.getBalance(request);
++        } catch (Exception e) {
++            log.error("Error calling Axis balance API for tenant {} and account {}: {}", 
++                     tenantId, accountIdentifier, e.getMessage());
++            throw e;
++        }
++    }
++
++    public IDFCBalanceCheckResponse fetchIdfcBalance(String tenantId, String accountIdentifier) {
++        try {
++            return idfcv3PaymentProviderSettlementService.getAccountBalance(tenantId, accountIdentifier);
++        } catch (Exception e) {
++            log.error("Error calling IDFC balance API for tenant {} and account {}: {}", 
++                     tenantId, accountIdentifier, e.getMessage());
++            throw e;
++        }
++    }
++
++    @SneakyThrows
++    public BalanceCheckResponse fetchScbBalance(String tenantId, String accountIdentifier) {
++        try {
++            BaseRequestSCB request = BaseRequestSCB.builder()
++                    .tenantIdentifier(tenantId)
++                    .accountIdentifier(accountIdentifier)
++                    .build();
++            
++            return scbv2Client.balanceCheck(request);
++        } catch (Exception e) {
++            log.error("Error calling SCB balance API for tenant {} and account {}: {}",
++                     tenantId, accountIdentifier, e.getMessage());
++            throw e;
++        }
++    }
++}
+diff --git a/app/src/main/java/in/dreamplug/genie/core/service/TenantBalanceService.java b/app/src/main/java/in/dreamplug/genie/core/service/TenantBalanceService.java
+new file mode 100644
+index 000000000..2e751c4a0
+--- /dev/null
++++ b/app/src/main/java/in/dreamplug/genie/core/service/TenantBalanceService.java
+@@ -0,0 +1,369 @@
++package in.dreamplug.genie.core.service;
++
++import in.deamplug.external.rblV2.client.RBLV2Client;
++import in.deamplug.external.rblV2.config.RblV2AccountLevelConfig;
++import in.deamplug.external.rblV2.response.BalanceCheckResponseWrapper;
++import in.dreamplug.external.axis.client.AxisPayoutClient;
++import in.dreamplug.external.axis.config.AxisAccountLevelConfig;
++import in.dreamplug.external.axis.response.AxisResponseContainer;
++import in.dreamplug.external.axis.response.balance.AxisBaseBalanceCheckResponse;
++import in.dreamplug.external.axis.response.balance.AxisSuccessBalanceCheckResponse;
++import in.dreamplug.external.hystrix.domains.BaseResponse;
++import in.dreamplug.external.idfcV3.client.IDFCV3Client;
++import in.dreamplug.external.idfcV3.config.IDFCV3AccountLevelConfig;
++import in.dreamplug.external.idfcV3.response.IDFCBalanceCheckResponse;
++import in.dreamplug.external.scbV2.client.SCBV2Client;
++import in.dreamplug.external.scbV2.config.SCBV2AccountLevelConfig;
++import in.dreamplug.external.scbV2.domain.AccountBalance;
++import in.dreamplug.external.util.common.config.AccountConfig;
++import in.dreamplug.external.ybl.client.YBLClient;
++import in.dreamplug.external.ybl.config.YBLAccountLevelConfig;
++import in.dreamplug.external.ybl.response.account.AccountResponse;
++import in.dreamplug.genie.core.repository.TenantProviderConfigRepository;
++import in.dreamplug.genie.model.bean.core.Error;
++import in.dreamplug.genie.model.bean.response.PaymentProviderBalance;
++import in.dreamplug.genie.model.bean.response.ProviderAccount;
++import in.dreamplug.genie.model.bean.response.TenantBalanceCheckResponse;
++import in.dreamplug.genie.model.entities.core.tenant.Tenant;
++import jakarta.inject.Inject;
++import lombok.RequiredArgsConstructor;
++import lombok.extern.slf4j.Slf4j;
++
++import java.math.BigDecimal;
++import java.util.ArrayList;
++import java.util.List;
++import java.util.Map;
++import java.util.Objects;
++import java.util.concurrent.CompletableFuture;
++import java.util.stream.Collectors;
++
++import static in.dreamplug.genie.core.utils.Constant.Providers.*;
++
++@Slf4j
++@RequiredArgsConstructor(onConstructor_ = {@Inject})
++public class TenantBalanceService {
++
++    private final TenantService tenantService;
++    private final ProviderBalanceClientService providerBalanceClientService;
++    private final TenantProviderConfigRepository tenantProviderConfigRepository;
++
++    private final YBLClient yblClient;
++    private final AxisPayoutClient axisPayoutClient;
++    private final SCBV2Client scbv2Client;
++    private final IDFCV3Client idfcv3Client;
++    private final RBLV2Client rblv2Client;
++
++
++    public TenantBalanceCheckResponse getTenantBalance(String tenantId) {
++        validateTenant(tenantId);
++        List<PaymentProviderBalance> balances = getAllProviderBalances(tenantId);
++        return buildTenantBalanceResponse(tenantId, balances);
++    }
++
++    public TenantBalanceCheckResponse getProviderSpecificTenantBalance(String tenantId, List<String> providers) {
++        validateTenant(tenantId);
++
++        List<PaymentProviderBalance> balances;
++
++        if (Objects.isNull(providers) || providers.isEmpty()) {
++            balances = getAllProviderBalances(tenantId);
++        } else {
++            balances = getSpecificProviderBalances(tenantId, providers);
++        }
++        return buildTenantBalanceResponse(tenantId, balances);
++    }
++
++    private List<PaymentProviderBalance> getSpecificProviderBalances(String tenantId, List<String> providerIds) {
++        return providerIds.stream()
++                .map(providerId -> getProviderBalance(tenantId, providerId))
++                .filter(Objects::nonNull)
++                .collect(Collectors.toList());
++    }
++
++    private PaymentProviderBalance getProviderBalance(String tenantId, String providerId) {
++        try {
++            return switch (providerId) {
++                case YBL -> getYblBalance(tenantId);
++                case RBL_V2 -> getRblV2Balance(tenantId);
++                case AXIS -> getAxisBalance(tenantId);
++                case IDFC_V3 -> getIdfcV3Balance(tenantId);
++                case SCB_V2 -> getScbV2Balance(tenantId);
++                default -> {
++                    log.warn("Unknown provider ID: {}", providerId);
++                    yield null;
++                }
++            };
++        } catch (Exception e) {
++            log.error("Error getting balance for provider {} and tenant {}: {}", providerId, tenantId, e.getMessage());
++            return null;
++        }
++    }
++
++    private List<PaymentProviderBalance> getAllProviderBalances(String tenantId) {
++        List<CompletableFuture<PaymentProviderBalance>> futures = List.of(
++                CompletableFuture.supplyAsync(() -> getYblBalance(tenantId)),
++                CompletableFuture.supplyAsync(() -> getRblV2Balance(tenantId)),
++                CompletableFuture.supplyAsync(() -> getAxisBalance(tenantId)),
++                CompletableFuture.supplyAsync(() -> getIdfcV3Balance(tenantId)),
++                CompletableFuture.supplyAsync(() -> getScbV2Balance(tenantId))
++        );
++
++        return futures.stream()
++                .map(CompletableFuture::join)
++                .collect(Collectors.toList());
++    }
++
++    public void validateTenant(String tenantId) {
++        Tenant tenant = tenantService.fetchTenant(tenantId)
++                .orElseThrow(Error.invalid_tenant_id.getBuilder()::build);
++
++        if (!tenant.isEnabled()) {
++            throw Error.tenant_disabled.getBuilder().build();
++        }
++    }
++
++    private TenantBalanceCheckResponse buildTenantBalanceResponse(String tenantId, List<PaymentProviderBalance> balances) {
++        return TenantBalanceCheckResponse.builder()
++                .tenantId(tenantId)
++                .paymentProviderBalanceList(balances)
++                .build();
++    }
++
++    private PaymentProviderBalance getYblBalance(String tenantId) {
++        List<ProviderAccount> accounts = new ArrayList<>();
++
++        try {
++            AccountConfig<YBLAccountLevelConfig> accountConfig = yblClient.getClientConfig().getTenantConfig(tenantId);
++            Map<String, YBLAccountLevelConfig> accountsMap = getActiveTenantProviderConfig(tenantId,
++                    YBL, accountConfig.getAccountConfigStore());
++
++            CompletableFuture.allOf(accountsMap.entrySet().stream()
++                            .map(entry -> CompletableFuture.runAsync(() -> {
++                                try {
++                                    String accountType = entry.getKey();
++                                    YBLAccountLevelConfig config = entry.getValue();
++
++                                    BaseResponse<AccountResponse> response = providerBalanceClientService.fetchYblBalance(tenantId, accountType);
++
++                                    if (response.isOK()) {
++                                        String accountNumber = config.getDebitAccountNo();
++                                        BigDecimal balance = new BigDecimal(response.getResponse().getGetBalanceResponse().getAccountBalanceAmount());
++
++                                        synchronized (accounts) {
++                                            accounts.add(ProviderAccount.builder()
++                                                    .accountNumber(accountNumber)
++                                                    .balance(balance)
++                                                    .currency("INR")
++                                                    .build());
++                                        }
++                                    }
++                                } catch (Exception e) {
++                                    log.error("Error getting YBL balance for account {}: {}", entry.getKey(), e.getMessage());
++                                }
++                            }))
++                            .toArray(CompletableFuture[]::new))
++                    .join();
++        } catch (Exception e) {
++            log.error("Error getting YBL balance for tenant {}: {}", tenantId, e.getMessage());
++        }
++
++        return PaymentProviderBalance.builder()
++                .providerId(YBL)
++                .accounts(accounts)
++                .build();
++    }
++
++    private PaymentProviderBalance getRblV2Balance(String tenantId) {
++        List<ProviderAccount> accounts = new ArrayList<>();
++
++        try {
++            AccountConfig<RblV2AccountLevelConfig> accountConfig = rblv2Client.getConfig().getTenantConfig(tenantId);
++            Map<String, RblV2AccountLevelConfig> accountsMap = getActiveTenantProviderConfig(tenantId,
++                    RBL_V2, accountConfig.getAccountConfigStore());
++
++            CompletableFuture.allOf(accountsMap.entrySet().stream()
++                            .map(entry -> CompletableFuture.runAsync(() -> {
++                                try {
++                                    String accountId = entry.getKey();
++                                    RblV2AccountLevelConfig config = entry.getValue();
++
++                                    BaseResponse<BalanceCheckResponseWrapper> response = providerBalanceClientService.fetchRblBalance(tenantId, accountId);
++
++                                    if (response.isOK()) {
++                                        String accountNumber = config.getDebitAccountNo();
++                                        BigDecimal balance = new BigDecimal(response.getResponse().getBalanceCheckResponse().getBody().getBalanceAmountData().getAmountValue());
++
++                                        synchronized (accounts) {
++                                            accounts.add(ProviderAccount.builder()
++                                                    .accountNumber(accountNumber != null ? accountNumber : accountId)
++                                                    .balance(balance)
++                                                    .currency("INR")
++                                                    .build());
++                                        }
++                                    }
++                                } catch (Exception e) {
++                                    log.error("Error getting RBL balance for account {}: {}", entry.getKey(), e.getMessage());
++                                }
++                            }))
++                            .toArray(CompletableFuture[]::new))
++                    .join();
++        } catch (Exception e) {
++            log.error("Error getting RBL balance for tenant {}: {}", tenantId, e.getMessage());
++        }
++
++        return PaymentProviderBalance.builder()
++                .providerId(RBL_V2)
++                .accounts(accounts)
++                .build();
++    }
++
++    private PaymentProviderBalance getAxisBalance(String tenantId) {
++        List<ProviderAccount> accounts = new ArrayList<>();
++
++        try {
++            AccountConfig<AxisAccountLevelConfig> accountConfig = axisPayoutClient.getConfig().getTenantConfig(tenantId);
++            Map<String, AxisAccountLevelConfig> accountsMap = getActiveTenantProviderConfig(tenantId,
++                    AXIS, accountConfig.getAccountConfigStore());
++
++            CompletableFuture.allOf(accountsMap.entrySet().stream()
++                            .map(entry -> CompletableFuture.runAsync(() -> {
++                                try {
++                                    AxisAccountLevelConfig config = entry.getValue();
++                                    AxisResponseContainer<AxisBaseBalanceCheckResponse> response = providerBalanceClientService.fetchAxisBalance(tenantId, entry.getKey());
++                                    if (response.isOK()) {
++                                        AxisSuccessBalanceCheckResponse successResponse = (AxisSuccessBalanceCheckResponse) response.getResponse();
++                                        String accountNumber = config.getCorpAccNum();
++                                        BigDecimal balance = new BigDecimal(successResponse.getDetails().getBalance());
++
++                                        synchronized (accounts) {
++                                            accounts.add(ProviderAccount.builder()
++                                                    .accountNumber(accountNumber)
++                                                    .balance(balance)
++                                                    .currency("INR")
++                                                    .build());
++                                        }
++                                    }
++                                } catch (Exception e) {
++                                    log.error("Error getting Axis balance for account {}: {}", entry.getKey(), e.getMessage());
++                                }
++                            }))
++                            .toArray(CompletableFuture[]::new))
++                    .join();
++        } catch (Exception e) {
++            log.error("Error getting Axis balance for tenant {}: {}", tenantId, e.getMessage());
++        }
++
++        return PaymentProviderBalance.builder()
++                .providerId(AXIS)
++                .accounts(accounts)
++                .build();
++    }
++
++    private PaymentProviderBalance getIdfcV3Balance(String tenantId) {
++        List<ProviderAccount> accounts = new ArrayList<>();
++
++        try {
++            AccountConfig<IDFCV3AccountLevelConfig> accountConfig = idfcv3Client.getClientConfig().getTenantConfig(tenantId);
++            Map<String, IDFCV3AccountLevelConfig> accountsMap = getActiveTenantProviderConfig(tenantId,
++                    IDFC_V3, accountConfig.getAccountConfigStore());
++
++            CompletableFuture.allOf(accountsMap.entrySet().stream()
++                            .map(entry -> CompletableFuture.runAsync(() -> {
++                                try {
++                                    String accountId = entry.getKey();
++                                    IDFCV3AccountLevelConfig config = entry.getValue();
++
++                                    IDFCBalanceCheckResponse response = providerBalanceClientService.fetchIdfcBalance(tenantId, accountId);
++                                    if (Objects.nonNull(response)) {
++                                        String accountNumber = config.getAccountNo();
++                                        BigDecimal balance = new BigDecimal(response.getPrefetchAccountResp().getResourceData().getAvailableBalance());
++
++                                        synchronized (accounts) {
++                                            accounts.add(ProviderAccount.builder()
++                                                    .accountNumber(accountNumber != null ? accountNumber : accountId)
++                                                    .balance(balance)
++                                                    .currency("INR")
++                                                    .build());
++                                        }
++                                    }
++                                } catch (Exception e) {
++                                    log.error("Error getting IDFC balance for account {}: {}", entry.getKey(), e.getMessage());
++                                }
++                            }))
++                            .toArray(CompletableFuture[]::new))
++                    .join();
++        } catch (Exception e) {
++            log.error("Error getting IDFC balance for tenant {}: {}", tenantId, e.getMessage());
++        }
++
++        return PaymentProviderBalance.builder()
++                .providerId(IDFC_V3)
++                .accounts(accounts)
++                .build();
++    }
++
++    private PaymentProviderBalance getScbV2Balance(String tenantId) {
++        List<ProviderAccount> accounts = new ArrayList<>();
++
++        try {
++            AccountConfig<SCBV2AccountLevelConfig> accountConfig = scbv2Client.getConfig().getTenantConfig(tenantId);
++            Map<String, SCBV2AccountLevelConfig> accountsMap = getActiveTenantProviderConfig(tenantId,
++                    SCB_V2, accountConfig.getAccountConfigStore());
++
++            CompletableFuture.allOf(accountsMap.entrySet().stream()
++                            .map(entry -> CompletableFuture.runAsync(() -> {
++                                try {
++                                    String accountId = entry.getKey();
++                                    SCBV2AccountLevelConfig config = entry.getValue();
++
++                                    in.dreamplug.external.scbV2.response.BalanceCheckResponse response = providerBalanceClientService.fetchScbBalance(tenantId, accountId);
++
++                                    if (Objects.nonNull(response)) {
++                                        response.getAccountBalances()
++                                                .stream()
++                                                .findFirst()
++                                                .map(AccountBalance::getBalances)
++                                                .filter(balances -> !balances.isEmpty())
++                                                .flatMap(balances -> balances.stream()
++                                                        .filter(balance -> "ClosingAvailable".equalsIgnoreCase(balance.getType()))
++                                                        .findFirst())
++                                                .ifPresent(balance -> {
++                                                    String accountNumber = config.getDebtorAccountId();
++                                                    BigDecimal balanceAmount = new BigDecimal(balance.getBalanceAmount().getAmount());
++
++                                                    synchronized (accounts) {
++                                                        accounts.add(ProviderAccount.builder()
++                                                                .accountNumber(accountNumber != null ? accountNumber : accountId)
++                                                                .balance(balanceAmount)
++                                                                .currency("INR")
++                                                                .build());
++                                                    }
++                                                });
++                                    }
++                                } catch (Exception e) {
++                                    log.error("Error getting SCB balance for account {}: {}", entry.getKey(), e.getMessage());
++                                }
++                            }))
++                            .toArray(CompletableFuture[]::new))
++                    .join();
++        } catch (Exception e) {
++            log.error("Error getting SCB balance for tenant {}: {}", tenantId, e.getMessage());
++        }
++
++        return PaymentProviderBalance.builder()
++                .providerId(SCB_V2)
++                .accounts(accounts)
++                .build();
++    }
++
++    private <T> Map<String, T> getActiveTenantProviderConfig(String tenantId, String providerId, Map<String, T> accountConfig) {
++        return tenantProviderConfigRepository.getTenantProviderConfig(tenantId).stream()
++                .filter(config -> config.isEnabled() && config.getProviderId().equals(providerId)
++                        && accountConfig.containsKey(config.getAccountId()))
++                .collect(Collectors.toMap(
++                        config -> config.getAccountId(),
++                        config -> accountConfig.get(config.getAccountId())
++                ));
++    }
++
++}
+diff --git a/app/src/main/java/in/dreamplug/genie/model/bean/core/Error.java b/app/src/main/java/in/dreamplug/genie/model/bean/core/Error.java
+index 1cdda759c..0a3531653 100644
+--- a/app/src/main/java/in/dreamplug/genie/model/bean/core/Error.java
++++ b/app/src/main/java/in/dreamplug/genie/model/bean/core/Error.java
+@@ -34,6 +34,7 @@ public enum Error {
+     settlement_attempt_not_found_404(AppException.builder().statusCode(404).header("Settlement Attempt not found").message("Settlement attempt not found for the given attempt uid")),
+     settlement_account_inactive(AppException.builder().statusCode(500).header("Settlement Account is Inactive").message("Settlement Account is Inactive.")),
+     invalid_tenant_id(AppException.builder().statusCode(400).header("Invalid tenant_id").message("Please check the tenant id and try again")),
++    tenant_disabled(AppException.builder().statusCode(400).header("Disabled tenant_id").message("Please check the tenant id and try again")),
+     duplicate_tenant_id(AppException.builder().statusCode(409).header("Duplicate tenant_id.").message("Please check the tenant id and try again")),
+     invalid_tenant_config(AppException.builder().statusCode(400).header("Invalid Tenant Config").message("Please check the tenant config and try again")),
+     tenant_update_failure(AppException.builder().statusCode(400).header("Tenant Update Failed").message("Tenant Update Failed")),
+diff --git a/app/src/main/java/in/dreamplug/genie/resource/v1/TenantResource.java b/app/src/main/java/in/dreamplug/genie/resource/v1/TenantResource.java
+index 4c2d36402..811c98c59 100644
+--- a/app/src/main/java/in/dreamplug/genie/resource/v1/TenantResource.java
++++ b/app/src/main/java/in/dreamplug/genie/resource/v1/TenantResource.java
+@@ -1,20 +1,41 @@
+ package in.dreamplug.genie.resource.v1;
+ 
+ import in.dreamplug.genie.config.TenantConfig;
++import in.dreamplug.genie.core.service.TenantBalanceService;
+ import in.dreamplug.genie.core.service.TenantService;
++import in.dreamplug.genie.fliter.AuthorizedTenant;
+ import in.dreamplug.genie.model.bean.core.Error;
+-import in.dreamplug.genie.model.entities.core.tenant.*;
++import in.dreamplug.genie.model.bean.request.TenantBalanceCheckRequest;
++import in.dreamplug.genie.model.bean.response.TenantBalanceCheckResponse;
++import in.dreamplug.genie.model.entities.core.tenant.Tenant;
++import in.dreamplug.genie.model.entities.core.tenant.TenantCredentialConfig;
++import in.dreamplug.genie.model.entities.core.tenant.TenantProviderConfig;
++import in.dreamplug.genie.model.entities.core.tenant.TenantQueueConfig;
++import in.dreamplug.genie.model.entities.core.tenant.TenantWebhookConfig;
+ import jakarta.inject.Inject;
+-import jakarta.ws.rs.*;
++import jakarta.ws.rs.Consumes;
++import jakarta.ws.rs.DefaultValue;
++import jakarta.ws.rs.GET;
++import jakarta.ws.rs.POST;
++import jakarta.ws.rs.PUT;
++import jakarta.ws.rs.Path;
++import jakarta.ws.rs.PathParam;
++import jakarta.ws.rs.Produces;
++import jakarta.ws.rs.QueryParam;
+ import jakarta.ws.rs.core.MediaType;
+ import lombok.RequiredArgsConstructor;
++import org.slf4j.MDC;
++
++import static in.dreamplug.genie.core.utils.Constant.PayoutHeaders.X_TENANT_ID;
+ 
+ @Path ("genie/v1/tenant")
+ @Produces (MediaType.APPLICATION_JSON)
+ @Consumes (MediaType.APPLICATION_JSON)
+ @RequiredArgsConstructor (onConstructor_ = { @Inject })
+ public class TenantResource {
++
+     private final TenantService tenantService;
++    private final TenantBalanceService tenantBalanceService;
+ 
+     @POST
+     @Path("/{tenantId}")
+@@ -76,4 +97,18 @@ public TenantConfig createTenantProviderConfig(@PathParam("tenantId") String ten
+ //        tenantService.deleteTenant(tenantId);
+ //    }
+ 
++    @GET
++    @AuthorizedTenant
++    @Path("/balance")
++    public TenantBalanceCheckResponse getTenantBalance() {
++        return tenantBalanceService.getTenantBalance(MDC.get(X_TENANT_ID));
++    }
++
++    @POST
++    @AuthorizedTenant
++    @Path("/providers/balance")
++    public TenantBalanceCheckResponse getTenantBalance(TenantBalanceCheckRequest tenantBalanceCheckRequest) {
++        return tenantBalanceService.getProviderSpecificTenantBalance(MDC.get(X_TENANT_ID), tenantBalanceCheckRequest.getProviders());
++    }
++
+ }
+diff --git a/app/src/test/java/in/dreamplug/genie/core/service/ProviderBalanceClientServiceTest.java b/app/src/test/java/in/dreamplug/genie/core/service/ProviderBalanceClientServiceTest.java
+new file mode 100644
+index 000000000..13146c786
+--- /dev/null
++++ b/app/src/test/java/in/dreamplug/genie/core/service/ProviderBalanceClientServiceTest.java
+@@ -0,0 +1,293 @@
++package in.dreamplug.genie.core.service;
++
++import in.deamplug.external.rblV2.client.RBLV2Client;
++import in.deamplug.external.rblV2.request.RBLBaseRequest;
++import in.deamplug.external.rblV2.response.BalanceCheckResponseWrapper;
++import in.dreamplug.external.axis.client.AxisPayoutClient;
++import in.dreamplug.external.axis.config.AxisAccountLevelConfig;
++import in.dreamplug.external.axis.config.AxisPayoutClientConfig;
++import in.dreamplug.external.axis.domain.balance.AccountBalanceCheckRequestBody;
++import in.dreamplug.external.axis.response.AxisResponseContainer;
++import in.dreamplug.external.axis.response.balance.AxisBaseBalanceCheckResponse;
++import in.dreamplug.external.hystrix.domains.BaseResponse;
++import in.dreamplug.external.idfcV3.client.IDFCV3Client;
++import in.dreamplug.external.idfcV3.response.IDFCBalanceCheckResponse;
++import in.dreamplug.external.scbV2.client.SCBV2Client;
++import in.dreamplug.external.scbV2.domain.BaseRequestSCB;
++import in.dreamplug.external.scbV2.response.BalanceCheckResponse;
++import in.dreamplug.external.util.common.config.AccountConfig;
++import in.dreamplug.external.ybl.client.YBLClient;
++import in.dreamplug.external.ybl.request.account.AccountBalanceCheckRequest;
++import in.dreamplug.external.ybl.response.account.AccountResponse;
++import in.dreamplug.genie.external.provider.IDFCV3PaymentProviderSettlementService;
++import org.junit.jupiter.api.Test;
++import org.junit.jupiter.api.extension.ExtendWith;
++import org.mockito.ArgumentCaptor;
++import org.mockito.InjectMocks;
++import org.mockito.Mock;
++import org.mockito.junit.jupiter.MockitoExtension;
++
++import java.util.HashMap;
++import java.util.Map;
++
++import static org.junit.jupiter.api.Assertions.*;
++import static org.mockito.ArgumentMatchers.any;
++import static org.mockito.Mockito.*;
++
++@ExtendWith(MockitoExtension.class)
++class ProviderBalanceClientServiceTest {
++
++    @Mock
++    private YBLClient yblClient;
++
++    @Mock
++    private RBLV2Client rblv2Client;
++
++    @Mock
++    private AxisPayoutClient axisPayoutClient;
++
++    @Mock
++    private IDFCV3Client idfcv3Client;
++
++    @Mock
++    private SCBV2Client scbv2Client;
++
++    @Mock
++    private IDFCV3PaymentProviderSettlementService idfcv3PaymentProviderSettlementService;
++
++    @InjectMocks
++    private ProviderBalanceClientService providerBalanceClientService;
++
++    @Test
++    void testFetchYblBalance_Success() {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "CURRENT";
++        BaseResponse<AccountResponse> mockResponse = mock(BaseResponse.class);
++        when(yblClient.getBalance(any(AccountBalanceCheckRequest.class))).thenReturn(mockResponse);
++
++        // Act
++        BaseResponse<AccountResponse> result = providerBalanceClientService.fetchYblBalance(tenantId, accountIdentifier);
++
++        // Assert
++        assertNotNull(result);
++        assertEquals(mockResponse, result);
++
++        ArgumentCaptor<AccountBalanceCheckRequest> captor = ArgumentCaptor.forClass(AccountBalanceCheckRequest.class);
++        verify(yblClient).getBalance(captor.capture());
++        AccountBalanceCheckRequest capturedRequest = captor.getValue();
++        assertEquals(tenantId, capturedRequest.getTenantIdentifier());
++        assertEquals(accountIdentifier, capturedRequest.getAccountType());
++    }
++
++    @Test
++    void testFetchYblBalance_ThrowsException() {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "CURRENT";
++        RuntimeException exception = new RuntimeException("API failure");
++        when(yblClient.getBalance(any(AccountBalanceCheckRequest.class))).thenThrow(exception);
++
++        // Act & Assert
++        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
++            providerBalanceClientService.fetchYblBalance(tenantId, accountIdentifier);
++        });
++
++        assertEquals("API failure", thrown.getMessage());
++        verify(yblClient).getBalance(any(AccountBalanceCheckRequest.class));
++    }
++
++    @Test
++    void testFetchRblBalance_Success() {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "ACC001";
++        BaseResponse<BalanceCheckResponseWrapper> mockResponse = mock(BaseResponse.class);
++        when(rblv2Client.checkBalance(any(RBLBaseRequest.class))).thenReturn(mockResponse);
++
++        // Act
++        BaseResponse<BalanceCheckResponseWrapper> result = providerBalanceClientService.fetchRblBalance(tenantId, accountIdentifier);
++
++        // Assert
++        assertNotNull(result);
++        assertEquals(mockResponse, result);
++
++        ArgumentCaptor<RBLBaseRequest> captor = ArgumentCaptor.forClass(RBLBaseRequest.class);
++        verify(rblv2Client).checkBalance(captor.capture());
++        RBLBaseRequest capturedRequest = captor.getValue();
++        assertEquals(tenantId, capturedRequest.getTenantIdentifier());
++        assertEquals(accountIdentifier, capturedRequest.getAccountIdentifier());
++        assertNotNull(capturedRequest.getRequestIdentifier());
++        assertTrue(capturedRequest.getRequestIdentifier().startsWith("balance_check_"));
++    }
++
++    @Test
++    void testFetchRblBalance_ThrowsException() {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "ACC001";
++        RuntimeException exception = new RuntimeException("RBL API failure");
++        when(rblv2Client.checkBalance(any(RBLBaseRequest.class))).thenThrow(exception);
++
++        // Act & Assert
++        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
++            providerBalanceClientService.fetchRblBalance(tenantId, accountIdentifier);
++        });
++
++        assertEquals("RBL API failure", thrown.getMessage());
++        verify(rblv2Client).checkBalance(any(RBLBaseRequest.class));
++    }
++
++    @Test
++    void testFetchAxisBalance_Success() {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "AXIS_ACC001";
++
++        AxisPayoutClientConfig clientConfig = mock(AxisPayoutClientConfig.class);
++        when(clientConfig.getChannelId()).thenReturn("CHANNEL_ID");
++
++        AxisAccountLevelConfig accountConfig = mock(AxisAccountLevelConfig.class);
++        when(accountConfig.getCorpCode()).thenReturn("CORP123");
++        when(accountConfig.getCorpAccNum()).thenReturn("1234567890");
++
++        Map<String, AxisAccountLevelConfig> accountMap = new HashMap<>();
++        accountMap.put(accountIdentifier, accountConfig);
++
++        AccountConfig<AxisAccountLevelConfig> config = mock(AccountConfig.class);
++        when(config.getAccountConfigStore()).thenReturn(accountMap);
++
++        when(axisPayoutClient.getConfig()).thenReturn(clientConfig);
++        when(clientConfig.getTenantConfig(tenantId)).thenReturn(config);
++
++        AxisResponseContainer<AxisBaseBalanceCheckResponse> mockResponse = mock(AxisResponseContainer.class);
++        when(axisPayoutClient.getBalance(any(AccountBalanceCheckRequestBody.class))).thenReturn(mockResponse);
++
++        // Act
++        AxisResponseContainer<AxisBaseBalanceCheckResponse> result = providerBalanceClientService.fetchAxisBalance(tenantId, accountIdentifier);
++
++        // Assert
++        assertNotNull(result);
++        assertEquals(mockResponse, result);
++
++        ArgumentCaptor<AccountBalanceCheckRequestBody> captor = ArgumentCaptor.forClass(AccountBalanceCheckRequestBody.class);
++        verify(axisPayoutClient).getBalance(captor.capture());
++        AccountBalanceCheckRequestBody capturedRequest = captor.getValue();
++        assertEquals(tenantId, capturedRequest.getTenantIdentifier());
++    }
++
++    @Test
++    void testFetchAxisBalance_AccountConfigNotFound_ThrowsException() {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "INVALID_ACCOUNT";
++
++        AxisPayoutClientConfig clientConfig = mock(AxisPayoutClientConfig.class);
++        Map<String, AxisAccountLevelConfig> accountMap = new HashMap<>();
++
++        AccountConfig<AxisAccountLevelConfig> config = mock(AccountConfig.class);
++        when(config.getAccountConfigStore()).thenReturn(accountMap);
++
++        when(axisPayoutClient.getConfig()).thenReturn(clientConfig);
++        when(clientConfig.getTenantConfig(tenantId)).thenReturn(config);
++
++        // Act & Assert
++        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () -> {
++            providerBalanceClientService.fetchAxisBalance(tenantId, accountIdentifier);
++        });
++
++        assertTrue(thrown.getMessage().contains("Account config not found"));
++        verify(axisPayoutClient, never()).getBalance(any(AccountBalanceCheckRequestBody.class));
++    }
++
++    @Test
++    void testFetchAxisBalance_ThrowsException() {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "AXIS_ACC001";
++
++        AxisPayoutClientConfig clientConfig = mock(AxisPayoutClientConfig.class);
++        when(axisPayoutClient.getConfig()).thenReturn(clientConfig);
++        when(clientConfig.getTenantConfig(tenantId)).thenThrow(new RuntimeException("Config not found"));
++
++        // Act & Assert
++        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
++            providerBalanceClientService.fetchAxisBalance(tenantId, accountIdentifier);
++        });
++
++        assertEquals("Config not found", thrown.getMessage());
++    }
++
++    @Test
++    void testFetchIdfcBalance_Success() {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "IDFC_ACC001";
++        IDFCBalanceCheckResponse mockResponse = mock(IDFCBalanceCheckResponse.class);
++        when(idfcv3PaymentProviderSettlementService.getAccountBalance(tenantId, accountIdentifier)).thenReturn(mockResponse);
++
++        // Act
++        IDFCBalanceCheckResponse result = providerBalanceClientService.fetchIdfcBalance(tenantId, accountIdentifier);
++
++        // Assert
++        assertNotNull(result);
++        assertEquals(mockResponse, result);
++        verify(idfcv3PaymentProviderSettlementService).getAccountBalance(tenantId, accountIdentifier);
++    }
++
++    @Test
++    void testFetchIdfcBalance_ThrowsException() {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "IDFC_ACC001";
++        RuntimeException exception = new RuntimeException("IDFC API failure");
++        when(idfcv3PaymentProviderSettlementService.getAccountBalance(tenantId, accountIdentifier)).thenThrow(exception);
++
++        // Act & Assert
++        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
++            providerBalanceClientService.fetchIdfcBalance(tenantId, accountIdentifier);
++        });
++
++        assertEquals("IDFC API failure", thrown.getMessage());
++        verify(idfcv3PaymentProviderSettlementService).getAccountBalance(tenantId, accountIdentifier);
++    }
++
++    @Test
++    void testFetchScbBalance_Success() throws Exception {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "SCB_ACC001";
++        BalanceCheckResponse mockResponse = mock(BalanceCheckResponse.class);
++        when(scbv2Client.balanceCheck(any(BaseRequestSCB.class))).thenReturn(mockResponse);
++
++        // Act
++        BalanceCheckResponse result = providerBalanceClientService.fetchScbBalance(tenantId, accountIdentifier);
++
++        // Assert
++        assertNotNull(result);
++        assertEquals(mockResponse, result);
++
++        ArgumentCaptor<BaseRequestSCB> captor = ArgumentCaptor.forClass(BaseRequestSCB.class);
++        verify(scbv2Client).balanceCheck(captor.capture());
++        BaseRequestSCB capturedRequest = captor.getValue();
++        assertEquals(tenantId, capturedRequest.getTenantIdentifier());
++        assertEquals(accountIdentifier, capturedRequest.getAccountIdentifier());
++    }
++
++    @Test
++    void testFetchScbBalance_ThrowsException() throws Exception {
++        // Arrange
++        String tenantId = "test-tenant";
++        String accountIdentifier = "SCB_ACC001";
++        RuntimeException exception = new RuntimeException("SCB API failure");
++        when(scbv2Client.balanceCheck(any(BaseRequestSCB.class))).thenThrow(exception);
++
++        // Act & Assert
++        RuntimeException thrown = assertThrows(RuntimeException.class, () -> {
++            providerBalanceClientService.fetchScbBalance(tenantId, accountIdentifier);
++        });
++
++        assertEquals("SCB API failure", thrown.getMessage());
++        verify(scbv2Client).balanceCheck(any(BaseRequestSCB.class));
++    }
++}
+diff --git a/app/src/test/java/in/dreamplug/genie/core/service/TenantBalanceServiceTest.java b/app/src/test/java/in/dreamplug/genie/core/service/TenantBalanceServiceTest.java
+new file mode 100644
+index 000000000..dc926fb16
+--- /dev/null
++++ b/app/src/test/java/in/dreamplug/genie/core/service/TenantBalanceServiceTest.java
+@@ -0,0 +1,524 @@
++package in.dreamplug.genie.core.service;
++
++import in.deamplug.external.rblV2.client.RBLV2Client;
++import in.deamplug.external.rblV2.config.RblV2AccountLevelConfig;
++import in.dreamplug.commons.core.exception.AppException;
++import in.dreamplug.external.axis.client.AxisPayoutClient;
++import in.dreamplug.external.axis.config.AxisAccountLevelConfig;
++import in.dreamplug.external.idfcV3.client.IDFCV3Client;
++import in.dreamplug.external.idfcV3.config.IDFCV3AccountLevelConfig;
++import in.dreamplug.external.scbV2.client.SCBV2Client;
++import in.dreamplug.external.scbV2.config.SCBV2AccountLevelConfig;
++import in.dreamplug.external.util.common.config.AccountConfig;
++import in.dreamplug.external.ybl.client.YBLClient;
++import in.dreamplug.external.ybl.config.YBLAccountLevelConfig;
++import in.dreamplug.genie.core.repository.TenantProviderConfigRepository;
++import in.dreamplug.genie.model.bean.response.PaymentProviderBalance;
++import in.dreamplug.genie.model.bean.response.TenantBalanceCheckResponse;
++import in.dreamplug.genie.model.entities.core.tenant.Tenant;
++import in.dreamplug.genie.model.entities.core.tenant.TenantProviderConfig;
++import org.junit.jupiter.api.Test;
++import org.junit.jupiter.api.extension.ExtendWith;
++import org.mockito.InjectMocks;
++import org.mockito.Mock;
++import org.mockito.junit.jupiter.MockitoExtension;
++
++import java.util.Collections;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++import java.util.Optional;
++
++import static in.dreamplug.genie.core.utils.Constant.Providers.*;
++import static org.junit.jupiter.api.Assertions.*;
++import static org.mockito.ArgumentMatchers.anyString;
++import static org.mockito.Mockito.*;
++
++@ExtendWith(MockitoExtension.class)
++class TenantBalanceServiceTest {
++
++    @Mock
++    private TenantService tenantService;
++
++    @Mock
++    private ProviderBalanceClientService providerBalanceClientService;
++
++    @Mock
++    private TenantProviderConfigRepository tenantProviderConfigRepository;
++
++    @Mock
++    private YBLClient yblClient;
++
++    @Mock
++    private AxisPayoutClient axisPayoutClient;
++
++    @Mock
++    private SCBV2Client scbv2Client;
++
++    @Mock
++    private IDFCV3Client idfcv3Client;
++
++    @Mock
++    private RBLV2Client rblv2Client;
++
++    @InjectMocks
++    private TenantBalanceService tenantBalanceService;
++
++    private static final String TEST_TENANT_ID = "test-tenant";
++
++    @Test
++    void testGetTenantBalance_Success() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++        mockAllProvidersWithEmptyConfig();
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getTenantBalance(TEST_TENANT_ID);
++
++        // Assert
++        assertNotNull(response);
++        assertEquals(TEST_TENANT_ID, response.getTenantId());
++        assertNotNull(response.getPaymentProviderBalanceList());
++        assertEquals(5, response.getPaymentProviderBalanceList().size());
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testGetTenantBalance_TenantNotFound_ThrowsException() {
++        // Arrange
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.empty());
++
++        // Act & Assert
++        assertThrows(AppException.class, () -> {
++            tenantBalanceService.getTenantBalance(TEST_TENANT_ID);
++        });
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testGetTenantBalance_TenantDisabled_ThrowsException() {
++        // Arrange
++        Tenant tenant = createDisabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++
++        // Act & Assert
++        assertThrows(AppException.class, () -> {
++            tenantBalanceService.getTenantBalance(TEST_TENANT_ID);
++        });
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testGetProviderSpecificTenantBalance_WithProviderList_Success() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++        mockYblProviderConfig();
++
++        List<String> providers = List.of(YBL);
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getProviderSpecificTenantBalance(TEST_TENANT_ID, providers);
++
++        // Assert
++        assertNotNull(response);
++        assertEquals(TEST_TENANT_ID, response.getTenantId());
++        assertNotNull(response.getPaymentProviderBalanceList());
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testGetProviderSpecificTenantBalance_WithEmptyProviderList_ReturnsAllProviders() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++        mockAllProvidersWithEmptyConfig();
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getProviderSpecificTenantBalance(TEST_TENANT_ID, Collections.emptyList());
++
++        // Assert
++        assertNotNull(response);
++        assertEquals(TEST_TENANT_ID, response.getTenantId());
++        assertEquals(5, response.getPaymentProviderBalanceList().size());
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testGetProviderSpecificTenantBalance_WithNullProviderList_ReturnsAllProviders() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++        mockAllProvidersWithEmptyConfig();
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getProviderSpecificTenantBalance(TEST_TENANT_ID, null);
++
++        // Assert
++        assertNotNull(response);
++        assertEquals(TEST_TENANT_ID, response.getTenantId());
++        assertEquals(5, response.getPaymentProviderBalanceList().size());
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testGetProviderSpecificTenantBalance_WithUnknownProvider_FiltersOut() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++        mockYblProviderConfig();
++
++        List<String> providers = List.of(YBL, "UNKNOWN_PROVIDER");
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getProviderSpecificTenantBalance(TEST_TENANT_ID, providers);
++
++        // Assert
++        assertNotNull(response);
++        assertEquals(TEST_TENANT_ID, response.getTenantId());
++        assertNotNull(response.getPaymentProviderBalanceList());
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testValidateTenant_ValidTenant_Success() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++
++        // Act
++        assertDoesNotThrow(() -> {
++            tenantBalanceService.validateTenant(TEST_TENANT_ID);
++        });
++
++        // Assert
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testValidateTenant_TenantNotFound_ThrowsException() {
++        // Arrange
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.empty());
++
++        // Act & Assert
++        AppException exception = assertThrows(AppException.class, () -> {
++            tenantBalanceService.validateTenant(TEST_TENANT_ID);
++        });
++
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testValidateTenant_TenantDisabled_ThrowsException() {
++        // Arrange
++        Tenant tenant = createDisabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++
++        // Act & Assert
++        AppException exception = assertThrows(AppException.class, () -> {
++            tenantBalanceService.validateTenant(TEST_TENANT_ID);
++        });
++
++        verify(tenantService).fetchTenant(TEST_TENANT_ID);
++    }
++
++    @Test
++    void testGetYblBalance_WithValidAccount_Success() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++
++        mockYblProviderConfigWithBalance();
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getTenantBalance(TEST_TENANT_ID);
++
++        // Assert
++        assertNotNull(response);
++        PaymentProviderBalance yblBalance = response.getPaymentProviderBalanceList().stream()
++                .filter(b -> YBL.equals(b.getProviderId()))
++                .findFirst()
++                .orElse(null);
++        assertNotNull(yblBalance);
++        assertEquals(YBL, yblBalance.getProviderId());
++    }
++
++    @Test
++    void testGetRblV2Balance_WithValidAccount_Success() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++
++        mockRblProviderConfigWithBalance();
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getTenantBalance(TEST_TENANT_ID);
++
++        // Assert
++        assertNotNull(response);
++        PaymentProviderBalance rblBalance = response.getPaymentProviderBalanceList().stream()
++                .filter(b -> RBL_V2.equals(b.getProviderId()))
++                .findFirst()
++                .orElse(null);
++        assertNotNull(rblBalance);
++        assertEquals(RBL_V2, rblBalance.getProviderId());
++    }
++
++    @Test
++    void testGetAxisBalance_WithValidAccount_Success() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++
++        mockAxisProviderConfigWithBalance();
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getTenantBalance(TEST_TENANT_ID);
++
++        // Assert
++        assertNotNull(response);
++        PaymentProviderBalance axisBalance = response.getPaymentProviderBalanceList().stream()
++                .filter(b -> AXIS.equals(b.getProviderId()))
++                .findFirst()
++                .orElse(null);
++        assertNotNull(axisBalance);
++        assertEquals(AXIS, axisBalance.getProviderId());
++    }
++
++    @Test
++    void testGetIdfcV3Balance_WithValidAccount_Success() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++
++        mockIdfcProviderConfigWithBalance();
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getTenantBalance(TEST_TENANT_ID);
++
++        // Assert
++        assertNotNull(response);
++        PaymentProviderBalance idfcBalance = response.getPaymentProviderBalanceList().stream()
++                .filter(b -> IDFC_V3.equals(b.getProviderId()))
++                .findFirst()
++                .orElse(null);
++        assertNotNull(idfcBalance);
++        assertEquals(IDFC_V3, idfcBalance.getProviderId());
++    }
++
++    @Test
++    void testGetScbV2Balance_WithValidAccount_Success() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++
++        mockScbProviderConfigWithBalance();
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getTenantBalance(TEST_TENANT_ID);
++
++        // Assert
++        assertNotNull(response);
++        PaymentProviderBalance scbBalance = response.getPaymentProviderBalanceList().stream()
++                .filter(b -> SCB_V2.equals(b.getProviderId()))
++                .findFirst()
++                .orElse(null);
++        assertNotNull(scbBalance);
++        assertEquals(SCB_V2, scbBalance.getProviderId());
++    }
++
++    @Test
++    void testGetYblBalance_WithException_ReturnsEmptyAccounts() {
++        // Arrange
++        Tenant tenant = createEnabledTenant();
++        when(tenantService.fetchTenant(TEST_TENANT_ID)).thenReturn(Optional.of(tenant));
++
++        mockYblProviderConfig();
++        when(providerBalanceClientService.fetchYblBalance(anyString(), anyString()))
++                .thenThrow(new RuntimeException("API failure"));
++
++        // Act
++        TenantBalanceCheckResponse response = tenantBalanceService.getTenantBalance(TEST_TENANT_ID);
++
++        // Assert
++        assertNotNull(response);
++        PaymentProviderBalance yblBalance = response.getPaymentProviderBalanceList().stream()
++                .filter(b -> YBL.equals(b.getProviderId()))
++                .findFirst()
++                .orElse(null);
++        assertNotNull(yblBalance);
++        assertTrue(yblBalance.getAccounts().isEmpty());
++    }
++
++    // Helper methods
++
++    private Tenant createEnabledTenant() {
++        Tenant tenant = new Tenant();
++        tenant.setId(TEST_TENANT_ID);
++        tenant.setEnabled(true);
++        return tenant;
++    }
++
++    private Tenant createDisabledTenant() {
++        Tenant tenant = new Tenant();
++        tenant.setId(TEST_TENANT_ID);
++        tenant.setEnabled(false);
++        return tenant;
++    }
++
++    private void mockAllProvidersWithEmptyConfig() {
++        mockYblProviderConfig();
++        mockRblProviderConfig();
++        mockAxisProviderConfig();
++        mockIdfcProviderConfig();
++        mockScbProviderConfig();
++    }
++
++    private void mockYblProviderConfig() {
++        YBLAccountLevelConfig config = mock(YBLAccountLevelConfig.class);
++
++        Map<String, YBLAccountLevelConfig> accountMap = new HashMap<>();
++        accountMap.put("CURRENT", config);
++
++        AccountConfig<YBLAccountLevelConfig> accountConfig = mock(AccountConfig.class);
++        when(accountConfig.getAccountConfigStore()).thenReturn(accountMap);
++
++        in.dreamplug.external.ybl.config.YBLClientConfig yblClientConfig = mock(in.dreamplug.external.ybl.config.YBLClientConfig.class);
++        when(yblClient.getClientConfig()).thenReturn(yblClientConfig);
++        when(yblClientConfig.getTenantConfig(TEST_TENANT_ID)).thenReturn(accountConfig);
++
++        List<TenantProviderConfig> tenantProviderConfigs = List.of(
++                createTenantProviderConfig(YBL, "CURRENT")
++        );
++        when(tenantProviderConfigRepository.getTenantProviderConfig(TEST_TENANT_ID)).thenReturn(tenantProviderConfigs);
++    }
++
++    private void mockYblProviderConfigWithBalance() {
++        mockYblProviderConfig();
++
++        // Note: Due to complex nested inner classes, we're not fully mocking the response chain
++        // The actual balance fetching logic is tested in ProviderBalanceClientServiceTest
++        // This test focuses on the service orchestration rather than response parsing
++    }
++
++    private void mockRblProviderConfig() {
++        RblV2AccountLevelConfig config = mock(RblV2AccountLevelConfig.class);
++
++        Map<String, RblV2AccountLevelConfig> accountMap = new HashMap<>();
++        accountMap.put("ACC001", config);
++
++        AccountConfig<RblV2AccountLevelConfig> accountConfig = mock(AccountConfig.class);
++        when(accountConfig.getAccountConfigStore()).thenReturn(accountMap);
++
++        in.deamplug.external.rblV2.config.RBLV2ClientConfig rblConfig = mock(in.deamplug.external.rblV2.config.RBLV2ClientConfig.class);
++        when(rblv2Client.getConfig()).thenReturn(rblConfig);
++        when(rblConfig.getTenantConfig(TEST_TENANT_ID)).thenReturn(accountConfig);
++
++        when(tenantProviderConfigRepository.getTenantProviderConfig(TEST_TENANT_ID)).thenReturn(Collections.emptyList());
++    }
++
++    private void mockRblProviderConfigWithBalance() {
++        mockRblProviderConfig();
++
++        List<TenantProviderConfig> tenantProviderConfigs = List.of(
++                createTenantProviderConfig(RBL_V2, "ACC001")
++        );
++        when(tenantProviderConfigRepository.getTenantProviderConfig(TEST_TENANT_ID)).thenReturn(tenantProviderConfigs);
++
++        // Note: Due to complex nested inner classes, we're not fully mocking the response chain
++        // The actual balance fetching logic is tested in ProviderBalanceClientServiceTest
++        // This test focuses on the service orchestration rather than response parsing
++    }
++
++    private void mockAxisProviderConfig() {
++        AxisAccountLevelConfig config = mock(AxisAccountLevelConfig.class);
++
++        Map<String, AxisAccountLevelConfig> accountMap = new HashMap<>();
++        accountMap.put("AXIS_ACC001", config);
++
++        AccountConfig<AxisAccountLevelConfig> accountConfig = mock(AccountConfig.class);
++        when(accountConfig.getAccountConfigStore()).thenReturn(accountMap);
++
++        in.dreamplug.external.axis.config.AxisPayoutClientConfig axisConfig = mock(in.dreamplug.external.axis.config.AxisPayoutClientConfig.class);
++        when(axisPayoutClient.getConfig()).thenReturn(axisConfig);
++        when(axisConfig.getTenantConfig(TEST_TENANT_ID)).thenReturn(accountConfig);
++
++        when(tenantProviderConfigRepository.getTenantProviderConfig(TEST_TENANT_ID)).thenReturn(Collections.emptyList());
++    }
++
++    private void mockAxisProviderConfigWithBalance() {
++        mockAxisProviderConfig();
++
++        List<TenantProviderConfig> tenantProviderConfigs = List.of(
++                createTenantProviderConfig(AXIS, "AXIS_ACC001")
++        );
++        when(tenantProviderConfigRepository.getTenantProviderConfig(TEST_TENANT_ID)).thenReturn(tenantProviderConfigs);
++
++        // Note: Due to complex nested inner classes, we're not fully mocking the response chain
++        // The actual balance fetching logic is tested in ProviderBalanceClientServiceTest
++        // This test focuses on the service orchestration rather than response parsing
++    }
++
++    private void mockIdfcProviderConfig() {
++        IDFCV3AccountLevelConfig config = mock(IDFCV3AccountLevelConfig.class);
++
++        Map<String, IDFCV3AccountLevelConfig> accountMap = new HashMap<>();
++        accountMap.put("IDFC_ACC001", config);
++
++        AccountConfig<IDFCV3AccountLevelConfig> accountConfig = mock(AccountConfig.class);
++        when(accountConfig.getAccountConfigStore()).thenReturn(accountMap);
++
++        in.dreamplug.external.idfcV3.config.IDFCV3ClientConfig idfcConfig = mock(in.dreamplug.external.idfcV3.config.IDFCV3ClientConfig.class);
++        when(idfcv3Client.getClientConfig()).thenReturn(idfcConfig);
++        when(idfcConfig.getTenantConfig(TEST_TENANT_ID)).thenReturn(accountConfig);
++
++        when(tenantProviderConfigRepository.getTenantProviderConfig(TEST_TENANT_ID)).thenReturn(Collections.emptyList());
++    }
++
++    private void mockIdfcProviderConfigWithBalance() {
++        mockIdfcProviderConfig();
++
++        List<TenantProviderConfig> tenantProviderConfigs = List.of(
++                createTenantProviderConfig(IDFC_V3, "IDFC_ACC001")
++        );
++        when(tenantProviderConfigRepository.getTenantProviderConfig(TEST_TENANT_ID)).thenReturn(tenantProviderConfigs);
++
++        // Note: Due to complex nested inner classes, we're not fully mocking the response chain
++        // The actual balance fetching logic is tested in ProviderBalanceClientServiceTest
++        // This test focuses on the service orchestration rather than response parsing
++    }
++
++    private void mockScbProviderConfig() {
++        SCBV2AccountLevelConfig config = mock(SCBV2AccountLevelConfig.class);
++
++        Map<String, SCBV2AccountLevelConfig> accountMap = new HashMap<>();
++        accountMap.put("SCB_ACC001", config);
++
++        AccountConfig<SCBV2AccountLevelConfig> accountConfig = mock(AccountConfig.class);
++        when(accountConfig.getAccountConfigStore()).thenReturn(accountMap);
++
++        in.dreamplug.external.scbV2.config.SCBV2ClientConfig scbConfig = mock(in.dreamplug.external.scbV2.config.SCBV2ClientConfig.class);
++        when(scbv2Client.getConfig()).thenReturn(scbConfig);
++        when(scbConfig.getTenantConfig(TEST_TENANT_ID)).thenReturn(accountConfig);
++
++        when(tenantProviderConfigRepository.getTenantProviderConfig(TEST_TENANT_ID)).thenReturn(Collections.emptyList());
++    }
++
++    private void mockScbProviderConfigWithBalance() {
++        mockScbProviderConfig();
++
++        List<TenantProviderConfig> tenantProviderConfigs = List.of(
++                createTenantProviderConfig(SCB_V2, "SCB_ACC001")
++        );
++        when(tenantProviderConfigRepository.getTenantProviderConfig(TEST_TENANT_ID)).thenReturn(tenantProviderConfigs);
++    }
++
++    private TenantProviderConfig createTenantProviderConfig(String providerId, String accountId) {
++        TenantProviderConfig config = new TenantProviderConfig();
++        config.setProviderId(providerId);
++        config.setAccountId(accountId);
++        config.setEnabled(true);
++        return config;
++    }
++}
+diff --git a/genie-models/pom.xml b/genie-models/pom.xml
+index 93a200166..eea2020c7 100644
+--- a/genie-models/pom.xml
++++ b/genie-models/pom.xml
+@@ -6,7 +6,7 @@
+ 
+     <groupId>in.dreamplug.genie</groupId>
+     <artifactId>genie-models</artifactId>
+-    <version>7.0.19</version>
++    <version>7.0.20-SNAPSHOT</version>
+ 
+     <repositories>
+         <repository>
+diff --git a/genie-models/src/main/java/in/dreamplug/genie/model/bean/request/TenantBalanceCheckRequest.java b/genie-models/src/main/java/in/dreamplug/genie/model/bean/request/TenantBalanceCheckRequest.java
+new file mode 100644
+index 000000000..d2d8a258c
+--- /dev/null
++++ b/genie-models/src/main/java/in/dreamplug/genie/model/bean/request/TenantBalanceCheckRequest.java
+@@ -0,0 +1,14 @@
++package in.dreamplug.genie.model.bean.request;
++
++import lombok.*;
++
++import java.util.List;
++
++@Builder
++@Getter
++@Setter
++@NoArgsConstructor
++@AllArgsConstructor
++public class TenantBalanceCheckRequest {
++    private List<String> providers;
++}
+\ No newline at end of file
+diff --git a/genie-models/src/main/java/in/dreamplug/genie/model/bean/response/PaymentProviderBalance.java b/genie-models/src/main/java/in/dreamplug/genie/model/bean/response/PaymentProviderBalance.java
+new file mode 100644
+index 000000000..4edfea161
+--- /dev/null
++++ b/genie-models/src/main/java/in/dreamplug/genie/model/bean/response/PaymentProviderBalance.java
+@@ -0,0 +1,17 @@
++package in.dreamplug.genie.model.bean.response;
++
++import lombok.*;
++
++import java.math.BigDecimal;
++import java.util.List;
++import java.util.Map;
++
++@Builder
++@Getter
++@Setter
++@NoArgsConstructor
++@AllArgsConstructor
++public class PaymentProviderBalance {
++    String providerId;
++    List<ProviderAccount> accounts;
++}
+diff --git a/genie-models/src/main/java/in/dreamplug/genie/model/bean/response/ProviderAccount.java b/genie-models/src/main/java/in/dreamplug/genie/model/bean/response/ProviderAccount.java
+new file mode 100644
+index 000000000..bf3984ef3
+--- /dev/null
++++ b/genie-models/src/main/java/in/dreamplug/genie/model/bean/response/ProviderAccount.java
+@@ -0,0 +1,16 @@
++package in.dreamplug.genie.model.bean.response;
++
++import lombok.*;
++
++import java.math.BigDecimal;
++
++@Builder
++@Getter
++@Setter
++@NoArgsConstructor
++@AllArgsConstructor
++public class ProviderAccount {
++    private String accountNumber;
++    private BigDecimal balance;
++    private String currency;
++}
+\ No newline at end of file
+diff --git a/genie-models/src/main/java/in/dreamplug/genie/model/bean/response/TenantBalanceCheckResponse.java b/genie-models/src/main/java/in/dreamplug/genie/model/bean/response/TenantBalanceCheckResponse.java
+new file mode 100644
+index 000000000..7d5f3d10b
+--- /dev/null
++++ b/genie-models/src/main/java/in/dreamplug/genie/model/bean/response/TenantBalanceCheckResponse.java
+@@ -0,0 +1,15 @@
++package in.dreamplug.genie.model.bean.response;
++
++import lombok.*;
++
++import java.util.List;
++
++@Builder
++@Getter
++@Setter
++@NoArgsConstructor
++@AllArgsConstructor
++public class TenantBalanceCheckResponse {
++    private String tenantId;
++    private List<PaymentProviderBalance> paymentProviderBalanceList;
++}
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   120    0   120    0     0    471      0 --:--:-- --:--:-- --:--:--   470

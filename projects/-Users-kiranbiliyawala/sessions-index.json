@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "sessionId": "29c8dce9-9c2a-42fc-bfcf-862e837f2375",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/29c8dce9-9c2a-42fc-bfcf-862e837f2375.jsonl",
+      "fileMtime": 1769518900360,
+      "firstPrompt": "tmux list",
+      "summary": "Tmux Session Listing and Termination",
+      "messageCount": 4,
+      "created": "2026-01-07T16:10:35.014Z",
+      "modified": "2026-01-07T16:11:42.635Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "4c56d9b8-aff7-46e4-b536-a4e84d59fd85",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/4c56d9b8-aff7-46e4-b536-a4e84d59fd85.jsonl",
+      "fileMtime": 1769518901715,
+      "firstPrompt": "<command-message>canvas</command-message> <command-name>/canvas</command-name> <command-args>draft an email to our partner HDFC bank representative, mentioning to share the p95 latencies, rate limits,…",
+      "summary": "Draft email to HDFC bank on credit card integration",
+      "messageCount": 3,
+      "created": "2026-01-07T16:11:59.238Z",
+      "modified": "2026-01-07T16:12:27.780Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "6b42b8cc-4be0-4532-8f40-dcd88658eac1",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/6b42b8cc-4be0-4532-8f40-dcd88658eac1.jsonl",
+      "fileMtime": 1769518903530,
+      "firstPrompt": "<command-message>canvas</command-message> <command-name>/canvas</command-name> <command-args>draft an email to our partner HDFC bank representative, mentioning to share the p95 latencies, rate limits,…",
+      "summary": "Draft HDFC Bank Email on API Resiliency",
+      "messageCount": 11,
+      "created": "2026-01-07T16:00:05.597Z",
+      "modified": "2026-01-07T16:09:54.315Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "9d560df3-ced2-41f8-9c81-ffbea64e6392",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/9d560df3-ced2-41f8-9c81-ffbea64e6392.jsonl",
+      "fileMtime": 1769518904980,
+      "firstPrompt": "<command-message>canvas</command-message> <command-name>/canvas</command-name> <command-args>draft an email to our partner HDFC bank representative, mentioning to share the p95 latencies, rate limits,…",
+      "summary": "HDFC Bank Partner Email: Resiliency Setup Requirements",
+      "messageCount": 2,
+      "created": "2026-01-07T15:58:38.822Z",
+      "modified": "2026-01-07T15:59:30.431Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "378db8ac-e1fa-456a-8c0b-a0eec4e87ff0",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/378db8ac-e1fa-456a-8c0b-a0eec4e87ff0.jsonl",
+      "fileMtime": 1769519131882,
+      "firstPrompt": "install firecrawl mcp",
+      "summary": "Firecrawl MCP Server Installation and Configuration",
+      "messageCount": 8,
+      "created": "2026-01-27T13:01:38.884Z",
+      "modified": "2026-01-27T13:03:16.503Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "5697f777-fa35-4412-a627-cd12d4360d40",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/5697f777-fa35-4412-a627-cd12d4360d40.jsonl",
+      "fileMtime": 1769522538342,
+      "firstPrompt": "move firecrawl to user level mcp instead of project level",
+      "summary": "Move Firecrawl MCP from project to user level",
+      "messageCount": 11,
+      "created": "2026-01-27T13:05:30.098Z",
+      "modified": "2026-01-27T13:13:17.193Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "d6a6155b-7cc7-4963-8f23-b1f03b41b7bd",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/d6a6155b-7cc7-4963-8f23-b1f03b41b7bd.jsonl",
+      "fileMtime": 1769685372414,
+      "firstPrompt": "i'm not receiving push notification. codelens check aws-okta-py, and tell me how to reset whether to get push notification or enter 6 verification code",
+      "summary": "Debug aws-okta-py MFA push notifications",
+      "messageCount": 4,
+      "created": "2026-01-27T14:02:16.901Z",
+      "modified": "2026-01-27T14:04:05.198Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala",
+      "isSidechain": false
+    }
+  ],
+  "originalPath": "/Users/kiranbiliyawala"
+}

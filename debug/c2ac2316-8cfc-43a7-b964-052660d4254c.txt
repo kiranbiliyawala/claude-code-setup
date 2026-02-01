@@ -1,0 +1,571 @@
+2026-01-23T08:38:53.109Z [DEBUG] Watching for changes in setting files /Users/kiranbiliyawala/.claude...
+2026-01-23T08:38:53.159Z [DEBUG] [init] configureGlobalMTLS starting
+2026-01-23T08:38:53.160Z [DEBUG] [init] configureGlobalMTLS complete
+2026-01-23T08:38:53.160Z [DEBUG] [init] configureGlobalAgents starting
+2026-01-23T08:38:53.160Z [DEBUG] [init] configureGlobalAgents complete
+2026-01-23T08:38:53.165Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-01-23T08:38:53.194Z [DEBUG] Loading plugin github from source: "./external_plugins/github"
+2026-01-23T08:38:53.197Z [DEBUG] [ToolSearch:optimistic] mode=standard, ENABLE_TOOL_SEARCH=undefined, result=false
+2026-01-23T08:38:53.198Z [DEBUG] [STARTUP] Running setup()...
+2026-01-23T08:38:53.198Z [DEBUG] Loading skills from: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/kiranbiliyawala/.claude/skills, project=[]
+2026-01-23T08:38:53.210Z [ERROR] Error: Error: ENOENT: no such file or directory, scandir '/Library/Application Support/ClaudeCode/.claude/skills'
+    at Module.readdirSync (node:fs:1581:26)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1766
+    at fX (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:34782)
+    at Object.readdirSync (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1736)
+    at C01 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1537:369)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1537:4279
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6807)
+    at Ih2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4842:4362)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4842:6961
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6807)
+2026-01-23T08:38:53.210Z [ERROR] Error: Error: ENOENT: no such file or directory, scandir '/Users/kiranbiliyawala/.claude/skills'
+    at Module.readdirSync (node:fs:1581:26)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1766
+    at fX (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:34782)
+    at Object.readdirSync (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1736)
+    at C01 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1537:369)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1537:4322
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6807)
+    at Ih2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4842:4362)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4842:6961
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6807)
+2026-01-23T08:38:53.210Z [DEBUG] Error log sink initialized
+2026-01-23T08:38:53.214Z [DEBUG] Using cached index entry for session: 05d131a4-8985-4eac-946d-7119b55eeaf2
+2026-01-23T08:38:53.215Z [DEBUG] Using cached index entry for session: 0fd1b872-4c87-44f3-987f-a1bdb56c80cb
+2026-01-23T08:38:53.215Z [DEBUG] Using cached index entry for session: 90a444fb-cf7f-4895-b038-9d0727ae8a50
+2026-01-23T08:38:53.215Z [DEBUG] Using cached index entry for session: cdf1635b-8471-4814-ba9e-5a1d69ae242e
+2026-01-23T08:38:53.226Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, legacy commands: 0)
+2026-01-23T08:38:53.228Z [DEBUG] Using git SHA for github@claude-plugins-official: e30768372b41
+2026-01-23T08:38:53.228Z [DEBUG] Plugin github@claude-plugins-official version e30768372b41 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/e30768372b41
+2026-01-23T08:38:53.228Z [DEBUG] Copied local plugin github to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/e30768372b41
+2026-01-23T08:38:53.230Z [DEBUG] Loading plugin pr-review-toolkit from source: "./plugins/pr-review-toolkit"
+2026-01-23T08:38:53.232Z [DEBUG] [Claude in Chrome] Found chrome profiles: Default
+2026-01-23T08:38:53.236Z [DEBUG] [Claude in Chrome] Found arc profiles: Default, Profile 1
+2026-01-23T08:38:53.237Z [DEBUG] [STARTUP] setup() completed in 39ms
+2026-01-23T08:38:53.237Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-01-23T08:38:53.243Z [DEBUG] [Claude in Chrome] Found vivaldi profiles: Default
+2026-01-23T08:38:53.244Z [DEBUG] [Claude in Chrome] Extension not found in any browser
+2026-01-23T08:38:53.263Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: e30768372b41
+2026-01-23T08:38:53.264Z [DEBUG] Plugin pr-review-toolkit@claude-plugins-official version e30768372b41 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/e30768372b41
+2026-01-23T08:38:53.264Z [DEBUG] Copied local plugin pr-review-toolkit to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/e30768372b41
+2026-01-23T08:38:53.266Z [DEBUG] Loading plugin canvas from source: "./canvas"
+2026-01-23T08:38:53.267Z [DEBUG] Using provided version for canvas@claude-canvas: 0.1.0
+2026-01-23T08:38:53.268Z [DEBUG] Plugin canvas@claude-canvas version 0.1.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-23T08:38:53.268Z [DEBUG] Copied local plugin canvas to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-23T08:38:53.268Z [DEBUG] Plugin canvas has no entry.skills defined
+2026-01-23T08:38:53.269Z [DEBUG] Loading plugin code-simplifier from source: "./plugins/code-simplifier"
+2026-01-23T08:38:53.271Z [DEBUG] Using manifest version for code-simplifier@claude-plugins-official: 1.0.0
+2026-01-23T08:38:53.272Z [DEBUG] Plugin code-simplifier@claude-plugins-official version 1.0.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-01-23T08:38:53.272Z [DEBUG] Copied local plugin code-simplifier to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-01-23T08:38:53.272Z [DEBUG] Found 4 plugins (4 enabled, 0 disabled)
+2026-01-23T08:38:53.273Z [DEBUG] getPluginSkills: Processing 4 enabled plugins
+2026-01-23T08:38:53.273Z [DEBUG] Checking plugin github: skillsPath=none, skillsPaths=0 paths
+2026-01-23T08:38:53.273Z [DEBUG] Checking plugin pr-review-toolkit: skillsPath=none, skillsPaths=0 paths
+2026-01-23T08:38:53.273Z [DEBUG] Checking plugin canvas: skillsPath=exists, skillsPaths=0 paths
+2026-01-23T08:38:53.273Z [DEBUG] Attempting to load skills from plugin canvas default skillsPath: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0/skills
+2026-01-23T08:38:53.290Z [DEBUG] Registered 0 hooks from 4 plugins
+2026-01-23T08:38:53.291Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-23T08:38:53.291Z [DEBUG] Loaded 4 skills from plugin canvas default directory
+2026-01-23T08:38:53.291Z [DEBUG] Checking plugin code-simplifier: skillsPath=none, skillsPaths=0 paths
+2026-01-23T08:38:53.291Z [DEBUG] Total plugin skills loaded: 4
+2026-01-23T08:38:53.291Z [DEBUG] Loaded 1 commands from plugin pr-review-toolkit default directory
+2026-01-23T08:38:53.291Z [DEBUG] Loaded 1 commands from plugin canvas default directory
+2026-01-23T08:38:53.291Z [DEBUG] Total plugin commands loaded: 2
+2026-01-23T08:38:53.291Z [DEBUG] getSkills returning: 0 skill dir commands, 4 plugin skills, 0 bundled skills
+2026-01-23T08:38:53.292Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at ijA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5248:22157)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-23T08:38:53.343Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157533343
+2026-01-23T08:38:53.343Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:38:53.344Z [DEBUG] Temp file written successfully, size: 35965 bytes
+2026-01-23T08:38:53.344Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:38:53.344Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157533343 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:38:53.344Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:38:53.653Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157533653
+2026-01-23T08:38:53.653Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:38:53.653Z [DEBUG] Temp file written successfully, size: 35998 bytes
+2026-01-23T08:38:53.653Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:38:53.653Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157533653 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:38:53.653Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:38:53.852Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+2026-01-23T08:38:53.869Z [DEBUG] Loaded 6 agents from plugin pr-review-toolkit default directory
+2026-01-23T08:38:53.869Z [DEBUG] Loaded 1 agents from plugin code-simplifier default directory
+2026-01-23T08:38:53.869Z [DEBUG] Total plugin agents loaded: 7
+2026-01-23T08:38:53.869Z [DEBUG] [STARTUP] Commands and agents loaded in 632ms
+2026-01-23T08:38:53.870Z [DEBUG] [STARTUP] Running showSetupScreens()...
+2026-01-23T08:38:53.870Z [DEBUG] [render] initYoga starting
+2026-01-23T08:38:53.879Z [DEBUG] [render] initYoga complete
+2026-01-23T08:38:53.880Z [DEBUG] [render] first ink render: 1264ms since process start
+2026-01-23T08:38:53.883Z [DEBUG] [keybindings] KeybindingSetup initialized with 87 bindings, 0 warnings
+2026-01-23T08:38:53.904Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-01-23T08:38:53.905Z [DEBUG] [STARTUP] showSetupScreens() completed in 35ms
+2026-01-23T08:38:53.905Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-01-23T08:38:53.905Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-01-23T08:38:53.905Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-01-23T08:38:53.906Z [DEBUG] [STARTUP] MCP configs loaded in 741ms
+2026-01-23T08:38:53.909Z [DEBUG] MCP server "gemini-collab": Starting connection with timeout of 30000ms
+2026-01-23T08:38:53.912Z [DEBUG] MCP server "plugin:github:github": Initializing HTTP transport to https://api.githubcopilot.com/mcp/
+2026-01-23T08:38:53.912Z [DEBUG] MCP server "plugin:github:github": Node version: v23.9.0, Platform: darwin
+2026-01-23T08:38:53.912Z [DEBUG] MCP server "plugin:github:github": Environment: {"NODE_OPTIONS":"not set","UV_THREADPOOL_SIZE":"default","HTTP_PROXY":"not set","HTTPS_PROXY":"not set","NO_PROXY":"not set"}
+2026-01-23T08:38:53.926Z [DEBUG] [ToolSearch:optimistic] mode=standard, ENABLE_TOOL_SEARCH=undefined, result=false
+2026-01-23T08:38:53.935Z [DEBUG] All plugins already exist, skipping migration
+2026-01-23T08:38:53.938Z [DEBUG] [Reconnection] computeInitialTeamContext: No teammate context set (not a teammate)
+2026-01-23T08:38:53.941Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157533941
+2026-01-23T08:38:53.941Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:38:53.941Z [DEBUG] Temp file written successfully, size: 35998 bytes
+2026-01-23T08:38:53.941Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:38:53.941Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157533941 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:38:53.941Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:38:53.945Z [DEBUG] Loaded 4 installed plugins from /Users/kiranbiliyawala/.claude/plugins/installed_plugins.json
+2026-01-23T08:38:53.945Z [DEBUG] Initialized versioned plugins system with 4 plugins
+2026-01-23T08:38:53.945Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2026-01-23T08:38:53.947Z [DEBUG] Found 0 hook matchers in settings
+2026-01-23T08:38:53.947Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2026-01-23T08:38:53.947Z [DEBUG] MCP server "plugin:github:github": Proxy options: default
+2026-01-23T08:38:53.948Z [DEBUG] MCP server "plugin:github:github": HTTP transport options: {"url":"https://api.githubcopilot.com/mcp/","headers":{"User-Agent":"claude-code/2.1.17","Authorization":"[REDACTED]"},"hasAuthProvider":true,"timeoutMs":60000}
+2026-01-23T08:38:53.948Z [DEBUG] MCP server "plugin:github:github": HTTP transport created successfully
+2026-01-23T08:38:53.949Z [DEBUG] MCP server "plugin:github:github": Client created, setting up request handler
+2026-01-23T08:38:53.949Z [DEBUG] MCP server "plugin:github:github": Starting connection with timeout of 30000ms
+2026-01-23T08:38:53.949Z [DEBUG] MCP server "plugin:github:github": Testing basic HTTP connectivity to https://api.githubcopilot.com/mcp/
+2026-01-23T08:38:53.949Z [DEBUG] MCP server "plugin:github:github": Parsed URL: host=api.githubcopilot.com, port=default, protocol=https:
+2026-01-23T08:38:53.981Z [DEBUG] MCP server "plugin:github:github": No token data found
+2026-01-23T08:38:53.981Z [DEBUG] [render] initYoga starting
+2026-01-23T08:38:53.982Z [DEBUG] [render] initYoga complete
+2026-01-23T08:38:53.982Z [DEBUG] [render] first ink render: 1365ms since process start
+2026-01-23T08:38:53.995Z [DEBUG] [keybindings] Skipping file watcher - user customization disabled
+2026-01-23T08:38:53.997Z [DEBUG] Git remote URL: null
+2026-01-23T08:38:53.997Z [DEBUG] No git remote URL found
+2026-01-23T08:38:53.997Z [DEBUG] Not in a GitHub repository, skipping path mapping update
+2026-01-23T08:38:54.013Z [DEBUG] [ToolSearch:optimistic] mode=standard, ENABLE_TOOL_SEARCH=undefined, result=false
+2026-01-23T08:38:54.019Z [DEBUG] [keybindings] KeybindingSetup initialized with 87 bindings, 0 warnings
+2026-01-23T08:38:54.058Z [DEBUG] High write ratio: blit=0, write=1139 (100.0% writes), screen=20x121
+2026-01-23T08:38:54.067Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157534067
+2026-01-23T08:38:54.067Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:38:54.067Z [DEBUG] Temp file written successfully, size: 35998 bytes
+2026-01-23T08:38:54.067Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:38:54.067Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157534067 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:38:54.067Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:38:54.070Z [DEBUG] [keybindings] Skipping file watcher - user customization disabled
+2026-01-23T08:38:54.070Z [DEBUG] [REPL:mount] REPL mounted, disabled=false
+2026-01-23T08:38:54.071Z [DEBUG] Official marketplace auto-install skipped: already_attempted
+2026-01-23T08:38:54.071Z [DEBUG] performStartupChecks called
+2026-01-23T08:38:54.072Z [DEBUG] Starting background plugin installations
+2026-01-23T08:38:54.072Z [DEBUG] performBackgroundPluginInstallations called
+2026-01-23T08:38:54.073Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-23T08:38:54.074Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-23T08:38:54.074Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-23T08:38:54.074Z [DEBUG] Found 4 enabled plugins
+2026-01-23T08:38:54.074Z [DEBUG] All plugins already exist, skipping migration
+2026-01-23T08:38:54.074Z [DEBUG] Found 4 installed plugins (V2 format)
+2026-01-23T08:38:54.074Z [DEBUG] Loaded plugins - Enabled: 4, Disabled: 0, Commands: 2, Agents: 7, Errors: 0
+2026-01-23T08:38:54.074Z [DEBUG] Found 0 missing plugins (not installed):
+2026-01-23T08:38:54.074Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2026-01-23T08:38:54.076Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at ijA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5248:22157)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runNextTicks (node:internal/process/task_queues:69:3)
+    at process.processImmediate (node:internal/timers:479:9)
+    at async _ (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4210:17625)
+2026-01-23T08:38:54.076Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at ijA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5248:22157)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runNextTicks (node:internal/process/task_queues:69:3)
+    at process.processImmediate (node:internal/timers:479:9)
+    at async Z (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4210:18141)
+2026-01-23T08:38:54.076Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-01-23T08:38:54.076Z [DEBUG] [claudeai-mcp] Gate returned: false
+2026-01-23T08:38:54.076Z [DEBUG] [claudeai-mcp] Disabled via gate
+2026-01-23T08:38:54.078Z [DEBUG] Total LSP servers loaded: 0
+2026-01-23T08:38:54.078Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2026-01-23T08:38:54.078Z [DEBUG] LSP manager initialized with 0 servers
+2026-01-23T08:38:54.078Z [DEBUG] LSP server manager initialized successfully
+2026-01-23T08:38:54.078Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-01-23T08:38:54.090Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157534090
+2026-01-23T08:38:54.090Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:38:54.090Z [DEBUG] Temp file written successfully, size: 35998 bytes
+2026-01-23T08:38:54.090Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:38:54.090Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157534090 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:38:54.090Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:38:54.105Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157534105
+2026-01-23T08:38:54.105Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:38:54.105Z [DEBUG] Temp file written successfully, size: 35998 bytes
+2026-01-23T08:38:54.105Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:38:54.105Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157534105 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:38:54.105Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:38:54.453Z [DEBUG] MCP server "gemini-collab": Successfully connected to stdio server in 547ms
+2026-01-23T08:38:54.453Z [DEBUG] MCP server "gemini-collab": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"claude-gemini-mcp","version":"1.0.0"}}
+2026-01-23T08:38:54.454Z [DEBUG] MCP server "gemini-collab": STDIO connection dropped after 0s uptime
+2026-01-23T08:38:54.454Z [DEBUG] MCP server "gemini-collab": Connection error: [
+  {
+    "code": "invalid_union",
+    "errors": [
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "id",
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"id\", \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "result"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        }
+      ]
+    ],
+    "path": [],
+    "message": "Invalid input"
+  }
+]
+2026-01-23T08:38:54.881Z [DEBUG] MCP server "plugin:github:github": HTTP Connection failed after 969ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+ (code: 400, errno: none)
+2026-01-23T08:38:54.881Z [ERROR] MCP server "plugin:github:github" Error: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-23T08:38:54.882Z [DEBUG] MCP server "plugin:github:github": Connection failed after 970ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-23T08:38:54.882Z [ERROR] MCP server "plugin:github:github" Connection failed: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-23T08:38:54.885Z [DEBUG] [ToolSearch:optimistic] mode=standard, ENABLE_TOOL_SEARCH=undefined, result=false
+2026-01-23T08:38:54.887Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-23T08:38:54.887Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-23T08:38:54.888Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-23T08:38:54.888Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-23T08:38:54.888Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-23T08:38:54.888Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-23T08:38:54.888Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-23T08:38:54.889Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-23T08:38:54.889Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-23T08:38:55.347Z [ERROR] Error: Error: Connection error.
+    at XR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:168:4542)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1178:5186
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1119:2223
+    at async WwY (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1118:9406)
+    at async Q97 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1119:2156)
+    at async egA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1203)
+    at async BqA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1900)
+    at async Promise.all (index 0)
+    at async AFA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:4651)
+2026-01-23T08:38:55.347Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-23T08:38:55.347Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-23T08:38:55.347Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-23T08:38:55.347Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-23T08:38:55.353Z [ERROR] Error: Error: Connection error.
+    at XR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:168:4542)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1178:5186
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1119:2223
+    at async WwY (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1118:9406)
+    at async Q97 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1119:2156)
+    at async egA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1203)
+    at async BqA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1900)
+    at async Promise.all (index 2)
+    at async AFA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:4651)
+2026-01-23T08:38:55.353Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-23T08:38:55.353Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-23T08:38:55.353Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-23T08:38:55.353Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-23T08:38:55.407Z [ERROR] Error: Error: Connection error.
+    at XR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:168:4542)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1178:5186
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1119:2223
+    at async WwY (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1118:9406)
+    at async Q97 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1119:2156)
+    at async egA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1203)
+    at async BqA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1900)
+    at async Promise.all (index 1)
+    at async AFA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:4651)
+2026-01-23T08:38:55.407Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-23T08:38:55.407Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-23T08:38:55.407Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-23T08:38:55.407Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-23T08:38:55.798Z [DEBUG] countTokensWithFallback: haiku fallback failed: Connection error.
+2026-01-23T08:38:55.798Z [ERROR] Error: Error: Connection error.
+    at XR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:168:4542)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async e97 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1178:5878)
+    at async egA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1475)
+    at async BqA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1900)
+    at async Promise.all (index 0)
+    at async AFA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:4651)
+    at async L1K (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3609:503)
+2026-01-23T08:38:55.798Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__gemini-collab__ask_gemini
+2026-01-23T08:38:55.836Z [DEBUG] countTokensWithFallback: haiku fallback failed: Connection error.
+2026-01-23T08:38:55.836Z [ERROR] Error: Error: Connection error.
+    at XR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:168:4542)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async e97 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1178:5878)
+    at async egA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1475)
+    at async BqA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1900)
+    at async Promise.all (index 2)
+    at async AFA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:4651)
+    at async L1K (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3609:503)
+2026-01-23T08:38:55.836Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__gemini-collab__gemini_brainstorm
+2026-01-23T08:38:55.869Z [DEBUG] countTokensWithFallback: haiku fallback failed: Connection error.
+2026-01-23T08:38:55.869Z [ERROR] Error: Error: Connection error.
+    at XR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:168:4542)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async e97 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1178:5878)
+    at async egA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1475)
+    at async BqA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1900)
+    at async Promise.all (index 1)
+    at async AFA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:4651)
+    at async L1K (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3609:503)
+2026-01-23T08:38:55.869Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__gemini-collab__gemini_code_review
+2026-01-23T08:38:55.869Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-23T08:38:55.871Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157535871
+2026-01-23T08:38:55.871Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:38:55.871Z [DEBUG] Temp file written successfully, size: 36015 bytes
+2026-01-23T08:38:55.871Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:38:55.871Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157535871 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:38:55.871Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:calendar" (userFacingName="calendar")
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:document" (userFacingName="document")
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:flight" (userFacingName="flight")
+2026-01-23T08:38:55.877Z [DEBUG] Skills and commands included in Skill tool: pr-review-toolkit:review-pr, canvas, calendar, canvas, document, flight
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:calendar" (userFacingName="calendar")
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:document" (userFacingName="document")
+2026-01-23T08:38:55.877Z [DEBUG] Skill prompt: showing "canvas:flight" (userFacingName="flight")
+2026-01-23T08:38:55.878Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-23T08:38:55.878Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-23T08:38:55.878Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-23T08:38:56.315Z [ERROR] Error: Error: Connection error.
+    at XR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:168:4542)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1178:5186
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1119:2223
+    at async WwY (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1118:9406)
+    at async Q97 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1119:2156)
+    at async egA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1203)
+    at async BqA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1900)
+    at async L1K (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3609:554)
+2026-01-23T08:38:56.315Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (20 tools)
+2026-01-23T08:38:56.315Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-23T08:38:56.315Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-23T08:38:56.315Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-23T08:38:56.725Z [DEBUG] countTokensWithFallback: haiku fallback failed: Connection error.
+2026-01-23T08:38:56.725Z [ERROR] Error: Error: Connection error.
+    at XR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:168:4542)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async e97 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1178:5878)
+    at async egA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1475)
+    at async BqA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3599:1900)
+    at async L1K (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3609:554)
+2026-01-23T08:38:56.725Z [DEBUG] countToolDefinitionTokens returned null for 20 tools: Task, TaskOutput, Bash, Glob, Grep, ExitPlanMode, Read, Edit, Write, NotebookEdit, WebFetch, WebSear...
+2026-01-23T08:38:58.345Z [ERROR] Error: Error: 1P event logging: 28 events failed to export
+    at vK6.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:685:2042)
+    at async vK6.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:685:1197)
+2026-01-23T08:38:58.346Z [ERROR] Error: Error: {"stack":"Error: Failed to export 28 events\n    at vK6.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:685:1299)","message":"Failed to export 28 events","name":"Error"}
+    at Qf6.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2329:34863)
+    at m46.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:679:8378)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:679:39403
+    at ro3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:679:39949)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:680:20245
+2026-01-23T08:39:13.203Z [DEBUG] High write ratio: blit=0, write=1178 (100.0% writes), screen=21x121
+2026-01-23T08:39:13.210Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157553210
+2026-01-23T08:39:13.210Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:39:13.210Z [DEBUG] Temp file written successfully, size: 36015 bytes
+2026-01-23T08:39:13.210Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:39:13.210Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157553210 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:39:13.210Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:39:13.354Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157553354
+2026-01-23T08:39:13.354Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:39:13.355Z [DEBUG] Temp file written successfully, size: 36015 bytes
+2026-01-23T08:39:13.355Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:39:13.355Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157553354 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:39:13.355Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:39:16.858Z [DEBUG] High write ratio: blit=0, write=1178 (100.0% writes), screen=21x121
+2026-01-23T08:39:16.864Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157556864
+2026-01-23T08:39:16.864Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:39:16.865Z [DEBUG] Temp file written successfully, size: 36015 bytes
+2026-01-23T08:39:16.865Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:39:16.865Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157556864 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:39:16.865Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:39:16.913Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157556913
+2026-01-23T08:39:16.913Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:39:16.913Z [DEBUG] Temp file written successfully, size: 36015 bytes
+2026-01-23T08:39:16.913Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:39:16.913Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157556913 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:39:16.913Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:39:25.094Z [DEBUG] High write ratio: blit=0, write=1152 (100.0% writes), screen=21x121
+2026-01-23T08:39:25.100Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157565100
+2026-01-23T08:39:25.100Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:39:25.100Z [DEBUG] Temp file written successfully, size: 36015 bytes
+2026-01-23T08:39:25.100Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:39:25.100Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157565100 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:39:25.100Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:39:25.523Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157565523
+2026-01-23T08:39:25.523Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:39:25.524Z [DEBUG] Temp file written successfully, size: 36015 bytes
+2026-01-23T08:39:25.524Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:39:25.524Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157565523 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:39:25.524Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:39:41.440Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157581440
+2026-01-23T08:39:41.440Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:39:41.441Z [DEBUG] Temp file written successfully, size: 36015 bytes
+2026-01-23T08:39:41.441Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:39:41.441Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157581440 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:39:41.441Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:39:41.653Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157581653
+2026-01-23T08:39:41.653Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:39:41.653Z [DEBUG] Temp file written successfully, size: 36015 bytes
+2026-01-23T08:39:41.653Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:39:41.653Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157581653 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:39:41.654Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:41:36.032Z [DEBUG] High write ratio: blit=0, write=1152 (100.0% writes), screen=21x121
+2026-01-23T08:41:36.041Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157696041
+2026-01-23T08:41:36.041Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:41:36.041Z [DEBUG] Temp file written successfully, size: 37111 bytes
+2026-01-23T08:41:36.041Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:41:36.041Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157696041 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:41:36.041Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:41:36.199Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157696199
+2026-01-23T08:41:36.199Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:41:36.199Z [DEBUG] Temp file written successfully, size: 37111 bytes
+2026-01-23T08:41:36.199Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:41:36.199Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157696199 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:41:36.199Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:42:08.271Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at vK6.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:685:2042)
+    at async vK6.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:685:1197)
+2026-01-23T08:42:08.272Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at vK6.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:685:1299)","message":"Failed to export 1 events","name":"Error"}
+    at Qf6.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2329:34863)
+    at m46.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:679:8378)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:679:39403
+    at ro3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:679:39949)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:680:20245
+2026-01-23T08:42:57.675Z [DEBUG] High write ratio: blit=0, write=2078 (100.0% writes), screen=36x245
+2026-01-23T08:42:57.684Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157777684
+2026-01-23T08:42:57.684Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:42:57.684Z [DEBUG] Temp file written successfully, size: 37111 bytes
+2026-01-23T08:42:57.684Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:42:57.684Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157777684 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:42:57.684Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-23T08:42:57.817Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157777817
+2026-01-23T08:42:57.817Z [DEBUG] Preserving file permissions: 100644
+2026-01-23T08:42:57.818Z [DEBUG] Temp file written successfully, size: 37111 bytes
+2026-01-23T08:42:57.818Z [DEBUG] Applied original permissions to temp file
+2026-01-23T08:42:57.818Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57260.1769157777817 to /Users/kiranbiliyawala/.claude.json
+2026-01-23T08:42:57.818Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically

@@ -1,0 +1,1021 @@
+# 04 - Payment Flow Deep-Dive
+
+> **Reading Time:** 90 minutes
+> **Prerequisites:** [03-provider-integration.md](./03-provider-integration.md)
+> **Next:** [05-key-files-reference.md](./05-key-files-reference.md)
+
+---
+
+## Table of Contents
+1. [The 7-Step Workflow Pipeline](#the-7-step-workflow-pipeline)
+2. [PaymentAttemptCreateWorkflow Detailed](#paymentattemptcreateworkflow-detailed)
+3. [State Machine Implementation](#state-machine-implementation)
+4. [End-to-End Payment Flow](#end-to-end-payment-flow)
+5. [3DS / Native OTP Authentication](#3ds--native-otp-authentication)
+6. [Instrument Processing](#instrument-processing)
+7. [Distributed Locking](#distributed-locking)
+8. [Event-Driven Architecture](#event-driven-architecture)
+
+---
+
+## The 7-Step Workflow Pipeline
+
+### Base Workflow Pattern (Template Method)
+**File:** `v2/workflow/create/Workflow.java`
+
+```java
+public abstract class Workflow<Request, Response, Context> {
+
+    public Response execute(Request request) {
+        // STEP 1: Validate inputs and enrich context
+        Context context = validateAndEnrichContext(request);
+
+        // STEP 2: Persist to relational DB (transactional)
+        persistIntent(context);
+
+        // STEP 3: Pre-persist event hooks
+        publishEntityPrePersistEvents(context);
+
+        // STEP 4: Persist to non-relational DB (DynamoDB)
+        persistNonRelationalIntent(context);
+
+        // STEP 5: Process (external provider calls)
+        process(context);
+
+        // STEP 6: Post-process and save results (transactional)
+        Response response = postProcess(context);
+
+        // STEP 7: Post-persist & publish events
+        postPersistNonRelationalDataStore(context);
+        publishEntityChangeEvents(context);
+
+        throwErrorIfRequired(context);
+        return response;
+    }
+
+    // Abstract methods for subclasses to implement
+    protected abstract Context validateAndEnrichContext(Request request);
+    protected abstract void persistIntent(Context context);
+    protected abstract void process(Context context);
+    protected abstract Response postProcess(Context context);
+    protected abstract void publishEntityChangeEvents(Context context);
+}
+```
+
+### Step-by-Step Breakdown
+
+| Step | Method | Purpose | Transaction |
+|------|--------|---------|-------------|
+| 1 | `validateAndEnrichContext()` | Validate inputs, enrich with external data | None |
+| 2 | `persistIntent()` | Save entities to MySQL | Master TX |
+| 3 | `publishEntityPrePersistEvents()` | Pre-persist hooks | None |
+| 4 | `persistNonRelationalIntent()` | Save to DynamoDB | None |
+| 5 | `process()` | Call external provider APIs | None |
+| 6 | `postProcess()` | Update entities with response | Master TX |
+| 7 | `publishEntityChangeEvents()` | Trigger state machines, events | None |
+
+---
+
+## PaymentAttemptCreateWorkflow Detailed
+
+**File:** `v2/workflow/create/paymentattempts/PaymentAttemptCreateWorkflow.java`
+
+### Step 1: Validate & Enrich Context
+
+```java
+@Override
+protected PaymentAttemptCreateContext validateAndEnrichContext(
+        CreatePaymentAttemptRequest request) {
+
+    PaymentAttemptCreateContext context = new PaymentAttemptCreateContext();
+    context.setRequest(request);
+
+    // 1. Fetch related entities
+    PaymentV2Entity payment = paymentRepository.findByExternalId(request.getPaymentId());
+    OrderEntity order = payment.getOrderEntity();
+    CustomerEntity customer = order.getCustomerEntity();
+    ClientEntity client = order.getClientEntity();
+
+    context.setPaymentEntity(payment);
+    context.setOrderEntity(order);
+    context.setCustomerEntity(customer);
+    context.setClientEntity(client);
+
+    // 2. Validate & enrich instrument
+    InstrumentTypeProcessorResult result = instrumentTypeProcessorManager
+        .validatePaymentInstrumentAndEnrich(request.getPaymentInstrument());
+    context.setInstrumentProcessorResult(result);
+
+    // 3. Route to provider via Decision Tree
+    ProviderRoutingDecisionResult routingResult = providerDeciderRouter
+        .resolve(context);
+    context.setRoutingDecisionResult(routingResult);
+    context.setProviderAccountEntity(routingResult.getProviderAccountEntity());
+
+    // 4. Determine auth type (3DS, OTP, None)
+    AuthType authType = authTypeDeciderFactory
+        .decideAuthType(context);
+    context.setAuthType(authType);
+
+    // 5. Validate settlement routes
+    RoutesBreakup routes = settlementRouteValidator
+        .validateAndEnrich(context);
+    context.setRoutesBreakup(routes);
+
+    // 6. Register mandate if eMandate flow
+    if (isEMandateFlow(context)) {
+        mandateServiceDataManager.registerMandate(context);
+    }
+
+    return context;
+}
+```
+
+### Enrichment Pipeline
+
+| Enricher | Input | Output |
+|----------|-------|--------|
+| `InstrumentTypeProcessorManager` | PaymentInstrument | BIN data, issuer, card type |
+| `ProviderDeciderRouter` | Context | Provider + Account |
+| `AuthTypeDeciderFactory` | Context | 3DS / OTP / None |
+| `NativeProviderDecider` | Context | Native OTP provider |
+| `SettlementRouteValidator` | Context | Routes breakup |
+| `MandateServiceDataManager` | Context | Mandate registration |
+
+### Context Object Structure
+
+```java
+@Data
+public class PaymentAttemptCreateContext {
+    // Request/Response
+    private CreatePaymentAttemptRequest request;
+    private PaymentAttemptResponse response;
+
+    // Entities
+    private PaymentAttemptV2Entity paymentAttemptEntity;
+    private PaymentV2Entity paymentEntity;
+    private OrderEntity orderEntity;
+    private CustomerEntity customerEntity;
+    private ClientEntity clientEntity;
+
+    // Enriched Data
+    private InstrumentTypeProcessorResult instrumentProcessorResult;
+    private ProviderAccountEntity providerAccountEntity;
+    private ProviderRoutingDecisionResult routingDecisionResult;
+    private AuthType authType;
+    private RoutesBreakup routesBreakup;
+    private ProviderPaymentResponse createResponse;
+
+    // OTP/Auth Flow
+    private Boolean isPlatformNativeOtpSupported;
+    private PaymentAttemptNativeOTPDetailEntity nativeOTPDetailEntity;
+
+    // Error Collection
+    private List<WorkflowInternalError> errors = new ArrayList<>();
+}
+```
+
+### Step 2: Persist Intent
+
+```java
+@Override
+@Transactional(transactionManager = "MasterTransactionManager")
+protected void persistIntent(PaymentAttemptCreateContext context) {
+
+    // Build PaymentAttemptV2Entity
+    PaymentAttemptV2Entity entity = PaymentAttemptV2Entity.builder()
+        .externalId(PaymentAttemptUUIdGenerator.generate())
+        .status(PaymentAttemptStatus.CREATED)
+        .paymentEntity(context.getPaymentEntity())
+        .orderId(context.getOrderEntity().getId())
+        .paymentProviderEntity(context.getRoutingDecisionResult().getPaymentProvider())
+        .providerAccountEntity(context.getProviderAccountEntity())
+        .paymentMethod(context.getInstrumentProcessorResult().getPaymentMethod())
+        .instrumentDetail(context.getInstrumentProcessorResult().getEnrichedInstrument())
+        .routesBreakup(context.getRoutesBreakup())
+        .build();
+
+    // Save to repository
+    paymentAttemptRepository.save(entity);
+    context.setPaymentAttemptEntity(entity);
+
+    // Save fees
+    List<FeeContext> feeContexts = buildFeeContexts(context);
+    feeCreateWorkflow.persistIntent(feeContexts);
+
+    // Add attributes (metadata)
+    enrichAttributes(entity, context);
+}
+
+private void enrichAttributes(PaymentAttemptV2Entity entity,
+                              PaymentAttemptCreateContext context) {
+    Set<PaymentAttemptAttributeEntity> attributes = new HashSet<>();
+
+    // Decision tree tracking
+    attributes.add(new PaymentAttemptAttributeEntity(
+        DT_ID, context.getRoutingDecisionResult().getDecisionTreeId()));
+    attributes.add(new PaymentAttemptAttributeEntity(
+        DT_RESULT, context.getRoutingDecisionResult().getDecisionPath()));
+
+    // Provider metadata
+    attributes.add(new PaymentAttemptAttributeEntity(
+        PROVIDER_KEY, context.getProviderAccountEntity().getPaymentProvider().getKey()));
+
+    entity.setAttributeEntities(attributes);
+}
+```
+
+### Step 5: Process (Provider Call)
+
+```java
+@Override
+protected void process(PaymentAttemptCreateContext context) {
+
+    // Find the right adapter
+    IPaymentProviderAdapter adapter = paymentProviderFactory.findPaymentProviderAdapter(
+        context.getOrderEntity().getType(),           // PAY, REFUND
+        context.getRoutingDecisionResult().getProviderKey(),  // CASHFREE, etc.
+        context.getInstrumentProcessorResult().getInstrumentType(),  // CARD, UPI
+        context.getAuthType().getThreeDSType()        // 3DS1, 3DS2, NONE
+    );
+
+    // Execute provider call
+    ProviderPaymentResponse response = adapter.executePaymentAttempt(
+        context,
+        adapter::createPaymentAttempt,  // Method reference
+        FlowType.CREATE
+    );
+
+    // Check platform OTP capability
+    response = checkIfPlatformOtpEnabled(context, response);
+
+    context.setCreateResponse(response);
+}
+
+private ProviderPaymentResponse checkIfPlatformOtpEnabled(
+        PaymentAttemptCreateContext context,
+        ProviderPaymentResponse response) {
+
+    // If provider returned redirect but we support native OTP
+    if (response.getStatus() == AUTHENTICATION_REQUIRED
+            && context.getIsPlatformNativeOtpSupported()) {
+
+        // Override with SDK params for native OTP
+        CardNativeOTPSDKParamDetail sdkParams = CardNativeOTPSDKParamDetail.builder()
+            .authType(AuthType.NATIVE_OTP)
+            .challengeId(UUID.randomUUID().toString())
+            .fallbackUrl(response.getTransactionResponse().getAuthentication().getUrl())
+            .submitOTPAllowed(true)
+            .build();
+
+        response.getTransactionResponse().setSdkParams(sdkParams);
+    }
+
+    return response;
+}
+```
+
+### Step 6: Post-Process
+
+```java
+@Override
+@Transactional(transactionManager = "MasterTransactionManager")
+protected PaymentAttemptResponse postProcess(PaymentAttemptCreateContext context) {
+
+    PaymentAttemptV2Entity entity = context.getPaymentAttemptEntity();
+    ProviderPaymentResponse response = context.getCreateResponse();
+
+    // Update from provider response
+    entity.setProviderStatus(response.getProviderStatus());
+    entity.setProviderReferenceId(response.getProviderReferenceId());
+    entity.setGatewayReferenceId(response.getGatewayReferenceId());
+
+    // Set error details if failed
+    if (response.getProviderError() != null) {
+        entity.setErrorCode(response.getProviderError().getCode());
+        entity.setErrorMessage(response.getProviderError().getMessage());
+    }
+
+    // Determine final status
+    if (response.getProviderRequestStatus() == REQUEST_SUCCESS) {
+        entity.setStatus(response.getStatus());
+    } else if (isEligibleForRetry(context)) {
+        // Set to PROCESSING for async status check
+        entity.setStatus(response.getStatus() == FAILED ? FAILED : PROCESSING);
+    }
+
+    // Save updated entity
+    paymentAttemptRepository.save(entity);
+
+    // Audit provider response
+    auditService.auditProviderData(
+        response.getProviderResponseObject(),
+        entity.getId(),
+        AuditType.CREATE_RESPONSE);
+
+    return mapper.toResponse(entity, response);
+}
+```
+
+### Step 7: Publish Events
+
+```java
+@Override
+protected void publishEntityChangeEvents(PaymentAttemptCreateContext context) {
+    PaymentAttemptV2Entity entity = context.getPaymentAttemptEntity();
+
+    // 1. Post to synchronous EventBus (triggers PaymentStateMachine)
+    PaymentAttemptEvent event = PaymentAttemptEventFactory.findEvent(entity);
+    syncEventBus.post(event);
+
+    // 2. Post to asynchronous EventBus
+    asyncEventBus.post(event);
+
+    // 3. Publish to multi-tenant event system (client webhooks)
+    eventiService.publishEvent(entity);
+
+    // 4. Publish to analytics (Pinot)
+    eventiService.publishToPinot(buildAnalyticsEvent(entity));
+
+    // 5. Add to sync manager for webhook updates
+    paymentAttemptSyncManager.addEntityForSync(entity);
+}
+```
+
+---
+
+## State Machine Implementation
+
+### PaymentStateMachine
+**File:** `statemachine/payment/PaymentStateMachine.java`
+
+```java
+@Component
+public class PaymentStateMachine {
+
+    @Subscribe
+    public void onPaymentAttemptCreated(PaymentAttemptCreatedEvent event) {
+        PaymentV2Entity payment = event.getPaymentAttemptEntity().getPaymentEntity();
+
+        if (payment.getStatus() == FAILED) {
+            // First attempt - change from FAILED to CREATED
+            payment.setStatus(CREATED);
+            paymentRepository.save(payment);
+            postPaymentEvent(payment, PaymentCreatedEvent.class);
+        }
+    }
+
+    @Subscribe
+    public void onPaymentAttemptFailed(PaymentAttemptFailedEvent event) {
+        PaymentV2Entity payment = event.getPaymentAttemptEntity().getPaymentEntity();
+
+        // Check if all attempts failed
+        boolean allAttemptsFailed = paymentAttemptRepository
+            .findByPaymentEntity_Id(payment.getId())
+            .stream()
+            .allMatch(a -> TERMINAL_FAILED_STATUSES.contains(a.getStatus()));
+
+        if (allAttemptsFailed && shouldUpdatePaymentStatus(payment)) {
+            payment.setStatus(FAILED);
+            paymentRepository.save(payment);
+            postPaymentEvent(payment, PaymentFailedEvent.class);
+        }
+    }
+
+    @Subscribe
+    @Retryable(maxAttempts = 3)  // Handle optimistic lock
+    public void onPaymentAttemptCompleted(PaymentAttemptCompletedEvent event) {
+        PaymentV2Entity payment = event.getPaymentAttemptEntity().getPaymentEntity();
+
+        if (shouldUpdatePaymentStatus(payment)) {
+            payment.setStatus(COMPLETED);
+            paymentRepository.save(payment);
+            postPaymentEvent(payment, PaymentCompletedEvent.class);
+        }
+    }
+
+    @Subscribe
+    public void onPaymentAttemptAuthorized(PaymentAttemptAuthorizedEvent event) {
+        PaymentV2Entity payment = event.getPaymentAttemptEntity().getPaymentEntity();
+
+        if (shouldUpdatePaymentStatus(payment)) {
+            payment.setStatus(AUTHORIZED);
+            paymentRepository.save(payment);
+            postPaymentEvent(payment, PaymentAuthorizedEvent.class);
+        }
+    }
+
+    @Subscribe
+    public void onPaymentAttemptProcessing(PaymentAttemptProcessingEvent event) {
+        PaymentV2Entity payment = event.getPaymentAttemptEntity().getPaymentEntity();
+
+        if (shouldUpdatePaymentStatus(payment)) {
+            payment.setStatus(PROCESSING);
+            paymentRepository.save(payment);
+            postPaymentEvent(payment, PaymentProcessingEvent.class);
+        }
+    }
+
+    private boolean shouldUpdatePaymentStatus(PaymentV2Entity entity) {
+        return !TERMINAL_STATUSES.contains(entity.getStatus());
+    }
+
+    private static final Set<PaymentStatus> TERMINAL_STATUSES = Set.of(
+        COMPLETED, FAILED, FORCE_FAILED, DISCARDED
+    );
+}
+```
+
+### OrderStateMachine
+**File:** `statemachine/order/OrderStateMachine.java`
+
+```java
+@Component
+public class OrderStateMachine {
+
+    @Subscribe
+    public void onPaymentCreated(PaymentCreatedEvent event) {
+        OrderEntity order = event.getPaymentEntity().getOrderEntity();
+
+        if (order.getStatus() == OrderStatus.CREATED) {
+            // Check if authless flow
+            if (isAuthlessFlow(order)) {
+                order.setStatus(OrderStatus.AUTHLESS_READY_TO_PROCESS);
+            }
+            orderRepository.save(order);
+        }
+    }
+
+    @Subscribe
+    public void onPaymentFailed(PaymentFailedEvent event) {
+        OrderEntity order = event.getPaymentEntity().getOrderEntity();
+
+        // Check if all payments failed
+        boolean allPaymentsFailed = order.getPayments().stream()
+            .allMatch(p -> FAILED_STATUSES.contains(p.getStatus()));
+
+        if (allPaymentsFailed && shouldUpdateOrderStatus(order)) {
+            order.setStatus(OrderStatus.FAILED);
+            orderRepository.save(order);
+        }
+    }
+
+    @Subscribe
+    public void onPaymentCompleted(PaymentCompletedEvent event) {
+        OrderEntity order = event.getPaymentEntity().getOrderEntity();
+
+        // Check if all payments completed
+        boolean allPaymentsCompleted = order.getPayments().stream()
+            .allMatch(p -> p.getStatus() == PaymentStatus.COMPLETED);
+
+        if (allPaymentsCompleted && shouldUpdateOrderStatus(order)) {
+            order.setStatus(OrderStatus.COMPLETED);
+            orderRepository.save(order);
+        }
+    }
+
+    @Subscribe
+    public void onPaymentAuthorized(PaymentAuthorizedEvent event) {
+        OrderEntity order = event.getPaymentEntity().getOrderEntity();
+
+        if (shouldUpdateOrderStatus(order)) {
+            order.setStatus(OrderStatus.AUTHORIZED);
+            orderRepository.save(order);
+        }
+    }
+
+    @Subscribe
+    public void onPaymentProcessing(PaymentProcessingEvent event) {
+        OrderEntity order = event.getPaymentEntity().getOrderEntity();
+
+        if (shouldUpdateOrderStatus(order)) {
+            order.setStatus(OrderStatus.PROCESSING);
+            orderRepository.save(order);
+        }
+    }
+}
+```
+
+### State Transition Diagram
+
+```
+PaymentAttempt States:
+┌──────────────────────────────────────────────────────────────────┐
+│  CREATED ──► PROCESSING ──► AUTHORIZED ──► COMPLETED            │
+│      │           │              │                                │
+│      └───────────┴──────────────┴────► FAILED                   │
+│                                        FORCE_FAILED             │
+│                                        BLOCKED                  │
+└──────────────────────────────────────────────────────────────────┘
+
+Payment States:
+┌──────────────────────────────────────────────────────────────────┐
+│  CREATED ──► PROCESSING ──► AUTHORIZED ──► COMPLETED            │
+│      │           │              │                                │
+│      └───────────┴──────────────┴────► FAILED                   │
+│                                        FORCE_FAILED             │
+│                                        DISCARDED                │
+└──────────────────────────────────────────────────────────────────┘
+
+Order States:
+┌──────────────────────────────────────────────────────────────────┐
+│  CREATED ──► PROCESSING ──► AUTHORIZED ──► COMPLETED            │
+│      │           │              │                                │
+│      └───────────┴──────────────┴────► FAILED                   │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## End-to-End Payment Flow
+
+### Complete Flow Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                         CLIENT REQUEST                                   │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  1. ORDER CREATION                                                       │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ POST /v2/orders                                                     │ │
+│  │ OrderCreateWorkflow.execute()                                       │ │
+│  │ ├── validateAndEnrichContext() - Customer lookup, order validation │ │
+│  │ ├── persistIntent() - Save OrderEntity (status: CREATED)           │ │
+│  │ └── publishEvents() → OrderStateMachine                            │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  2. PAYMENT CREATION                                                     │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ POST /v2/orders/{orderId}/payments                                  │ │
+│  │ BulkPaymentCreateWorkflow.execute()                                 │ │
+│  │ ├── validateAndEnrichContext() - Payment mode validation           │ │
+│  │ ├── persistIntent() - Save PaymentV2Entity (status: CREATED)       │ │
+│  │ └── publishEvents() → PaymentStateMachine → OrderStateMachine      │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  3. PAYMENT ATTEMPT CREATION (Core Flow)                                 │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ POST /v2/payments/{paymentId}/attempts                              │ │
+│  │ PaymentAttemptCreateWorkflow.execute()                              │ │
+│  │ ├── validateAndEnrichContext()                                     │ │
+│  │ │   ├── InstrumentTypeProcessorManager (Card/UPI/NetBanking)       │ │
+│  │ │   ├── ProviderDeciderRouter (Decision Tree routing)              │ │
+│  │ │   ├── AuthTypeDeciderFactory (3DS/OTP/None)                      │ │
+│  │ │   └── SettlementRouteValidator                                   │ │
+│  │ ├── persistIntent() - Save PaymentAttemptV2Entity                  │ │
+│  │ ├── persistNonRelationalIntent() - DynamoDB (OTP details)          │ │
+│  │ ├── process() - Provider API call via Adapter                      │ │
+│  │ ├── postProcess() - Update entity with provider response           │ │
+│  │ └── publishEvents() → PaymentStateMachine → OrderStateMachine      │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+         ┌──────────────────────────┴──────────────────────────┐
+         ▼                                                      ▼
+┌─────────────────────────┐                    ┌─────────────────────────┐
+│  4A. 3DS/OTP FLOW       │                    │  4B. DIRECT SUCCESS     │
+│  ┌───────────────────┐  │                    │  ┌───────────────────┐  │
+│  │ Status:           │  │                    │  │ Status: COMPLETED │  │
+│  │ AUTHENTICATION_   │  │                    │  │ Payment done!     │  │
+│  │ REQUIRED          │  │                    │  └───────────────────┘  │
+│  └───────────────────┘  │                    └─────────────────────────┘
+│           │             │
+│           ▼             │
+│  Client performs auth   │
+│  (redirect/native OTP)  │
+│           │             │
+│           ▼             │
+│  POST /v2/authenticate  │
+│  PaymentAttempt         │
+│  AuthenticateWorkflow   │
+└─────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  5. WEBHOOK / SYNC UPDATE                                                │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ Provider sends webhook OR SyncManager polls status                  │ │
+│  │ ├── WebhookController receives update                              │ │
+│  │ ├── adapter.syncPaymentAttemptWithWebhook()                        │ │
+│  │ ├── Update PaymentAttemptV2Entity status                           │ │
+│  │ └── publishEvents() → State machines cascade updates               │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────┐
+│  6. FINAL STATE                                                          │
+│  ┌────────────────────────────────────────────────────────────────────┐ │
+│  │ PaymentAttempt: COMPLETED ──► Payment: COMPLETED ──► Order: COMPLETED│
+│  │                                                                     │ │
+│  │ eventiService.publishEvent() → Client webhook notification          │ │
+│  │ eventiService.publishToPinot() → Analytics dashboard               │ │
+│  └────────────────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 3DS / Native OTP Authentication
+
+### Native OTP Flow (Card Payments)
+
+```
+1. PaymentAttemptCreateWorkflow detects CARD + OTP-capable BIN
+         │
+         ▼
+2. wspService.isPlatformNativeOtpEnabled() returns true
+         │
+         ▼
+3. Provider returns redirect URL, but we override with SDK params
+         │
+         ▼
+4. CardNativeOTPSDKParamDetail created:
+   ├── authType: NATIVE_OTP
+   ├── challengeId: UUID
+   ├── fallbackUrl: Provider's original auth URL
+   └── submitOTPAllowed: true
+         │
+         ▼
+5. PaymentAttemptNativeOTPDetailEntity saved to DynamoDB
+         │
+         ▼
+6. Client submits OTP via PaymentAttemptAuthenticateWorkflow
+         │
+         ▼
+7. Provider validates OTP, returns success/failure
+         │
+         ▼
+8. State machines update payment/order status
+```
+
+### DynamoDB Entity for OTP
+
+```java
+@Data @Builder
+@DynamoDBTable(tableName = "darwin_payment_attempt_native_otp_detail")
+public class PaymentAttemptNativeOTPDetailEntity {
+
+    @DynamoDBHashKey(attributeName = "payment_attempt_external_id")
+    private String paymentAttemptExternalId;
+
+    @DynamoDBAttribute(attributeName = "challenge_id")
+    private String challengeId;
+
+    @DynamoDBAttribute(attributeName = "auth_type")
+    private String authType;
+
+    @DynamoDBAttribute(attributeName = "fallback_url")
+    private String fallbackUrl;
+
+    @DynamoDBAttribute(attributeName = "otp_submitted")
+    private Boolean otpSubmitted;
+
+    @Builder.Default
+    private long ttl = LocalDateTime.now()
+        .plusDays(1)
+        .toEpochSecond(ZoneOffset.UTC);
+}
+```
+
+### 3DS Redirect Flow
+
+```
+1. Provider returns authentication URL
+         │
+         ▼
+2. Client redirects to issuer's 3DS page
+         │
+         ▼
+3. User completes authentication on issuer page
+         │
+         ▼
+4. Issuer redirects to return_url with callback data
+         │
+         ▼
+5. ValidateAuthenticationWorkflow processes callback
+         │
+         ▼
+6. Provider confirms authentication status
+         │
+         ▼
+7. State machines update accordingly
+```
+
+### Authentication Workflow
+**File:** `v2/workflow/authenticate/PaymentAttemptAuthenticateWorkflow.java`
+
+```java
+@Override
+protected void process(PaymentAttemptAuthenticateContext context) {
+    PaymentAttemptV2Entity entity = context.getPaymentAttemptEntity();
+
+    // Find adapter
+    IPaymentProviderAdapter adapter = paymentProviderFactory
+        .findPaymentProviderAdapter(...);
+
+    // Submit OTP or process callback
+    if (context.isNativeOtpFlow()) {
+        adapter.submitOTP(entity, context.getOtp());
+    } else {
+        adapter.validateAuthentication(entity, context.getCallbackData());
+    }
+
+    // Sync status with provider
+    adapter.syncPaymentAttemptWithProviderId(entity);
+}
+```
+
+---
+
+## Instrument Processing
+
+### InstrumentTypeProcessorManager
+**File:** `processors/instrumenttype/InstrumentTypeProcessorManager.java`
+
+```java
+@Component
+public class InstrumentTypeProcessorManager {
+
+    private Map<InstrumentType, IInstrumentTypeProcessor<?, ?, ?>> processorByType;
+
+    public InstrumentTypeProcessorResult validatePaymentInstrumentAndEnrich(
+            PaymentInstrument instrument) {
+
+        IInstrumentTypeProcessor processor = processorByType.get(instrument.getType());
+
+        if (processor == null) {
+            throw Error.unsupported_instrument_type.getBuilder().build();
+        }
+
+        return processor.validatePaymentInstrumentAndEnrich(instrument);
+    }
+}
+```
+
+### Processor Implementations
+
+| Processor | InstrumentType | Enrichment |
+|-----------|----------------|------------|
+| `CardInstrumentTypeProcessor` | CARD | BIN lookup, issuer, card type, network |
+| `UPIPayInstrumentTypeProcessor` | UPI_APPS | VPA validation, provider |
+| `UPICollectInstrumentTypeProcessor` | UPI_COLLECT | QR code, timeout |
+| `NetBankingInstrumentTypeProcessor` | NET_BANKING | Bank code, issuer |
+| `EMandateInstrumentTypeProcessor` | NET_BANKING_WITH_PI | Mandate details |
+
+### Card Instrument Processing
+**File:** `processors/instrumenttype/CardInstrumentTypeProcessor.java`
+
+```java
+@Component
+public class CardInstrumentTypeProcessor
+        implements IInstrumentTypeProcessor<CardPaymentInstrument,
+                                           CardPaymentSubMethodDetail,
+                                           CardEnrichedPaymentInstrument> {
+
+    @Override
+    public InstrumentTypeProcessorResult<CardPaymentSubMethodDetail,
+                                         CardEnrichedPaymentInstrument>
+            validatePaymentInstrumentAndEnrich(CardPaymentInstrument instrument) {
+
+        // 1. Fetch card from Arsenal (tokenized vault)
+        CardVaultResponse cardData = arsenalClient.fetchCard(instrument.getToken());
+
+        // 2. Lookup BIN data
+        CardBinDetail binDetail = cardBinCache.getBinDetail(cardData.getBin());
+
+        // 3. Build enriched instrument
+        CardEnrichedPaymentInstrument enriched = CardEnrichedPaymentInstrument.builder()
+            .token(instrument.getToken())
+            .bin(cardData.getBin())
+            .last4(cardData.getLast4())
+            .cardType(binDetail.getCardType())        // CREDIT, DEBIT
+            .cardBrand(binDetail.getCardBrand())      // VISA, MASTERCARD
+            .issuingBank(binDetail.getIssuingBank())
+            .cardNetwork(binDetail.getNetwork())
+            .isInternational(binDetail.isInternational())
+            .build();
+
+        // 4. Determine payment method
+        PaymentInstrumentGroup method = binDetail.getCardType() == CREDIT
+            ? CREDIT_CARD : DEBIT_CARD;
+
+        return InstrumentTypeProcessorResult.builder()
+            .paymentMethod(method)
+            .paymentSubMethodDetail(buildSubMethodDetail(binDetail))
+            .enrichedPaymentInstrument(enriched)
+            .build();
+    }
+}
+```
+
+### InstrumentTypeProcessorResult
+
+```java
+@Data @Builder
+public class InstrumentTypeProcessorResult<SubMethod, Enriched> {
+    private PaymentInstrumentGroup paymentMethod;  // CARD, UPI_PAY, NET_BANKING
+    private SubMethod paymentSubMethodDetail;       // CardPaymentSubMethodDetail
+    private Enriched enrichedPaymentInstrument;     // CardEnrichedPaymentInstrument
+    private InstrumentType instrumentType;          // CARD, UPI_APPS
+}
+```
+
+---
+
+## Distributed Locking
+
+### SequentialWorkflow Pattern
+**File:** `v2/workflow/create/SequentialWorkflow.java`
+
+```java
+public abstract class SequentialWorkflow<Request, Response, Context>
+        extends Workflow<Request, Response, Context> {
+
+    @Override
+    public Response execute(Request request) {
+        LockSetting lockSetting = fetchLockSetting();
+        String lockKey = evaluateLockKey(request, lockSetting.getLockKey());
+
+        Optional<RLock> lock = Optional.empty();
+
+        try {
+            // Acquire Redis distributed lock
+            lock = redisLockUtil.acquireLock(lockKey, flowType);
+
+            if (lock.isPresent() || !lockSetting.getIsLockMandatory()) {
+                return super.execute(request);  // Run workflow
+            }
+
+            throw Error.unable_to_acquire_lock.getBuilder().build();
+
+        } finally {
+            lock.ifPresent(redisLockUtil::releaseLock);
+        }
+    }
+
+    protected abstract String evaluateLockKey(Request request, String keyTemplate);
+}
+```
+
+### Lock Settings
+
+```java
+@Data
+public class LockSetting {
+    private String lockKey;           // Template: "order:{orderId}"
+    private Boolean isLockMandatory;  // Fail if can't acquire
+    private Long waitTimeMs;          // Time to wait for lock
+    private Long leaseTimeMs;         // Auto-release after
+}
+```
+
+### Use Cases
+
+| Workflow | Lock Key | Purpose |
+|----------|----------|---------|
+| PaymentAttemptCreate | `order:{orderId}` | Prevent concurrent attempts |
+| WebhookProcess | `attempt:{attemptId}` | Single webhook processing |
+| RefundCreate | `attempt:{attemptId}` | Sequential refunds |
+
+---
+
+## Event-Driven Architecture
+
+### Guava EventBus Setup
+
+```java
+@Configuration
+public class EventBusConfiguration {
+
+    @Bean
+    public EventBus syncEventBus() {
+        return new EventBus("sync-payment-events");
+    }
+
+    @Bean
+    public AsyncEventBus asyncEventBus() {
+        return new AsyncEventBus("async-payment-events",
+            Executors.newFixedThreadPool(10));
+    }
+}
+```
+
+### Event Factory Pattern
+**File:** `statemachine/payment/events/PaymentAttemptEventFactory.java`
+
+```java
+public class PaymentAttemptEventFactory {
+
+    public static PaymentAttemptEvent findEvent(PaymentAttemptV2Entity entity) {
+        switch (entity.getStatus()) {
+            case CREATED:
+                return new PaymentAttemptCreatedEvent(entity);
+            case PROCESSING:
+                return new PaymentAttemptProcessingEvent(entity);
+            case AUTHORIZED:
+                return new PaymentAttemptAuthorizedEvent(entity);
+            case COMPLETED:
+                return new PaymentAttemptCompletedEvent(entity);
+            case FAILED:
+            case FORCE_FAILED:
+                return new PaymentAttemptFailedEvent(entity);
+            case BLOCKED:
+                return new PaymentAttemptBlockedEvent(entity);
+            default:
+                return new PaymentAttemptUnknownEvent(entity);
+        }
+    }
+}
+```
+
+### Event Flow Diagram
+
+```
+PaymentAttemptCreateWorkflow
+         │
+         │ publishEntityChangeEvents()
+         │
+         ▼
+    syncEventBus.post(PaymentAttemptEvent)
+         │
+         ├────────────────────────────────────────┐
+         │                                        │
+         ▼                                        ▼
+┌─────────────────────┐              ┌─────────────────────┐
+│ PaymentStateMachine │              │ asyncEventBus.post()│
+│ @Subscribe methods  │              │ (Background tasks)  │
+└─────────────────────┘              └─────────────────────┘
+         │
+         │ Updates Payment status
+         │ postPaymentEvent(PaymentEvent)
+         │
+         ▼
+    syncEventBus.post(PaymentEvent)
+         │
+         ▼
+┌─────────────────────┐
+│ OrderStateMachine   │
+│ @Subscribe methods  │
+└─────────────────────┘
+         │
+         │ Updates Order status
+         │
+         ▼
+    Final state cascade complete
+```
+
+---
+
+## Key Payment Flow Files
+
+### Core Workflows
+1. `v2/workflow/create/Workflow.java` - Base template
+2. `v2/workflow/create/paymentattempts/PaymentAttemptCreateWorkflow.java` - Main flow
+3. `v2/workflow/create/payments/bulk/BulkPaymentCreateWorkflow.java` - Payment creation
+4. `v2/workflow/authenticate/PaymentAttemptAuthenticateWorkflow.java` - OTP auth
+
+### State Machines
+1. `statemachine/payment/PaymentStateMachine.java`
+2. `statemachine/order/OrderStateMachine.java`
+3. `statemachine/RefundStateMachine.java`
+
+### Instrument Processing
+1. `processors/instrumenttype/InstrumentTypeProcessorManager.java`
+2. `processors/instrumenttype/CardInstrumentTypeProcessor.java`
+3. `processors/instrumenttype/UPIPayInstrumentTypeProcessor.java`
+
+### Context & Events
+1. `v2/workflow/create/paymentattempts/PaymentAttemptCreateContext.java`
+2. `statemachine/payment/events/PaymentAttemptEventFactory.java`
+3. `statemachine/order/events/OrderEventFactory.java`
+
+### Locking & Sequencing
+1. `v2/workflow/create/SequentialWorkflow.java`
+2. `commons/lock/RedisLockUtil.java`
+
+---
+
+## Checkpoint
+
+After completing this section:
+- [ ] Understand the 7-step workflow pipeline
+- [ ] Know how PaymentAttemptCreateWorkflow works step by step
+- [ ] Understand state machine event cascading
+- [ ] Know 3DS and Native OTP authentication flows
+- [ ] Understand instrument processing
+- [ ] Know distributed locking patterns
+- [ ] Proceed to [05-key-files-reference.md](./05-key-files-reference.md)
+
+---
+
+*Next: [05 - Key Files Reference](./05-key-files-reference.md)*

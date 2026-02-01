@@ -1,0 +1,49 @@
+2026-01-29T10:39:46.010Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.98397.1769683186010
+2026-01-29T10:39:46.010Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T10:39:46.010Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T10:39:46.010Z [DEBUG] Applied original permissions to temp file
+2026-01-29T10:39:46.010Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.98397.1769683186010 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T10:39:46.011Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T10:39:47.056Z [DEBUG] Started caffeinate to prevent sleep
+2026-01-29T10:39:47.057Z [DEBUG] Getting matching hook commands for SessionEnd with query: clear
+2026-01-29T10:39:47.057Z [DEBUG] Found 0 hook matchers in settings
+2026-01-29T10:39:47.057Z [DEBUG] Matched 0 unique hooks for query "clear" (0 before deduplication)
+2026-01-29T10:39:47.062Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-29T10:39:47.062Z [DEBUG] Cleared all session hooks for session fbc4060a-0df0-4a9e-afcc-e0d4e6e562dd
+2026-01-29T10:39:47.065Z [DEBUG] Getting matching hook commands for SessionStart with query: clear
+2026-01-29T10:39:47.065Z [DEBUG] Found 0 hook matchers in settings
+2026-01-29T10:39:47.065Z [DEBUG] Matched 0 unique hooks for query "clear" (0 before deduplication)
+2026-01-29T10:39:47.084Z [DEBUG] FileHistory: Added snapshot for e766813f-47e3-487b-a50d-30df9b667e56, tracking 0 files
+2026-01-29T10:39:47.133Z [DEBUG] Stopped caffeinate, allowing sleep
+2026-01-29T10:39:47.134Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-29T10:39:47.134Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-29T10:39:47.136Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at LGA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1609:27769)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runNextTicks (node:internal/process/task_queues:69:3)
+    at process.processImmediate (node:internal/timers:479:9)
+    at process.topLevelDomainCallback (node:domain:161:15)
+    at process.callbackTrampoline (node:internal/async_hooks:128:24)
+    at async _ (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4254:16162)
+2026-01-29T10:39:47.137Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at LGA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1609:27769)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runNextTicks (node:internal/process/task_queues:69:3)
+    at process.processImmediate (node:internal/timers:479:9)
+    at process.topLevelDomainCallback (node:domain:161:15)
+    at process.callbackTrampoline (node:internal/async_hooks:128:24)
+    at async Z (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4254:16678)
+2026-01-29T10:39:47.139Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-01-29T10:39:47.139Z [DEBUG] [claudeai-mcp] Gate returned: false
+2026-01-29T10:39:47.139Z [DEBUG] [claudeai-mcp] Disabled via gate
+2026-01-29T10:39:47.589Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T10:39:47.589Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T10:39:48.143Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.98397.1769683188143
+2026-01-29T10:39:48.143Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T10:39:48.144Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T10:39:48.144Z [DEBUG] Applied original permissions to temp file
+2026-01-29T10:39:48.144Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.98397.1769683188143 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T10:39:48.144Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T10:39:52.749Z [DEBUG] Getting matching hook commands for SessionEnd with query: other
+2026-01-29T10:39:52.749Z [DEBUG] Found 0 hook matchers in settings
+2026-01-29T10:39:52.749Z [DEBUG] Matched 0 unique hooks for query "other" (0 before deduplication)

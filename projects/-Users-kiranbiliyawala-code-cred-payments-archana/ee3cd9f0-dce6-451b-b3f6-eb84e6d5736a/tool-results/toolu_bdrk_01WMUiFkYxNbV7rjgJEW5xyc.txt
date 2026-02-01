@@ -1,0 +1,2003 @@
+diff --git a/app/build.gradle b/app/build.gradle
+index de5b0d954..833c461fb 100644
+--- a/app/build.gradle
++++ b/app/build.gradle
+@@ -127,7 +127,7 @@ dependencies {
+         exclude group: 'com.github.derjust', module: 'spring-data-dynamodb'
+     }
+ 
+-    implementation 'in.dreamplug.genie:genie-models:7.0.19'
++    implementation 'in.dreamplug.genie:genie-models:7.0.20-SNAPSHOT'
+     implementation ("in.dreamplug.external:cointab-provider-client:$providerClientVersion")
+     implementation ("in.dreamplug.external:razorpay-provider-client:$providerClientVersion")
+     implementation ("in.dreamplug.external:axis-push-to-vpa-client:$providerClientVersion")
+diff --git a/app/src/main/java/in/dreamplug/genie/application/module/ComponentsModule.java b/app/src/main/java/in/dreamplug/genie/application/module/ComponentsModule.java
+index e43a66894..85e79499c 100644
+--- a/app/src/main/java/in/dreamplug/genie/application/module/ComponentsModule.java
++++ b/app/src/main/java/in/dreamplug/genie/application/module/ComponentsModule.java
+@@ -175,6 +175,7 @@ protected void configure() {
+         bind(BankCodeIFSCService.class).asEagerSingleton();
+         bind(BankCodeVpaService.class).asEagerSingleton();
+         bind(ConfigService.class).asEagerSingleton();
++        bind(in.dreamplug.genie.core.cache.Utr22BankConfigCache.class).asEagerSingleton();
+         bind(DecisionTreeService.class).asEagerSingleton();
+         bind(CronApiService.class).asEagerSingleton();
+         bind(PaymentProviderOwnerService.class).asEagerSingleton();
+diff --git a/app/src/main/java/in/dreamplug/genie/config/Utr22BankConfig.java b/app/src/main/java/in/dreamplug/genie/config/Utr22BankConfig.java
+new file mode 100644
+index 000000000..f793d16d1
+--- /dev/null
++++ b/app/src/main/java/in/dreamplug/genie/config/Utr22BankConfig.java
+@@ -0,0 +1,10 @@
++package in.dreamplug.genie.config;
++
++import lombok.Data;
++
++import java.util.List;
++
++@Data
++public class Utr22BankConfig {
++    private List<Integer> utr22MigratedBanks;
++}
+diff --git a/app/src/main/java/in/dreamplug/genie/core/cache/Utr22BankConfigCache.java b/app/src/main/java/in/dreamplug/genie/core/cache/Utr22BankConfigCache.java
+new file mode 100644
+index 000000000..ec68293d6
+--- /dev/null
++++ b/app/src/main/java/in/dreamplug/genie/core/cache/Utr22BankConfigCache.java
+@@ -0,0 +1,92 @@
++package in.dreamplug.genie.core.cache;
++
++import com.github.benmanes.caffeine.cache.CacheLoader;
++import com.github.benmanes.caffeine.cache.Caffeine;
++import com.github.benmanes.caffeine.cache.LoadingCache;
++import in.dreamplug.genie.config.Utr22BankConfig;
++import in.dreamplug.genie.core.service.ConfigService;
++import in.dreamplug.genie.core.utils.Constant;
++import jakarta.inject.Inject;
++import lombok.NonNull;
++import lombok.RequiredArgsConstructor;
++import lombok.extern.slf4j.Slf4j;
++
++import java.util.Collections;
++import java.util.HashSet;
++import java.util.Objects;
++import java.util.Set;
++import java.util.concurrent.TimeUnit;
++
++@Slf4j
++@RequiredArgsConstructor(onConstructor_ = {@Inject})
++public class Utr22BankConfigCache {
++
++    private LoadingCache<String, Set<Integer>> cache;
++
++    @NonNull
++    private final ConfigService configService;
++
++    @Inject
++    void init() {
++        cache = Caffeine.newBuilder()
++                .refreshAfterWrite(1, TimeUnit.MINUTES)
++                .maximumSize(10)
++                .recordStats()
++                .build(new CacheLoader<String, Set<Integer>>() {
++                    public Set<Integer> load(String key) {
++                        try {
++                            Utr22BankConfig config = configService.utr22BankConfig();
++                            if (Objects.nonNull(config) && Objects.nonNull(config.getUtr22MigratedBanks())) {
++                                Set<Integer> migratedBanks = new HashSet<>(config.getUtr22MigratedBanks());
++                                log.info("Loaded UTR-22 config cache. Migrated banks count: {}", migratedBanks.size());
++                                return Collections.unmodifiableSet(migratedBanks);
++                            } else {
++                                log.warn("UTR-22 config is null or has no migrated banks. Using empty set.");
++                                return Collections.emptySet();
++                            }
++                        } catch (Exception e) {
++                            log.error("Error loading UTR-22 config cache.", e);
++                            return Collections.emptySet();
++                        }
++                    }
++                });
++    }
++
++    /**
++     * Check if a bank has migrated to UTR-22 format
++     *
++     * @param bankCode The bank code to check (as String)
++     * @return true if the bank has migrated to UTR-22, false otherwise
++     */
++    public boolean isMigrated(String bankCode) {
++        if (bankCode == null || bankCode.trim().isEmpty()) {
++            return false;
++        }
++        try {
++            // Convert String bankCode to Integer for comparison
++            Integer bankCodeInt = Integer.parseInt(bankCode.trim());
++            Set<Integer> migratedBanks = cache.get(Constant.UTR_22_BANK_CONFIG_CACHE);
++            return migratedBanks.contains(bankCodeInt);
++        } catch (NumberFormatException e) {
++            log.warn("Invalid bank code format (not a valid integer): {}", bankCode);
++            return false;
++        } catch (Exception e) {
++            log.error("Error while checking if bank code {} is migrated", bankCode, e);
++            return false;
++        }
++    }
++
++    /**
++     * Get the set of all migrated banks (for testing/debugging)
++     *
++     * @return Unmodifiable set of migrated bank codes as Integers
++     */
++    public Set<Integer> getMigratedBanks() {
++        try {
++            return cache.get(Constant.UTR_22_BANK_CONFIG_CACHE);
++        } catch (Exception e) {
++            log.error("Error while getting cache for key UTR_22_BANK_CONFIG_CACHE", e);
++            return Collections.emptySet();
++        }
++    }
++}
+diff --git a/app/src/main/java/in/dreamplug/genie/core/service/ConfigService.java b/app/src/main/java/in/dreamplug/genie/core/service/ConfigService.java
+index fe226a82e..802a033e9 100644
+--- a/app/src/main/java/in/dreamplug/genie/core/service/ConfigService.java
++++ b/app/src/main/java/in/dreamplug/genie/core/service/ConfigService.java
+@@ -10,6 +10,7 @@
+ import in.dreamplug.genie.config.BeneficiaryContextConfig;
+ import in.dreamplug.genie.config.BilldeskBillerConfig;
+ import in.dreamplug.genie.config.FundTransferContextConfig;
++import in.dreamplug.genie.config.Utr22BankConfig;
+ import in.dreamplug.genie.core.repository.ConfigRepository;
+ import in.dreamplug.genie.model.bean.core.Error;
+ import in.dreamplug.genie.model.bean.core.PriorityMatrixConfig;
+@@ -32,10 +33,11 @@
+ import java.util.*;
+ import java.util.concurrent.ExecutionException;
+ import java.util.concurrent.TimeUnit;
++import java.util.stream.Collectors;
+ 
+ 
+ @Slf4j
+-@RequiredArgsConstructor(onConstructor_ = { @Inject })
++@RequiredArgsConstructor(onConstructor_ = {@Inject})
+ public class ConfigService {
+ 
+     private final ConfigRepository configRepo;
+@@ -53,7 +55,7 @@ public Optional<Config> load(final String key) {
+                 return configRepo.find(key);
+             }
+         });
+-        GuavaCacheMetrics.monitor(meterRegistry,this.configCache,"config_table_cache" , Collections.emptyList());
++        GuavaCacheMetrics.monitor(meterRegistry, this.configCache, "config_table_cache", Collections.emptyList());
+     }
+ 
+     public Config addConfig(final Config config) {
+@@ -90,6 +92,7 @@ public void deleteConfig(String key) {
+     public boolean featureEnabled(Config.Name name) {
+         return find(name.name()).map(c -> Boolean.valueOf(c.getValue())).orElse(false);
+     }
++
+     public boolean featureEnabled(String key) {
+         return find(key).map(c -> Boolean.valueOf(c.getValue())).orElse(false);
+     }
+@@ -99,8 +102,8 @@ public boolean featureEnabled(String key, double defaultValue) {
+         return Math.random() < featureEnabledRatio;
+     }
+ 
+-    public Integer getForceFailedThresholdInMinutes(String tenantId){
+-        String key = Util.getTenantNameSpacedConfigKey(tenantId,Config.Name.FORCE_FAILED_THRESHOLD.name());
++    public Integer getForceFailedThresholdInMinutes(String tenantId) {
++        String key = Util.getTenantNameSpacedConfigKey(tenantId, Config.Name.FORCE_FAILED_THRESHOLD.name());
+         return find(key).map(c -> Integer.valueOf(c.getValue())).orElse(15);
+     }
+ 
+@@ -120,29 +123,29 @@ public boolean booleanValue(Config.Name name) {
+ 
+     public PriorityLogicContextConfig plContextConfig(String tenantId) {
+         //TODO Construct from Individual Atomic Configs
+-        String key = Util.getTenantNameSpacedConfigKey(tenantId,Config.Name.PL_CONTEXT_CONFIG.name());
++        String key = Util.getTenantNameSpacedConfigKey(tenantId, Config.Name.PL_CONTEXT_CONFIG.name());
+         return find(key).map(c -> Serializer.DEFAULT_JSON_SERIALIZER.deserialize(c.getValue(), PriorityLogicContextConfig.class)).orElse(null);
+     }
+ 
+     public HaltLogicContextConfig hlContextConfig(String tenantId) {
+         //TODO Construct from Individual Atomic Configs
+-        String key = Util.getTenantNameSpacedConfigKey(tenantId,Config.Name.HL_CONTEXT_CONFIG.name());
++        String key = Util.getTenantNameSpacedConfigKey(tenantId, Config.Name.HL_CONTEXT_CONFIG.name());
+         return find(key).map(c -> Serializer.DEFAULT_JSON_SERIALIZER.deserialize(c.getValue(), HaltLogicContextConfig.class)).orElse(null);
+     }
+ 
+     public void createDefaultDTContextConfigsForTenant(String tenantId) {
+         Config defaultPLContextConfig = find(Config.Name.PL_CONTEXT_CONFIG.name()).orElseThrow(Error.config_not_found.getBuilder()::build);
+         Config plConfig = Config.builder()
+-                                .key(Util.getTenantNameSpacedConfigKey(tenantId, Config.Name.PL_CONTEXT_CONFIG.name()))
+-                                .value(defaultPLContextConfig.getValue())
+-                                .build();
++                .key(Util.getTenantNameSpacedConfigKey(tenantId, Config.Name.PL_CONTEXT_CONFIG.name()))
++                .value(defaultPLContextConfig.getValue())
++                .build();
+         addConfig(plConfig);
+ 
+         Config defaultHLContextConfig = find(Config.Name.HL_CONTEXT_CONFIG.name()).orElseThrow(Error.config_not_found.getBuilder()::build);
+         Config hlConfig = Config.builder()
+-                                .key(Util.getTenantNameSpacedConfigKey(tenantId, Config.Name.HL_CONTEXT_CONFIG.name()))
+-                                .value(defaultHLContextConfig.getValue())
+-                                .build();
++                .key(Util.getTenantNameSpacedConfigKey(tenantId, Config.Name.HL_CONTEXT_CONFIG.name()))
++                .value(defaultHLContextConfig.getValue())
++                .build();
+         addConfig(hlConfig);
+ 
+         // QL and RL context configs are not required as they are empty by default
+@@ -150,12 +153,12 @@ public void createDefaultDTContextConfigsForTenant(String tenantId) {
+ 
+     public RetryLogicContextConfig rlContextConfig(String tenantId) {
+         //TODO Construct from Individual Atomic Configs
+-        String key = Util.getTenantNameSpacedConfigKey(tenantId,Config.Name.RL_CONTEXT_CONFIG.name());
++        String key = Util.getTenantNameSpacedConfigKey(tenantId, Config.Name.RL_CONTEXT_CONFIG.name());
+         return find(key).map(c -> Serializer.DEFAULT_JSON_SERIALIZER.deserialize(c.getValue(), RetryLogicContextConfig.class)).orElse(null);
+     }
+ 
+     public QueueLogicContextConfig qlContextConfig(String tenantId) {
+-        String key = Util.getTenantNameSpacedConfigKey(tenantId,Config.Name.QL_CONTEXT_CONFIG.name());
++        String key = Util.getTenantNameSpacedConfigKey(tenantId, Config.Name.QL_CONTEXT_CONFIG.name());
+         return find(key).map(c -> Serializer.DEFAULT_JSON_SERIALIZER.deserialize(c.getValue(), QueueLogicContextConfig.class)).orElse(null);
+     }
+ 
+@@ -163,7 +166,7 @@ public ServiceabilityLogicContextConfig slContextConfig(String key) {
+         return find(key).map(c -> Serializer.DEFAULT_JSON_SERIALIZER.deserialize(c.getValue(), ServiceabilityLogicContextConfig.class)).orElse(null);
+     }
+ 
+-    public FundTransferContextConfig getFundTransferContextConfig(String key){
++    public FundTransferContextConfig getFundTransferContextConfig(String key) {
+         return find(key).map(c -> Serializer.DEFAULT_JSON_SERIALIZER.deserialize(c.getValue(), FundTransferContextConfig.class)).orElse(null);
+     }
+ 
+@@ -179,20 +182,42 @@ public BbpsBillerConfig bbpsBillerConfig() {
+         return find(Config.Name.BBPS_BILLER_CONFIG.name()).map(c -> Serializer.DEFAULT_JSON_SERIALIZER.deserialize(c.getValue(), BbpsBillerConfig.class)).orElse(null);
+     }
+ 
+-    public <T> T getProviderStatusMapConfig(Class<T> configClass, Config.Name configName){
++    public Utr22BankConfig utr22BankConfig() {
++        return find(Config.Name.UTR_22_BANK_CONFIG.name()).map(config -> {
++            try {
++                String value = config.getValue();
++                if (StringUtils.isEmpty(value)) {
++                    return null;
++                }
++                Utr22BankConfig bankConfig = new Utr22BankConfig();
++                List<Integer> bankCodes = Arrays.stream(value.split(","))
++                        .map(String::trim)
++                        .filter(s -> !s.isEmpty())
++                        .map(Integer::parseInt)
++                        .collect(Collectors.toList());
++                bankConfig.setUtr22MigratedBanks(bankCodes);
++                return bankConfig;
++            } catch (Exception e) {
++                log.error("Error parsing UTR_22_BANK_CONFIG: {}", config.getValue(), e);
++                return null;
++            }
++        }).orElse(null);
++    }
++
++    public <T> T getProviderStatusMapConfig(Class<T> configClass, Config.Name configName) {
+         return find(configName.name())
+                 .map(config -> Serializer.DEFAULT_JSON_SERIALIZER.deserialize(config.getValue(), configClass))
+                 .orElse(null);
+     }
+ 
+-    public PriorityMatrixConfig priorityMatrixConfig(){
+-        return find(Config.Name.PRIORITY_MAP_CONFIG.name()).map(c->Serializer.DEFAULT_JSON_SERIALIZER.deserialize(c.getValue(), PriorityMatrixConfig.class)).orElse(null);
++    public PriorityMatrixConfig priorityMatrixConfig() {
++        return find(Config.Name.PRIORITY_MAP_CONFIG.name()).map(c -> Serializer.DEFAULT_JSON_SERIALIZER.deserialize(c.getValue(), PriorityMatrixConfig.class)).orElse(null);
+     }
+ 
+-    public Map<String,Object> getDecisionPropertySchema(DecisionTreeType name){
++    public Map<String, Object> getDecisionPropertySchema(DecisionTreeType name) {
+         Optional<Config> value;
+ 
+-        switch (name){
++        switch (name) {
+             case HALT_LOGIC:
+                 value = find(Config.Name.HL_PROPERTY_SCHEMA.name());
+                 break;
+@@ -211,9 +236,10 @@ public Map<String,Object> getDecisionPropertySchema(DecisionTreeType name){
+             default:
+                 value = Optional.empty();
+         }
+-        if (value.isPresent()){
++        if (value.isPresent()) {
+             try {
+-                return JsonObjectMapper.getMapper().readValue(value.get().getValue(),new TypeReference<Map<String, Object>>(){});
++                return JsonObjectMapper.getMapper().readValue(value.get().getValue(), new TypeReference<Map<String, Object>>() {
++                });
+             } catch (IOException e) {
+                 return null;
+             }
+@@ -235,47 +261,48 @@ public List<String> getList(@NonNull Config.Name name) {
+                 Collections.emptyList());
+     }
+ 
+-    public Set<String> getFinalBannedUserSet(List<String> requestedIds,Set<String> bannedUserIds,Action action){
+-        switch (action){
++    public Set<String> getFinalBannedUserSet(List<String> requestedIds, Set<String> bannedUserIds, Action action) {
++        switch (action) {
+             case ADD:
+                 bannedUserIds.addAll(requestedIds);
+-                return  bannedUserIds ;
++                return bannedUserIds;
+             case REMOVE:
+-                requestedIds.forEach(bannedUserIds::remove) ;
+-                return  bannedUserIds ;
++                requestedIds.forEach(bannedUserIds::remove);
++                return bannedUserIds;
+             case CLEAR:
+             default:
+                 return new HashSet<>();
+         }
+     }
+ 
+-    public void bannedUserManagement(UserIdActionRequest request){
++    public void bannedUserManagement(UserIdActionRequest request) {
+         HaltLogicContextConfig hlContextConfig = hlContextConfig(request.getTenantId());
+-        Set<String> bannedUserIds =  hlContextConfig.getBannedUserIds();
+-        if(null == bannedUserIds) {
++        Set<String> bannedUserIds = hlContextConfig.getBannedUserIds();
++        if (null == bannedUserIds) {
+             bannedUserIds = new HashSet<>();
+         }
+-        hlContextConfig.setBannedUserIds(getFinalBannedUserSet(request.getUserIds(),bannedUserIds,request.getAction()));
+-        String key = Util.getTenantNameSpacedConfigKey(request.getTenantId(),Config.Name.HL_CONTEXT_CONFIG.name());
++        hlContextConfig.setBannedUserIds(getFinalBannedUserSet(request.getUserIds(), bannedUserIds, request.getAction()));
++        String key = Util.getTenantNameSpacedConfigKey(request.getTenantId(), Config.Name.HL_CONTEXT_CONFIG.name());
+         updateConfig(
+                 key,
+                 Config.builder()
+-                      .key(key)
+-                      .value(Serializer.DEFAULT_JSON_SERIALIZER.serialize(hlContextConfig))
+-                      .build()
++                        .key(key)
++                        .value(Serializer.DEFAULT_JSON_SERIALIZER.serialize(hlContextConfig))
++                        .build()
+         );
+     }
+ 
+-    public Set<String> getBanUsers(String tenantId){
++    public Set<String> getBanUsers(String tenantId) {
+         HaltLogicContextConfig hlContextConfig = hlContextConfig(tenantId);
+-        Set<String> bannedUserIds =  hlContextConfig.getBannedUserIds();
++        Set<String> bannedUserIds = hlContextConfig.getBannedUserIds();
+         return bannedUserIds;
+     }
+ 
+-    public StrategyIdentifier getTpsStrategy(){
++    public StrategyIdentifier getTpsStrategy() {
+         return StrategyIdentifier.valueOf(find(Config.Name.TPS_STRATEGY.name()).map(c -> String.valueOf(c.getValue())).orElse("SLIDING_LOG"));
+     }
+-    public StrategyIdentifier getTpmStrategy(){
++
++    public StrategyIdentifier getTpmStrategy() {
+         return StrategyIdentifier.valueOf(find(Config.Name.TPM_STRATEGY.name()).map(c -> String.valueOf(c.getValue())).orElse("SLIDING_LOG"));
+     }
+ }
+diff --git a/app/src/main/java/in/dreamplug/genie/core/service/SettlementService.java b/app/src/main/java/in/dreamplug/genie/core/service/SettlementService.java
+index f73d7e50e..c5e499e43 100644
+--- a/app/src/main/java/in/dreamplug/genie/core/service/SettlementService.java
++++ b/app/src/main/java/in/dreamplug/genie/core/service/SettlementService.java
+@@ -1,6 +1,7 @@
+ package in.dreamplug.genie.core.service;
+ 
+ import com.fasterxml.jackson.core.JsonProcessingException;
++import com.fasterxml.jackson.core.type.TypeReference;
+ import com.google.common.base.Strings;
+ import com.google.common.collect.HashMultimap;
+ import com.google.common.collect.Lists;
+@@ -33,22 +34,55 @@
+ import in.dreamplug.genie.event.kafka.dto.SettlementDetailsData;
+ import in.dreamplug.genie.external.provider.PaymentProviderSettlementServiceFactory;
+ import in.dreamplug.genie.external.user.UserService;
+-import in.dreamplug.genie.model.bean.common.*;
++import in.dreamplug.genie.model.bean.common.PaymentRail;
++import in.dreamplug.genie.model.bean.common.RelayerFlowRequest;
++import in.dreamplug.genie.model.bean.common.ScheduleEventData;
++import in.dreamplug.genie.model.bean.common.SettlementAttemptDetails;
++import in.dreamplug.genie.model.bean.common.SettlementData;
++import in.dreamplug.genie.model.bean.common.SettlementDetails;
++import in.dreamplug.genie.model.bean.common.SettlementRailConfig;
++import in.dreamplug.genie.model.bean.common.SettlementSummary;
++import in.dreamplug.genie.model.bean.common.StatusCheckIntervalConfig;
++import in.dreamplug.genie.model.bean.common.WebhookData;
+ import in.dreamplug.genie.model.bean.core.Error;
+ import in.dreamplug.genie.model.bean.core.GenieMetrics;
+ import in.dreamplug.genie.model.bean.core.HealthEvent;
+ import in.dreamplug.genie.model.bean.core.Rail;
+ import in.dreamplug.genie.model.bean.external.provider.FetchSettlementAttemptRequest;
+ import in.dreamplug.genie.model.bean.external.provider.GetSettlementAttemptResponse;
+-import in.dreamplug.genie.model.bean.request.*;
++import in.dreamplug.genie.model.bean.request.BankIfscSettlementAccountRequest;
++import in.dreamplug.genie.model.bean.request.BulkSettlementActionRequest;
++import in.dreamplug.genie.model.bean.request.CreateSettlementRequest;
++import in.dreamplug.genie.model.bean.request.CreateSettlementRequestV2;
++import in.dreamplug.genie.model.bean.request.CreditCardSettlementAccountRequest;
++import in.dreamplug.genie.model.bean.request.DelaySettlementRequest;
++import in.dreamplug.genie.model.bean.request.LoanSettlementAccountRequest;
++import in.dreamplug.genie.model.bean.request.PrioritizeSettlementRequest;
++import in.dreamplug.genie.model.bean.request.ScheduleSettlementRequest;
++import in.dreamplug.genie.model.bean.request.SettlementAccountRequest;
++import in.dreamplug.genie.model.bean.request.SettlementActionRequest;
++import in.dreamplug.genie.model.bean.request.TagSettlementRequest;
++import in.dreamplug.genie.model.bean.request.UnTagSettlementRequest;
++import in.dreamplug.genie.model.bean.request.VPASettlementAccountRequest;
+ import in.dreamplug.genie.model.bean.request.enums.ObligationType;
+ import in.dreamplug.genie.model.bean.request.enums.SettlementAccountType;
+ import in.dreamplug.genie.model.bean.response.SettlementTagsResponse;
+ import in.dreamplug.genie.model.bean.workflow.RetryLogicResponse;
+ import in.dreamplug.genie.model.bean.workflow.RetryLogicWorkflowContext;
+ import in.dreamplug.genie.model.bean.workflow.StatusCheckType;
+-import in.dreamplug.genie.model.entities.core.*;
+-import in.dreamplug.genie.model.enums.*;
++import in.dreamplug.genie.model.entities.core.Config;
++import in.dreamplug.genie.model.entities.core.EntityRelay;
++import in.dreamplug.genie.model.entities.core.Settlement;
++import in.dreamplug.genie.model.entities.core.SettlementAttempt;
++import in.dreamplug.genie.model.entities.core.SettlementRail;
++import in.dreamplug.genie.model.entities.core.SettlementRelayer;
++import in.dreamplug.genie.model.enums.RelayEntityType;
++import in.dreamplug.genie.model.enums.RelayState;
++import in.dreamplug.genie.model.enums.RelayTask;
++import in.dreamplug.genie.model.enums.SettlementAttemptState;
++import in.dreamplug.genie.model.enums.SettlementMode;
++import in.dreamplug.genie.model.enums.SettlementRelayerReason;
++import in.dreamplug.genie.model.enums.SettlementState;
+ import in.dreamplug.genie.processor.consumer.EligibleRailsWorkflow;
+ import in.dreamplug.genie.util.JsonObjectMapper;
+ import in.dreamplug.genie.util.Util;
+@@ -63,7 +97,16 @@
+ import java.sql.Timestamp;
+ import java.time.Instant;
+ import java.time.temporal.ChronoUnit;
+-import java.util.*;
++import java.util.ArrayList;
++import java.util.Arrays;
++import java.util.Collections;
++import java.util.Comparator;
++import java.util.HashMap;
++import java.util.List;
++import java.util.Map;
++import java.util.Objects;
++import java.util.Optional;
++import java.util.UUID;
+ import java.util.function.Function;
+ import java.util.regex.Pattern;
+ import java.util.stream.Collectors;
+@@ -72,7 +115,7 @@
+ import static in.dreamplug.genie.core.utils.Constant.*;
+ 
+ @Slf4j
+-@RequiredArgsConstructor (onConstructor_ = { @Inject })
++@RequiredArgsConstructor(onConstructor_ = {@Inject})
+ public class SettlementService {
+     private final ConfigService configService;
+ 
+@@ -102,30 +145,30 @@ public class SettlementService {
+     @Named(Constants.DI.MASTER)
+     private final SettlementRelayerRepository settlementRelayerRepository;
+ 
+-    @Named (Constants.DI.PLUTUS)
++    @Named(Constants.DI.PLUTUS)
+     private final RedisFulfilmentPriorityQueue plutusPriorityQueue;
+ 
+-    @Named (Constants.DI.LENDING)
++    @Named(Constants.DI.LENDING)
+     private final RedisFulfilmentPriorityQueue lendingPriorityQueue;
+ 
+-    @Named (Constants.DI.RENT)
++    @Named(Constants.DI.RENT)
+     private final RedisFulfilmentPriorityQueue rentPriorityQueue;
+ 
+-    @Named (Constants.DI.DARWIN)
++    @Named(Constants.DI.DARWIN)
+     private final RedisFulfilmentPriorityQueue darwinPriorityQueue;
+ 
+     @NonNull
+     private final EventiPublisher eventiPublisher;
+ 
+-    @Named (Constants.DI.GLOBAL)
++    @Named(Constants.DI.GLOBAL)
+     private final RedisFailedAttemptCounter globalFailedAttemptCounter;
+ 
+     private Map<String, RedisFulfilmentPriorityQueue> priorityQueueMap = new HashMap<>();
+ 
+     private final SettlementRailService settlementRailService;
+ 
+-    private static List<SettlementAttemptState> BLOCKED_STATES = Arrays.asList(SettlementAttemptState.FAILED,SettlementAttemptState.FORCE_FAILED);
+-    private static List<SettlementAttemptState> BLOCKED_AND_CREATED_STATES = Arrays.asList(SettlementAttemptState.CREATED, SettlementAttemptState.FAILED,SettlementAttemptState.FORCE_FAILED,SettlementAttemptState.MANUAL_REVIEW);
++    private static List<SettlementAttemptState> BLOCKED_STATES = Arrays.asList(SettlementAttemptState.FAILED, SettlementAttemptState.FORCE_FAILED);
++    private static List<SettlementAttemptState> BLOCKED_AND_CREATED_STATES = Arrays.asList(SettlementAttemptState.CREATED, SettlementAttemptState.FAILED, SettlementAttemptState.FORCE_FAILED, SettlementAttemptState.MANUAL_REVIEW);
+ 
+     private final SettlementAttemptService settlementAttemptService;
+ 
+@@ -138,7 +181,7 @@ public class SettlementService {
+     private final TenantService tenantService;
+ 
+     @NonNull
+-    @Named (ASYNC_INTERNAL_BUS)
++    @Named(ASYNC_INTERNAL_BUS)
+     private final EventBus asyncBus;
+ 
+     private final PriorityCalculator priorityCalculator;
+@@ -160,19 +203,19 @@ private void init() {
+ 
+         priorityQueueMap.put(lendingPriorityQueue.getTenantConfig().getId(), lendingPriorityQueue);
+ 
+-        priorityQueueMap.put(rentPriorityQueue.getTenantConfig().getId(),rentPriorityQueue);
++        priorityQueueMap.put(rentPriorityQueue.getTenantConfig().getId(), rentPriorityQueue);
+ 
+-        priorityQueueMap.put(darwinPriorityQueue.getTenantConfig().getId(),darwinPriorityQueue);
++        priorityQueueMap.put(darwinPriorityQueue.getTenantConfig().getId(), darwinPriorityQueue);
+     }
+ 
+-    public void updateSettlementsState(List<String> ids, SettlementState state,String tenantId) {
+-        settlementRepository.updateSettlementsState(ids, state.name(),tenantId);
++    public void updateSettlementsState(List<String> ids, SettlementState state, String tenantId) {
++        settlementRepository.updateSettlementsState(ids, state.name(), tenantId);
+     }
+ 
+     public Optional<Settlement> updateSettlementState(Settlement settlement, SettlementState state) {
+         settlement.setState(state);
+         Optional<Settlement> s = settlementRepository.updateSettlementState(settlement);
+-        if(!s.isPresent()) {
++        if (!s.isPresent()) {
+             logAndMeasureSettlementStateDbUpdateFailures(settlement);
+         }
+         return s;
+@@ -191,34 +234,34 @@ public Optional<Settlement> updateSettlementStateToOnHoldFromScheduled(Settlemen
+     }
+ 
+ 
+-    public CreateSettlementRequest createRequestTransform(CreateSettlementRequestV2 createSettlementRequestV2){
++    public CreateSettlementRequest createRequestTransform(CreateSettlementRequestV2 createSettlementRequestV2) {
+ 
+         CreateSettlementRequest.CreateSettlementRequestBuilder requestBuilder = CreateSettlementRequest.builder()
+-                                                                                                       .obligationType(createSettlementRequestV2.getObligationType())
+-                                                                                                       .obligationSubType(createSettlementRequestV2.getObligationSubType())
+-                                                                                                       .tenantId(createSettlementRequestV2.getTenantId())
+-                                                                                                       .tenantSettlementReferenceId(createSettlementRequestV2.getTenantSettlementReferenceId())
+-                                                                                                       .ownerId(createSettlementRequestV2.getOwnerId())
+-                                                                                                       .amount(createSettlementRequestV2.getAmount())
+-                                                                                                       .currency(createSettlementRequestV2.getCurrency())
+-                                                                                                       .tags(createSettlementRequestV2.getTags())
+-                                                                                                       .request(createSettlementRequestV2.getRequest())
+-                                                                                                       .tenantObligationReferenceId(createSettlementRequestV2.getTenantObligationReferenceId())
+-                                                                                                       .maxTat(createSettlementRequestV2.getMaxTat())
+-                                                                                                       .userName(GENIE_DEFAULT_USER_NAME)
+-                                                                                                       .bankCode(GENIE_DEFAULT_BANK_CODE)
+-                                                                                                       .paymentData(createSettlementRequestV2.getPaymentData());
++                .obligationType(createSettlementRequestV2.getObligationType())
++                .obligationSubType(createSettlementRequestV2.getObligationSubType())
++                .tenantId(createSettlementRequestV2.getTenantId())
++                .tenantSettlementReferenceId(createSettlementRequestV2.getTenantSettlementReferenceId())
++                .ownerId(createSettlementRequestV2.getOwnerId())
++                .amount(createSettlementRequestV2.getAmount())
++                .currency(createSettlementRequestV2.getCurrency())
++                .tags(createSettlementRequestV2.getTags())
++                .request(createSettlementRequestV2.getRequest())
++                .tenantObligationReferenceId(createSettlementRequestV2.getTenantObligationReferenceId())
++                .maxTat(createSettlementRequestV2.getMaxTat())
++                .userName(GENIE_DEFAULT_USER_NAME)
++                .bankCode(GENIE_DEFAULT_BANK_CODE)
++                .paymentData(createSettlementRequestV2.getPaymentData());
+ 
+         validate(createSettlementRequestV2);
+-        Map<String,String>  metaMap = createSettlementRequestV2.getMetadata();
++        Map<String, String> metaMap = createSettlementRequestV2.getMetadata();
+         SettlementAccountRequest settlementAccount = createSettlementRequestV2.getSettlementAccount();
+         requestBuilder.settlementAccountType(settlementAccount.getSettlementAccountType()); // vpa, loan, bankifsc, credit card
+         metaMap.put(INSTRUMENT_ID, createSettlementRequestV2.getTenantObligationReferenceId());
+ 
+ 
+-        switch (settlementAccount.getSettlementAccountType()){
++        switch (settlementAccount.getSettlementAccountType()) {
+             case VPA:
+-                VPASettlementAccountRequest  vpaSettlementAccountRequest= (VPASettlementAccountRequest)settlementAccount;
++                VPASettlementAccountRequest vpaSettlementAccountRequest = (VPASettlementAccountRequest) settlementAccount;
+                 validate(vpaSettlementAccountRequest);
+                 requestBuilder.vpa(vpaSettlementAccountRequest.getVpa());
+                 if (!Strings.isNullOrEmpty(vpaSettlementAccountRequest.getUserName())) {
+@@ -226,12 +269,12 @@ public CreateSettlementRequest createRequestTransform(CreateSettlementRequestV2
+                 }
+                 break;
+             case BANK_IFSC:
+-                BankIfscSettlementAccountRequest bankIfscSettlementAccountRequest = (BankIfscSettlementAccountRequest)settlementAccount;
++                BankIfscSettlementAccountRequest bankIfscSettlementAccountRequest = (BankIfscSettlementAccountRequest) settlementAccount;
+                 validate(bankIfscSettlementAccountRequest);
+                 requestBuilder.bankCode(bankIfscSettlementAccountRequest.getBankCode())
+-                              .accountNumber(bankIfscSettlementAccountRequest.getAccountNumber())
+-                              .ifsc(bankIfscSettlementAccountRequest.getIfsc())
+-                              .userName(bankIfscSettlementAccountRequest.getUserName());
++                        .accountNumber(bankIfscSettlementAccountRequest.getAccountNumber())
++                        .ifsc(bankIfscSettlementAccountRequest.getIfsc())
++                        .userName(bankIfscSettlementAccountRequest.getUserName());
+                 break;
+             case LOAN:
+                 LoanSettlementAccountRequest loanSettlementAccountRequest = (LoanSettlementAccountRequest) settlementAccount;
+@@ -248,10 +291,10 @@ public CreateSettlementRequest createRequestTransform(CreateSettlementRequestV2
+                         .binHash(creditCardSettlementAccountRequest.getBinHash())
+                         .maskedCardNumber(creditCardSettlementAccountRequest.getMaskedCardNumber());
+ 
+-                metaMap.put(BIN,creditCardSettlementAccountRequest.getBin());
+-                metaMap.put(BRAND,creditCardSettlementAccountRequest.getBrand());
+-                metaMap.put(BIN_HASH,creditCardSettlementAccountRequest.getBinHash());
+-                metaMap.put(MASKED_CARD_NUMBER,creditCardSettlementAccountRequest.getMaskedCardNumber());
++                metaMap.put(BIN, creditCardSettlementAccountRequest.getBin());
++                metaMap.put(BRAND, creditCardSettlementAccountRequest.getBrand());
++                metaMap.put(BIN_HASH, creditCardSettlementAccountRequest.getBinHash());
++                metaMap.put(MASKED_CARD_NUMBER, creditCardSettlementAccountRequest.getMaskedCardNumber());
+                 break;
+             default:
+                 throw Error.unsupported_settlement_account_type.getBuilder().build();
+@@ -261,22 +304,22 @@ public CreateSettlementRequest createRequestTransform(CreateSettlementRequestV2
+         return requestBuilder.build();
+     }
+ 
+-    public Settlement createSettlementV2(CreateSettlementRequestV2 createSettlementRequestV2, Boolean scheduleSettlement, Double priority){
+-        return startSettlementFlow(createRequestTransform(createSettlementRequestV2),scheduleSettlement,priority);
++    public Settlement createSettlementV2(CreateSettlementRequestV2 createSettlementRequestV2, Boolean scheduleSettlement, Double priority) {
++        return startSettlementFlow(createRequestTransform(createSettlementRequestV2), scheduleSettlement, priority);
+     }
+ 
+     public Settlement createSettlement(CreateSettlementRequest createSettlementRequest, Boolean scheduleSettlement, Double priority) {
+         setMetadata(createSettlementRequest);
+         validate(createSettlementRequest);
+-        return startSettlementFlow(createSettlementRequest,scheduleSettlement,priority);
++        return startSettlementFlow(createSettlementRequest, scheduleSettlement, priority);
+     }
+ 
+-    public void setMetadata(CreateSettlementRequest createSettlementRequest){
+-        Map<String,String>  metaMap = createSettlementRequest.getMetadata();
+-        metaMap.put(BIN,createSettlementRequest.getBin());
+-        metaMap.put(BRAND,createSettlementRequest.getBrand());
+-        metaMap.put(BIN_HASH,createSettlementRequest.getBinHash());
+-        metaMap.put(MASKED_CARD_NUMBER,createSettlementRequest.getMaskedCardNumber());
++    public void setMetadata(CreateSettlementRequest createSettlementRequest) {
++        Map<String, String> metaMap = createSettlementRequest.getMetadata();
++        metaMap.put(BIN, createSettlementRequest.getBin());
++        metaMap.put(BRAND, createSettlementRequest.getBrand());
++        metaMap.put(BIN_HASH, createSettlementRequest.getBinHash());
++        metaMap.put(MASKED_CARD_NUMBER, createSettlementRequest.getMaskedCardNumber());
+         createSettlementRequest.setMetadata(metaMap);
+     }
+ 
+@@ -332,16 +375,16 @@ public void scheduleSettlement(Settlement settlement, long attemptAfterInMinutes
+         if (SettlementRelayerReason.delay.equals(relayerReason)) {
+             String delayedAttemptAfterInEpochMillis = String.valueOf(attemptAfterInMinutes * ONE_MINUTE + System.currentTimeMillis());
+             tagSettlement(TagSettlementRequest.builder()
+-                                              .settlementReferenceId(settlement.getTenantReferenceId())
+-                                              .tenantId(settlement.getTenantId())
+-                                              .tagKey(Constant.DELAYED_ATTEMPT_AFTER)
+-                                              .tagValue(delayedAttemptAfterInEpochMillis)
+-                                              .build());
++                    .settlementReferenceId(settlement.getTenantReferenceId())
++                    .tenantId(settlement.getTenantId())
++                    .tagKey(Constant.DELAYED_ATTEMPT_AFTER)
++                    .tagValue(delayedAttemptAfterInEpochMillis)
++                    .build());
+             setTag(settlement, Constant.DELAYED_ATTEMPT_AFTER, delayedAttemptAfterInEpochMillis);
+         }
+-        if(attemptAfterInMinutes == 0) {
++        if (attemptAfterInMinutes == 0) {
+             Optional<Settlement> settlementOpt = updateSettlementState(settlement, SettlementState.SCHEDULED);
+-            if(settlementOpt.isPresent()) {
++            if (settlementOpt.isPresent()) {
+                 eventPublisherService.enqueueEventi(
+                         RelayerFlowRequest.builder()
+                                 .settlementId(settlement.getId())
+@@ -352,30 +395,30 @@ public void scheduleSettlement(Settlement settlement, long attemptAfterInMinutes
+             }
+         } else {
+             if (configService.featureEnabled(Config.Name.RELAYER_INVOKER_FLOW_ENABLED)) {
+-                Optional<Settlement> settlementOpt  = updateSettlementState(settlement, SettlementState.SCHEDULED);
+-                if(settlementOpt.isPresent()) {
++                Optional<Settlement> settlementOpt = updateSettlementState(settlement, SettlementState.SCHEDULED);
++                if (settlementOpt.isPresent()) {
+                     Settlement settlementUpdate = settlementOpt.get();
+                     startInvokerFlow(settlementUpdate, attemptAfterInMinutes, relayerReason);
+                     publishStatusEvent(previousState, settlementUpdate.getState().name(), settlementUpdate, WebhookData.Type.SETTLEMENT);
+                 }
+             } else {
+-                startRelayerFlow(settlement.getTenantId(), settlement.getId(), new Timestamp(System.currentTimeMillis() + attemptAfterInMinutes*ONE_MINUTE), relayerReason);
++                startRelayerFlow(settlement.getTenantId(), settlement.getId(), new Timestamp(System.currentTimeMillis() + attemptAfterInMinutes * ONE_MINUTE), relayerReason);
+             }
+         }
+     }
+ 
+     private Settlement createSettlement(CreateSettlementRequest createSettlementRequest) {
+         Settlement.SettlementBuilder settlementBuilder = Settlement.builder()
+-                                                                   .tenantId(createSettlementRequest.getTenantId())
+-                                                                   .tenantReferenceId(createSettlementRequest.getTenantSettlementReferenceId())
+-                                                                   .ownerId(createSettlementRequest.getOwnerId())
+-                                                                   .tenantOwnerReferenceId(createSettlementRequest.getOwnerId())
+-                                                                   .obligationId(UUID.randomUUID().toString())
+-                                                                   .tenantObligationReferenceId(createSettlementRequest.getTenantObligationReferenceId())
+-                                                                   .amount(createSettlementRequest.getAmount())
+-                                                                   .currency(createSettlementRequest.getCurrency())
+-                                                                   .bankCode(createSettlementRequest.getBankCode())
+-                                                                   .userName(createSettlementRequest.getUserName());
++                .tenantId(createSettlementRequest.getTenantId())
++                .tenantReferenceId(createSettlementRequest.getTenantSettlementReferenceId())
++                .ownerId(createSettlementRequest.getOwnerId())
++                .tenantOwnerReferenceId(createSettlementRequest.getOwnerId())
++                .obligationId(UUID.randomUUID().toString())
++                .tenantObligationReferenceId(createSettlementRequest.getTenantObligationReferenceId())
++                .amount(createSettlementRequest.getAmount())
++                .currency(createSettlementRequest.getCurrency())
++                .bankCode(createSettlementRequest.getBankCode())
++                .userName(createSettlementRequest.getUserName());
+ 
+ 
+         createSettlementRequest.getMetadata().put(Constant.BRAND, createSettlementRequest.getBrand());
+@@ -390,7 +433,7 @@ private Settlement createSettlement(CreateSettlementRequest createSettlementRequ
+         return settlementRepository.createSettlement(settlementBuilder.build());
+     }
+ 
+-    private void enrichSettlementObject(Settlement.SettlementBuilder settlementBuilder, CreateSettlementRequest createSettlementRequest){
++    private void enrichSettlementObject(Settlement.SettlementBuilder settlementBuilder, CreateSettlementRequest createSettlementRequest) {
+ 
+         try {
+             settlementBuilder.metaData(JsonObjectMapper.getMapper().writeValueAsString(createSettlementRequest.getMetadata()));
+@@ -458,7 +501,7 @@ private Settlement createAccountIFCSSettlement(CreateSettlementRequest accountIF
+     }
+ 
+ 
+-    private Settlement createLendingSettlement(CreateSettlementRequest lendingSettlementRequest){
++    private Settlement createLendingSettlement(CreateSettlementRequest lendingSettlementRequest) {
+         return createSettlement(lendingSettlementRequest);
+     }
+ 
+@@ -472,52 +515,50 @@ private Settlement createVPASettlement(CreateSettlementRequest vpaSettlementRequ
+         return createSettlement(vpaSettlementRequest);
+     }
+ 
+-    public void unTagSettlement(UnTagSettlementRequest unTagSettlementRequest){
+-        Optional<Settlement> settlementOpt = settlementRepository.getSettlement(unTagSettlementRequest.getTenantId(),unTagSettlementRequest.getSettlementReferenceId());
++    public void unTagSettlement(UnTagSettlementRequest unTagSettlementRequest) {
++        Optional<Settlement> settlementOpt = settlementRepository.getSettlement(unTagSettlementRequest.getTenantId(), unTagSettlementRequest.getSettlementReferenceId());
+         if (settlementOpt.isPresent()) {
+             Map<String, String> tagsMap = settlementOpt.get().getTagsMap();
+-            if (tagsMap.containsKey(unTagSettlementRequest.getTagKey())){
++            if (tagsMap.containsKey(unTagSettlementRequest.getTagKey())) {
+                 tagsMap.remove(unTagSettlementRequest.getTagKey());
+                 try {
+                     String tags = JsonObjectMapper.getMapper().writeValueAsString(tagsMap);
+                     Settlement settlement = settlementOpt.get();
+                     settlement.setTags(tags);
+                     Optional<Settlement> updated = settlementRepository.updateSettlementTag(settlement);
+-                    if(updated.isPresent()) {
++                    if (updated.isPresent()) {
+                         log.info("Un Tag Successfully for key {} and settlement ref Id {}", unTagSettlementRequest.getTagKey(), unTagSettlementRequest.getSettlementReferenceId());
+                     } else {
+-                        log.error("DB Update for Un Tag failed for key {} and settlement ref Id {}", unTagSettlementRequest.getTagKey(), unTagSettlementRequest.getSettlementReferenceId() );
++                        log.error("DB Update for Un Tag failed for key {} and settlement ref Id {}", unTagSettlementRequest.getTagKey(), unTagSettlementRequest.getSettlementReferenceId());
+                         throw Error.invalid_request.getBuilder().build();
+                     }
+                 } catch (Throwable e) {
+                     log.error(e.getMessage(), e);
+                     throw Error.internal_error.getBuilder().build();
+                 }
+-            }
+-            else{
+-                log.error("No tag key found for untag for  tenantId :{} and settlementReferenceId :{}", unTagSettlementRequest.getTenantId(),unTagSettlementRequest.getSettlementReferenceId());
++            } else {
++                log.error("No tag key found for untag for  tenantId :{} and settlementReferenceId :{}", unTagSettlementRequest.getTenantId(), unTagSettlementRequest.getSettlementReferenceId());
+                 throw Error.tag_key_not_found.getBuilder().build();
+             }
+-        }
+-        else{
+-            log.error("No settlement find against tenantId :{} and settlementReferenceId :{}", unTagSettlementRequest.getTenantId(),unTagSettlementRequest.getSettlementReferenceId());
++        } else {
++            log.error("No settlement find against tenantId :{} and settlementReferenceId :{}", unTagSettlementRequest.getTenantId(), unTagSettlementRequest.getSettlementReferenceId());
+             throw Error.settlement_not_found.getBuilder().build();
+         }
+     }
+ 
+     public SettlementTagsResponse tagSettlement(TagSettlementRequest tagSettlementRequest) {
+ 
+-        Optional<Settlement> settlementOpt = settlementRepository.getSettlement(tagSettlementRequest.getTenantId(),tagSettlementRequest.getSettlementReferenceId());
++        Optional<Settlement> settlementOpt = settlementRepository.getSettlement(tagSettlementRequest.getTenantId(), tagSettlementRequest.getSettlementReferenceId());
+ 
+         if (settlementOpt.isPresent()) {
+             Map<String, String> tagsMap = settlementOpt.get().getTagsMap();
+-            log.info("tag key {}, tag value {} for settlement id {}",tagSettlementRequest.getTagKey(),tagSettlementRequest.getTagValue(),settlementOpt.get().getId());
+-            if(Objects.equals(tagSettlementRequest.getTagValue(), tagsMap.get(tagSettlementRequest.getTagKey()))) {
++            log.info("tag key {}, tag value {} for settlement id {}", tagSettlementRequest.getTagKey(), tagSettlementRequest.getTagValue(), settlementOpt.get().getId());
++            if (Objects.equals(tagSettlementRequest.getTagValue(), tagsMap.get(tagSettlementRequest.getTagKey()))) {
+                 return SettlementTagsResponse.builder().tags(tagsMap).build();
+             }
+             setTag(settlementOpt.get(), tagSettlementRequest.getTagKey(), tagSettlementRequest.getTagValue());
+             Optional<Settlement> updated = settlementRepository.updateSettlementTag(settlementOpt.get());
+-            if(updated.isPresent()) {
++            if (updated.isPresent()) {
+                 log.info("Tag Successfully for key {} settlement reference id {} ", tagSettlementRequest.getTagKey(), tagSettlementRequest.getSettlementReferenceId());
+             } else {
+                 log.error("Tag Failed for key {} settlement reference id {} ", tagSettlementRequest.getTagKey(), tagSettlementRequest.getSettlementReferenceId());
+@@ -526,7 +567,7 @@ public SettlementTagsResponse tagSettlement(TagSettlementRequest tagSettlementRe
+             return SettlementTagsResponse.builder().tags(tagsMap).build();
+ 
+         } else {
+-            log.error("No settlement find against tenantId :{} and settlementReferenceId :{}", tagSettlementRequest.getTenantId(),tagSettlementRequest.getSettlementReferenceId());
++            log.error("No settlement find against tenantId :{} and settlementReferenceId :{}", tagSettlementRequest.getTenantId(), tagSettlementRequest.getSettlementReferenceId());
+             throw Error.settlement_not_found.getBuilder().build();
+         }
+     }
+@@ -560,79 +601,79 @@ private void validateScheduleSettlement(ScheduleSettlementRequest scheduleSettle
+         }
+     }
+ 
+-    private void validate(CreateSettlementRequestV2 createSettlementRequest){
++    private void validate(CreateSettlementRequestV2 createSettlementRequest) {
+ 
+         if (Strings.isNullOrEmpty(createSettlementRequest.getTenantId()) || tenantService.getTenant(createSettlementRequest.getTenantId()).isEmpty()) {
+             log.error("Settlement validation failed. Found invalid tenant_id: {} for settlement_reference_id {}", createSettlementRequest.getTenantId(), createSettlementRequest.getTenantSettlementReferenceId());
+             throw Error.invalid_tenant_id.getBuilder().build();
+         }
+-        if(Objects.isNull(createSettlementRequest.getSettlementAccount())){
+-            log.error("Settlement validation failed. Request should have settlement account details for id {}",createSettlementRequest.getTenantSettlementReferenceId());
++        if (Objects.isNull(createSettlementRequest.getSettlementAccount())) {
++            log.error("Settlement validation failed. Request should have settlement account details for id {}", createSettlementRequest.getTenantSettlementReferenceId());
+             throw Error.no_settlement_account_found.getBuilder().build();
+         }
+-        if (Objects.isNull(createSettlementRequest.getSettlementAccount().getSettlementAccountType())){
+-            log.error("Settlement validation failed. Request should have settlement account type for id {}",createSettlementRequest.getTenantSettlementReferenceId());
++        if (Objects.isNull(createSettlementRequest.getSettlementAccount().getSettlementAccountType())) {
++            log.error("Settlement validation failed. Request should have settlement account type for id {}", createSettlementRequest.getTenantSettlementReferenceId());
+             throw Error.no_settlement_account_type_found.getBuilder().build();
+         }
+     }
+ 
+-    private void validate(VPASettlementAccountRequest request){
+-        if (Objects.isNull(request.getVpa())){
++    private void validate(VPASettlementAccountRequest request) {
++        if (Objects.isNull(request.getVpa())) {
+             log.error("Settlement validation failed. Vpa Request should have vpa field");
+             throw Error.no_vpa_found.getBuilder().build();
+         }
+     }
+ 
+-    private void validate(CreditCardSettlementAccountRequest request){
+-        if (Objects.isNull(request.getBankCode())){
++    private void validate(CreditCardSettlementAccountRequest request) {
++        if (Objects.isNull(request.getBankCode())) {
+             log.error("Settlement validation failed. Credit Request should have bank code ");
+             throw Error.bank_code_required.getBuilder().build();
+         }
+ 
+-        if (Objects.isNull(request.getBrand())){
++        if (Objects.isNull(request.getBrand())) {
+             log.error("Settlement validation failed. Credit Request should have brand.");
+             throw Error.no_card_brand_found.getBuilder().build();
+         }
+ 
+-        if (Objects.isNull(request.getUserName())){
++        if (Objects.isNull(request.getUserName())) {
+             log.error("Settlement validation failed. Credit Request should have user name.");
+             request.setUserName(GENIE_DEFAULT_USER_NAME);
+         }
+ 
+-        if((pattern.matcher(request.getUserName()).find())){
++        if ((pattern.matcher(request.getUserName()).find())) {
+             metricAdapter.inc(GenieMetrics.user_name_special_character_error.name());
+             request.setUserName(GENIE_DEFAULT_USER_NAME);
+         }
+ 
+     }
+ 
+-    private void validate(BankIfscSettlementAccountRequest request){
+-        if (Objects.isNull(request.getAccountNumber())){
++    private void validate(BankIfscSettlementAccountRequest request) {
++        if (Objects.isNull(request.getAccountNumber())) {
+             log.error("Settlement validation failed. Bank IFSC Request Request should have account number.");
+             throw Error.account_number_required.getBuilder().build();
+         }
+-        if (Objects.isNull(request.getBankCode())){
++        if (Objects.isNull(request.getBankCode())) {
+             log.error("Settlement validation failed. Bank IFSC Request Request should have bank code.");
+             throw Error.bank_code_required.getBuilder().build();
+         }
+-        if (Objects.isNull(request.getIfsc())){
++        if (Objects.isNull(request.getIfsc())) {
+             log.error("Settlement validation failed. Bank IFSC Request Request should have bank ifsc code.");
+             throw Error.ifsc_code_required.getBuilder().build();
+         }
+-        if (Objects.isNull(request.getUserName())){
++        if (Objects.isNull(request.getUserName())) {
+             log.error("Settlement validation failed. Bank IFSC Request Request should have user name.");
+             request.setUserName(GENIE_DEFAULT_USER_NAME);
+         }
+ 
+-        if((pattern.matcher(request.getUserName()).find())){
++        if ((pattern.matcher(request.getUserName()).find())) {
+             metricAdapter.inc(GenieMetrics.user_name_special_character_error.name());
+             request.setUserName(GENIE_DEFAULT_USER_NAME);
+         }
+ 
+     }
+ 
+-    private void validate(LoanSettlementAccountRequest request){
+-        if (Objects.isNull(request.getLoanAccountInstrumentId())){
++    private void validate(LoanSettlementAccountRequest request) {
++        if (Objects.isNull(request.getLoanAccountInstrumentId())) {
+             log.error("Settlement validation failed. Loan Request should have loan account instrument id.");
+             throw Error.no_loan_acc_instrument_id_found.getBuilder().build();
+         }
+@@ -641,27 +682,27 @@ private void validate(LoanSettlementAccountRequest request){
+ 
+     private void validate(CreateSettlementRequest createSettlementRequest) {
+ 
+-        if(null == createSettlementRequest.getTags()) {
++        if (null == createSettlementRequest.getTags()) {
+             createSettlementRequest.setTags(Maps.newHashMap());
+         }
+-        if(null == createSettlementRequest.getMetadata()) {
++        if (null == createSettlementRequest.getMetadata()) {
+             createSettlementRequest.setMetadata(Maps.newHashMap());
+         }
+-        if(null == createSettlementRequest.getRequest()) {
++        if (null == createSettlementRequest.getRequest()) {
+             createSettlementRequest.setRequest(Maps.newHashMap());
+         }
+ 
+         Optional<Config> config = configService.find(Config.Name.SETTLEMENT_AMOUNT_CAP.name());
+         if (config.isPresent() && org.apache.commons.lang3.StringUtils.isNotBlank(config.get().getValue())) {
+             BigDecimal settlementAmountCapAmount = BigDecimal.valueOf(Long.parseLong(config.get().getValue()));
+-            if (settlementAmountCapAmount.compareTo(BigDecimal.valueOf(createSettlementRequest.getAmount())) < 0){
+-                log.error("Settlement validation failed. Settle amount greater than configured threshold for id {}",createSettlementRequest.getTenantSettlementReferenceId());
++            if (settlementAmountCapAmount.compareTo(BigDecimal.valueOf(createSettlementRequest.getAmount())) < 0) {
++                log.error("Settlement validation failed. Settle amount greater than configured threshold for id {}", createSettlementRequest.getTenantSettlementReferenceId());
+                 throw Error.max_amount_error.getBuilder().build();
+             }
+         }
+ 
+         if (Constant.ZERO.compareTo(createSettlementRequest.getAmount()) > 0) {
+-            log.error("Settlement validation failed. Settle amount amount less than equal to 0 for id {}",createSettlementRequest.getTenantSettlementReferenceId());
++            log.error("Settlement validation failed. Settle amount amount less than equal to 0 for id {}", createSettlementRequest.getTenantSettlementReferenceId());
+             throw Error.invalid_amount.getBuilder().build();
+         }
+ 
+@@ -675,47 +716,47 @@ private void validate(CreateSettlementRequest createSettlementRequest) {
+             createSettlementRequest.setUserName(GENIE_DEFAULT_USER_NAME);
+         }
+ 
+-        if((createSettlementRequest.getObligationType().equals(ObligationType.CC_SETTLEMENT)) && pattern.matcher(createSettlementRequest.getUserName()).find()){
++        if ((createSettlementRequest.getObligationType().equals(ObligationType.CC_SETTLEMENT)) && pattern.matcher(createSettlementRequest.getUserName()).find()) {
+             metricAdapter.inc(String.format("%s_%s", GenieMetrics.user_name_special_character_error.name(), createSettlementRequest.getTenantId()));
+             createSettlementRequest.setUserName(GENIE_DEFAULT_USER_NAME);
+         }
+ 
+         if (Strings.isNullOrEmpty(createSettlementRequest.getTenantObligationReferenceId())) {
+-            log.error("Settlement validation failed. TenantObligationReferenceId is missing for id {}",createSettlementRequest.getTenantSettlementReferenceId());
++            log.error("Settlement validation failed. TenantObligationReferenceId is missing for id {}", createSettlementRequest.getTenantSettlementReferenceId());
+             throw Error.tenant_obligation_referenceId_required.getBuilder().build();
+         }
+     }
+ 
+     private void validateAccountIFSSettlement(CreateSettlementRequest accountIFSCSettlementRequest) {
+         if (Strings.isNullOrEmpty(accountIFSCSettlementRequest.getIfsc())) {
+-            log.error("Settlement validation failed. IFSC code is missing for id {}",accountIFSCSettlementRequest.getTenantSettlementReferenceId());
++            log.error("Settlement validation failed. IFSC code is missing for id {}", accountIFSCSettlementRequest.getTenantSettlementReferenceId());
+             throw Error.ifsc_code_required.getBuilder().build();
+         }
+         if (Strings.isNullOrEmpty(accountIFSCSettlementRequest.getAccountNumber())) {
+-            log.error("Settlement validation failed. Account number is missing for id {}",accountIFSCSettlementRequest.getTenantSettlementReferenceId());
++            log.error("Settlement validation failed. Account number is missing for id {}", accountIFSCSettlementRequest.getTenantSettlementReferenceId());
+             throw Error.account_number_required.getBuilder().build();
+         }
+     }
+ 
+     private void validateCreditCardSettlement(CreateSettlementRequest creditCardSettlementRequest) {
+         if (Strings.isNullOrEmpty(creditCardSettlementRequest.getBankCode())) {
+-            log.error("Settlement validation failed. Bank code is missing for id {}",creditCardSettlementRequest.getTenantSettlementReferenceId());
++            log.error("Settlement validation failed. Bank code is missing for id {}", creditCardSettlementRequest.getTenantSettlementReferenceId());
+             throw Error.bank_code_required.getBuilder().build();
+         }
+     }
+ 
+     private void validateVPASettlement(CreateSettlementRequest vpaSettlementRequest) {
+         if (Strings.isNullOrEmpty(vpaSettlementRequest.getVpa())) {
+-            log.error("Settlement validation failed. VPA is missing for id {}",vpaSettlementRequest.getTenantSettlementReferenceId());
++            log.error("Settlement validation failed. VPA is missing for id {}", vpaSettlementRequest.getTenantSettlementReferenceId());
+             throw Error.vpa_required.getBuilder().build();
+         }
+     }
+ 
+-    public List<SettlementDetails> getSettlementDetails(List<String> ids,String tenantId,boolean slave){
+-        if (slave){
+-            return getSettlementDetails(ids,tenantId,slaveSettlementRepository,slaveSettlementAttemptRepository);
++    public List<SettlementDetails> getSettlementDetails(List<String> ids, String tenantId, boolean slave) {
++        if (slave) {
++            return getSettlementDetails(ids, tenantId, slaveSettlementRepository, slaveSettlementAttemptRepository);
+         }
+-        return getSettlementDetails(ids,tenantId,settlementRepository,settlementAttemptRepository);
++        return getSettlementDetails(ids, tenantId, settlementRepository, settlementAttemptRepository);
+     }
+ 
+     public SettlementDetails getSettlementDetails(String settlementId, String tenantId, boolean slave) {
+@@ -725,25 +766,25 @@ public SettlementDetails getSettlementDetails(String settlementId, String tenant
+         return getSettlementDetails(settlementId, tenantId, settlementRepository, settlementAttemptRepository);
+     }
+ 
+-    private List<SettlementDetails> getSettlementDetails(List<String> ids,String tenantId,SettlementRepository settlementRepository,SettlementAttemptRepository settlementAttemptRepository) {
++    private List<SettlementDetails> getSettlementDetails(List<String> ids, String tenantId, SettlementRepository settlementRepository, SettlementAttemptRepository settlementAttemptRepository) {
+ 
+         List<Settlement> settlements = settlementRepository.getSettlements(ids);
+         List<String> settlementIds = settlements.stream().map(Settlement::getId).collect(Collectors.toList());
+         List<SettlementAttempt> settlementAttempts = settlementAttemptRepository.getAttemptsBySettlementIds(settlementIds);
+         Multimap<String, SettlementAttempt> settlementAttemptMap = getSettlementAttemptMap(settlementAttempts);
+         List<String> settlementRailIds = settlementAttempts.stream()
+-                                                           .map(SettlementAttempt::getSettlementRailId)
+-                                                           .distinct()
+-                                                           .collect(Collectors.toList());
++                .map(SettlementAttempt::getSettlementRailId)
++                .distinct()
++                .collect(Collectors.toList());
+         Map<String, SettlementRail> settlementRailMap = new HashMap<>();
+         if (!settlementRailIds.isEmpty()) {
+             settlementRailMap = settlementRailRepository.getByIds(settlementRailIds, tenantId).stream()
+-                                                        .collect(Collectors.toMap(p -> Rail.builder()
+-                                                                                           .tenantId(p.getTenantId())
+-                                                                                           .providerId(p.getProviderId())
+-                                                                                           .railId(p.getId())
+-                                                                                           .build()
+-                                                                                           .getKey(), Function.identity()));
++                    .collect(Collectors.toMap(p -> Rail.builder()
++                            .tenantId(p.getTenantId())
++                            .providerId(p.getProviderId())
++                            .railId(p.getId())
++                            .build()
++                            .getKey(), Function.identity()));
+         }
+ 
+         List<SettlementDetails> result = new ArrayList<>();
+@@ -756,6 +797,7 @@ private List<SettlementDetails> getSettlementDetails(List<String> ids,String ten
+             for (SettlementAttempt attempt : attempts) {
+                 SettlementAttemptDetails attemptDetails = new SettlementAttemptDetails();
+                 attemptDetails.setSettlementAttempt(attempt);
++                attemptDetails.getSettlementAttempt().setUtr(extractUTRFromMetadata(attempt));
+                 attemptDetails.setSettlementRail(settlementRailMap.get(Rail.builder().tenantId(attempt.getTenantId()).providerId(attempt.getProviderId()).railId(attempt.getSettlementRailId()).build().getKey()));
+                 details.add(attemptDetails);
+             }
+@@ -765,7 +807,6 @@ private List<SettlementDetails> getSettlementDetails(List<String> ids,String ten
+ 
+         return result;
+     }
+-
+     private SettlementDetails getSettlementDetails(String settlementId, String tenantId, SettlementRepository settlementRepository, SettlementAttemptRepository settlementAttemptRepository) {
+         try {
+             Settlement settlement = settlementRepository.getSettlement(settlementId).get();
+@@ -784,6 +825,7 @@ private SettlementDetails getSettlementDetails(String settlementId, String tenan
+             for (SettlementAttempt attempt : settlementAttempts) {
+                 SettlementAttemptDetails attemptDetails = new SettlementAttemptDetails();
+                 attemptDetails.setSettlementAttempt(attempt);
++                attemptDetails.getSettlementAttempt().setUtr(extractUTRFromMetadata(attempt));
+                 attemptDetails.setSettlementRail(settlementRailMap.get(Rail.builder().tenantId(attempt.getTenantId()).providerId(attempt.getProviderId()).railId(attempt.getSettlementRailId()).build().getKey()));
+                 details.add(attemptDetails);
+             }
+@@ -794,7 +836,19 @@ private SettlementDetails getSettlementDetails(String settlementId, String tenan
+             throw e;
+         }
+     }
+-
++    private String extractUTRFromMetadata(SettlementAttempt attempt) {
++        if (StringUtils.isEmpty(attempt.getMetaData())) {
++            return attempt.getUtr();
++        }
++        try {
++            Map<String, String> metadataMap = JsonObjectMapper.getMapper().readValue(attempt.getMetaData(), new TypeReference<Map<String, String>>() {
++            });
++            return metadataMap.getOrDefault(UTR_22, attempt.getUtr());
++        } catch (JsonProcessingException e) {
++            log.error("Error parsing metadata JSON: {}", e.getMessage());
++            return attempt.getUtr();
++        }
++    }
+     private Multimap<String, SettlementAttempt> getSettlementAttemptMap(List<SettlementAttempt> settlementAttempts) {
+         Multimap<String, SettlementAttempt> settlementAttemptMap = HashMultimap.create();
+         for (SettlementAttempt s : settlementAttempts) {
+@@ -804,20 +858,20 @@ private Multimap<String, SettlementAttempt> getSettlementAttemptMap(List<Settlem
+     }
+ 
+     public void markSettlementForRelay(Settlement settlement, Timestamp attemptAfter, String railId, SettlementRelayerReason settlementRelayerReason, Double priority, String newPriority) {
+-        if ((System.currentTimeMillis() - attemptAfter.getTime()) > VALID_ATTEMPT_AFTER_RANGE){
+-            log.error("Invalid attempt after is going to relayer for settlementId {}",settlement.getId());
++        if ((System.currentTimeMillis() - attemptAfter.getTime()) > VALID_ATTEMPT_AFTER_RANGE) {
++            log.error("Invalid attempt after is going to relayer for settlementId {}", settlement.getId());
+             attemptAfter = new Timestamp(System.currentTimeMillis());
+-            log.error("Fixed the attempt after time for settlementId {}",settlement.getId());
+-            metricAdapter.inc(String.format("%s_%s",GenieMetrics.invalid_attempt_after_error_attempt_and_fixed.name(), settlement.getId()));
++            log.error("Fixed the attempt after time for settlementId {}", settlement.getId());
++            metricAdapter.inc(String.format("%s_%s", GenieMetrics.invalid_attempt_after_error_attempt_and_fixed.name(), settlement.getId()));
+         }
+         Optional<SettlementRelayer> relayerConditional = settlementRelayerRepository.find(settlement.getId());
+-        if(relayerConditional.isPresent()) {
++        if (relayerConditional.isPresent()) {
+             SettlementRelayer settlementRelayer = relayerConditional.get();
+-            if(RelayState.PROCESSING.equals(settlementRelayer.getState()) && System.currentTimeMillis() - settlementRelayer.getUpdatedAt().getTime() < MAX_RELAYER_PROCESSING_TIME) {
++            if (RelayState.PROCESSING.equals(settlementRelayer.getState()) && System.currentTimeMillis() - settlementRelayer.getUpdatedAt().getTime() < MAX_RELAYER_PROCESSING_TIME) {
+                 log.error("Settlement ID {} already in relay", settlement.getId());
+-                throw Error.invalid_request.getBuilder().message("Settlement Already in Relay ID:"+settlement.getId()).build();
++                throw Error.invalid_request.getBuilder().message("Settlement Already in Relay ID:" + settlement.getId()).build();
+             } else {
+-                settlementRelayerRepository.update(settlement.getId(), attemptAfter, railId, settlementRelayerReason.name(),priority, RelayState.PENDING.name(), newPriority);
++                settlementRelayerRepository.update(settlement.getId(), attemptAfter, railId, settlementRelayerReason.name(), priority, RelayState.PENDING.name(), newPriority);
+             }
+         } else {
+             settlementRelayerRepository.insert(SettlementRelayer.builder().settlementId(settlement.getId()).attemptAfter(attemptAfter).state(RelayState.PENDING).tenantId(settlement.getTenantId()).priority(priority).probableRail(railId).reason(settlementRelayerReason).newPriority(newPriority).build());
+@@ -827,7 +881,7 @@ public void markSettlementForRelay(Settlement settlement, Timestamp attemptAfter
+ 
+     public void prioritizeSettlement(PrioritizeSettlementRequest prioritizeSettlementRequest) {
+         log.info("prioritise_settlement called for tenant_settlement_reference_id {}", prioritizeSettlementRequest.getSettlementReferenceId());
+-        if(null == prioritizeSettlementRequest.getPriority()) {
++        if (null == prioritizeSettlementRequest.getPriority()) {
+             prioritizeSettlementRequest.setPriority(0d);
+         }
+         Optional<Settlement> settlement = settlementRepository
+@@ -865,71 +919,68 @@ public void prioritizeSettlement(PrioritizeSettlementRequest prioritizeSettlemen
+     }
+ 
+ 
+-    private void handlePrioritizeForShortStayState(Settlement s, Double priority, long interval ){
++    private void handlePrioritizeForShortStayState(Settlement s, Double priority, long interval) {
+         log.info("inside handlePrioritizeForShortStayState() for {} for state {}", s.getTenantReferenceId(), s.getState().name());
+         long last_updated_at = s.getUpdatedAt().getTime();
+-        if (System.currentTimeMillis() - last_updated_at >= interval){
++        if (System.currentTimeMillis() - last_updated_at >= interval) {
+             log.info("Settlement id {} is in {}  state for long time", s.getId(), s.getState().name());
+-            if (handlePrioritize(s,priority, s.getState())){
++            if (handlePrioritize(s, priority, s.getState())) {
+                 log.info("prioritize_settlement_success for settlement id {} ", s.getId());
+-            }
+-            else{
++            } else {
+                 log.error("prioritize_settlement_failed : Settlement in {} State", s.getState());
+                 throw Error.unsupported_prioritize_state.getBuilder().build();
+             }
+-        }
+-        else{
++        } else {
+             log.error("prioritize_settlement_failed : Settlement in {} State", s.getState());
+             throw Error.unsupported_prioritize_state.getBuilder().build();
+         }
+     }
+ 
+-    private void markSettlementRelayed(Settlement s){
++    private void markSettlementRelayed(Settlement s) {
+         Optional<SettlementRelayer> settlementRelayer = settlementRelayerRepository.find(s.getId());
+         // Check if entry is present in Relayer or note
+-        if(settlementRelayer.isPresent()){
++        if (settlementRelayer.isPresent()) {
+             SettlementRelayer sr = settlementRelayer.get();
+-            if (RelayState.PENDING.equals(sr.getState())){
++            if (RelayState.PENDING.equals(sr.getState())) {
+                 settlementRelayerRepository.update(Lists.newArrayList(sr.getSettlementId()), new Timestamp(System.currentTimeMillis()), RelayState.RELAYED.name());
+             }
+         }
+ 
+     }
+ 
+-    private void handelPrioritizeForOnholdAndScheduled(Settlement s, Double priority){
+-        if (SettlementState.SCHEDULED.equals(s.getState())){
+-            if((s.getTagsMap().containsKey(INVOKER_REF_ID))){
+-                if (invokerClient.cancel(s.getTagsMap().get(INVOKER_REF_ID))){
+-                    log.info("Successfully for relayer schedule for settlement id {}",s.getId());
+-                }
+-                else{
+-                    log.error("Failed for relayer schedule for settlement id {}",s.getId());
++    private void handelPrioritizeForOnholdAndScheduled(Settlement s, Double priority) {
++        if (SettlementState.SCHEDULED.equals(s.getState())) {
++            if ((s.getTagsMap().containsKey(INVOKER_REF_ID))) {
++                if (invokerClient.cancel(s.getTagsMap().get(INVOKER_REF_ID))) {
++                    log.info("Successfully for relayer schedule for settlement id {}", s.getId());
++                } else {
++                    log.error("Failed for relayer schedule for settlement id {}", s.getId());
+                 }
+             }
+         }
+-        if (!handlePrioritize(s,priority,s.getState())) {
++        if (!handlePrioritize(s, priority, s.getState())) {
+             log.error("prioritize_settlement_failed : Settlement in {} State", s.getState());
+             throw Error.unsupported_prioritize_state.getBuilder().build();
+         }
+     }
+ 
+-    private boolean handlePrioritize(Settlement s, Double priority, SettlementState buggyState){
+-        List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()),s.getTenantId(),false);
++    private boolean handlePrioritize(Settlement s, Double priority, SettlementState buggyState) {
++        List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()), s.getTenantId(), false);
+         if (null != settlementDetailsList && !settlementDetailsList.isEmpty()) {
+             List<SettlementAttemptDetails> settlementAttemptDetailsList = settlementDetailsList.get(0).getSettlementAttemptDetails();
+             if (null != settlementAttemptDetailsList && !settlementAttemptDetailsList.isEmpty()) {
+-                SettlementSummary summary = forceSyncSettlement(new SettlementActionRequest(s.getTenantReferenceId(),s.getTenantId()));
+-                if (buggyState.equals(summary.getSettlement().getState())){
++                SettlementSummary summary = forceSyncSettlement(new SettlementActionRequest(s.getTenantReferenceId(), s.getTenantId()));
++                if (buggyState.equals(summary.getSettlement().getState())) {
+                     List<SettlementAttempt> completedSettlementAttempts = summary.getSettlementAttemptDetails().stream()
+                             .filter(sa -> SettlementAttemptState.COMPLETED
+                                     .equals(sa.getState())).collect(Collectors.toList());
+                     // If one attempt is complete then Settlement Complete
+-                    if (completedSettlementAttempts.isEmpty()){
++                    if (completedSettlementAttempts.isEmpty()) {
+                         List<SettlementAttempt> failedSettlementAttempts = summary.getSettlementAttemptDetails().stream().
+                                 filter(sa -> (SettlementAttemptState.FAILED.equals(sa.getState()) || SettlementAttemptState.FORCE_FAILED
+                                         .equals(sa.getState()))).collect(Collectors.toList());
+                         // If all attempts are failed then requeue.
+-                        if (summary.getSettlementAttemptDetails().size() == failedSettlementAttempts.size()){
++                        if (summary.getSettlementAttemptDetails().size() == failedSettlementAttempts.size()) {
+                             log.info("Settlement id {} has 0 or all failed attempts pushing to relayer with prioritise reason {}", s.getId(), buggyState);
+                             scheduleSettlement(settlementDetailsList.get(0).getSettlement(), 0, SettlementRelayerReason.prioritise);
+                             return true;
+@@ -940,7 +991,7 @@ private boolean handlePrioritize(Settlement s, Double priority, SettlementState
+                     } else {
+                         log.info("Settlement id {} is COMPLETED from {}", s.getId(), buggyState);
+                         Optional<Settlement> settlementDataOpt = updateSettlementState(s, SettlementState.COMPLETED);
+-                        if(settlementDataOpt.isPresent()) {
++                        if (settlementDataOpt.isPresent()) {
+                             Settlement settlementData = settlementDataOpt.get();
+                             publishStatusEvent(buggyState.name(), settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+                             return true;
+@@ -953,8 +1004,7 @@ private boolean handlePrioritize(Settlement s, Double priority, SettlementState
+                     return true;
+                 }
+ 
+-            }
+-            else{
++            } else {
+                 // If no attempts are there .Prioritise
+                 log.info("Settlement id {} not attempt found, pushing to relayer with prioritise reason", s.getId());
+                 scheduleSettlement(settlementDetailsList.get(0).getSettlement(), 0, SettlementRelayerReason.prioritise);
+@@ -962,7 +1012,7 @@ private boolean handlePrioritize(Settlement s, Double priority, SettlementState
+             }
+         } else {
+             log.info("Settlement {} details not found", s.getId());
+-            return  false;
++            return false;
+         }
+ 
+     }
+@@ -981,7 +1031,7 @@ public boolean stopSettlement(SettlementActionRequest stopSettlementRequest) {
+                     .settlementReferenceId(stopSettlementRequest.getSettlementReferenceId())
+                     .build()
+             );
+-            setTag(s, STOP_FULFILMENT,"true");
++            setTag(s, STOP_FULFILMENT, "true");
+ 
+             String requesterEmailId = stopSettlementRequest.getRequesterEmailId();
+             if (!requesterEmailId.isEmpty()) {
+@@ -1000,20 +1050,20 @@ public boolean stopSettlement(SettlementActionRequest stopSettlementRequest) {
+                 case SCHEDULED:
+                 case PROCESSING:
+                 case ON_HOLD:
+-                    List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()),s.getTenantId(),false);
++                    List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()), s.getTenantId(), false);
+                     if (null != settlementDetailsList && !settlementDetailsList.isEmpty()) {
+                         List<SettlementAttemptDetails> settlementAttemptDetailsList = settlementDetailsList.get(0).getSettlementAttemptDetails();
+                         if (null != settlementAttemptDetailsList && !settlementAttemptDetailsList.isEmpty()) {
+                             List<SettlementAttemptDetails> nonFailedSettlementAttempts = settlementAttemptDetailsList.stream().
+                                     filter(sa -> (
+                                                     !SettlementAttemptState.FAILED.equals(sa.getSettlementAttempt().getState())
+-                                                    && !SettlementAttemptState.FORCE_FAILED.equals(sa.getSettlementAttempt().getState())
++                                                            && !SettlementAttemptState.FORCE_FAILED.equals(sa.getSettlementAttempt().getState())
+                                             )
+                                     ).collect(Collectors.toList());
+                             SettlementAttempt lastNotFoundAttempt = settlementAttemptService.checkForNotFoundAttempt(settlementDetailsList.get(0));
+                             if (nonFailedSettlementAttempts.isEmpty() && Objects.isNull(lastNotFoundAttempt)) {
+                                 Optional<Settlement> settlementDataOpt = updateSettlementState(s, SettlementState.FORCE_FAILED);
+-                                if(settlementDataOpt.isPresent()) {
++                                if (settlementDataOpt.isPresent()) {
+                                     Settlement settlementData = settlementDataOpt.get();
+                                     metricAdapter.inc(String.format("%s_%s", GenieMetrics.force_settlement_failure.name(), stopSettlementRequest.getTenantId()));
+                                     publishStatusEvent(previousStatus, settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+@@ -1057,12 +1107,12 @@ public boolean stopSettlement(SettlementActionRequest stopSettlementRequest) {
+ 
+     private boolean handlePendingUpdateForStop(Settlement s) {
+         //TODO : Get all Pending Update SA without calling SettlementAttempt Details
+-        List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()),s.getTenantId(),false);
++        List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()), s.getTenantId(), false);
+         if (null != settlementDetailsList && !settlementDetailsList.isEmpty()) {
+             List<SettlementAttemptDetails> settlementAttemptDetailsList = settlementDetailsList.get(0).getSettlementAttemptDetails();
+             if (null != settlementAttemptDetailsList && !settlementAttemptDetailsList.isEmpty()) {
+                 List<SettlementAttemptDetails> settlementAttempts = settlementAttemptDetailsList.stream().
+-                        filter(sa ->(
++                        filter(sa -> (
+                                         SettlementAttemptState.PENDING_UPDATE.equals(sa.getSettlementAttempt().getState()) ||
+                                                 SettlementAttemptState.MANUAL_REVIEW.equals(sa.getSettlementAttempt().getState())
+                                 )
+@@ -1076,10 +1126,10 @@ private boolean handlePendingUpdateForStop(Settlement s) {
+                     switch (response.getSettlementAttempt().getState()) {
+                         case FAILED:// fixme Why force field is not here.
+                             settlementAttemptData = settlementAttemptRepository.updateSettlementAttempt(response.getSettlementAttempt()).orElse(null);
+-                            if (Objects.nonNull(settlementAttemptData)){
+-                                publishStatusEvent(previousAttemptStatus,settlementAttemptData.getState().name(),settlementAttemptData,WebhookData.Type.SETTLEMENT_ATTEMPT);
++                            if (Objects.nonNull(settlementAttemptData)) {
++                                publishStatusEvent(previousAttemptStatus, settlementAttemptData.getState().name(), settlementAttemptData, WebhookData.Type.SETTLEMENT_ATTEMPT);
+                                 Optional<Settlement> settlementDataOpt = updateSettlementState(s, SettlementState.FORCE_FAILED);
+-                                if(settlementDataOpt.isPresent()) {
++                                if (settlementDataOpt.isPresent()) {
+                                     settlementData = settlementDataOpt.get();
+                                     metricAdapter.inc(String.format("%s_%s", GenieMetrics.force_settlement_failure.name(), s.getTenantId()));
+                                     publishStatusEvent(preSettlementStatus, settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+@@ -1091,11 +1141,11 @@ private boolean handlePendingUpdateForStop(Settlement s) {
+                             }
+                         case COMPLETED:
+                             settlementAttemptData = settlementAttemptRepository.updateSettlementAttempt(response.getSettlementAttempt()).orElse(null);
+-                            if (Objects.nonNull(settlementAttemptData)){
++                            if (Objects.nonNull(settlementAttemptData)) {
+                                 log.info("Status Check returned settlement completed {}", response.getSettlementAttempt().getUId());
+-                                publishStatusEvent(previousAttemptStatus,settlementAttemptData.getState().name(),settlementAttemptData,WebhookData.Type.SETTLEMENT_ATTEMPT);
+-                                Optional<Settlement> settlementDataOpt  = updateSettlementState(s, SettlementState.COMPLETED);
+-                                if(settlementDataOpt.isPresent()) {
++                                publishStatusEvent(previousAttemptStatus, settlementAttemptData.getState().name(), settlementAttemptData, WebhookData.Type.SETTLEMENT_ATTEMPT);
++                                Optional<Settlement> settlementDataOpt = updateSettlementState(s, SettlementState.COMPLETED);
++                                if (settlementDataOpt.isPresent()) {
+                                     settlementData = settlementDataOpt.get();
+                                     publishStatusEvent(preSettlementStatus, settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+                                 }
+@@ -1108,14 +1158,14 @@ private boolean handlePendingUpdateForStop(Settlement s) {
+                     }
+                 } else {
+                     List<SettlementAttemptDetails> failedAttempts = settlementAttemptDetailsList.stream().
+-                            filter(sa ->(
++                            filter(sa -> (
+                                             SettlementAttemptState.FAILED.equals(sa.getSettlementAttempt().getState()) ||
+                                                     SettlementAttemptState.FORCE_FAILED.equals(sa.getSettlementAttempt().getState())
+                                     )
+                             ).collect(Collectors.toList());
+-                    if(settlementAttemptDetailsList.size() == failedAttempts.size()) {
++                    if (settlementAttemptDetailsList.size() == failedAttempts.size()) {
+                         Optional<Settlement> settlementDataOpt = updateSettlementState(s, SettlementState.FORCE_FAILED);
+-                        if(settlementDataOpt.isPresent()) {
++                        if (settlementDataOpt.isPresent()) {
+                             Settlement settlementData = settlementDataOpt.get();
+                             publishStatusEvent(SettlementState.PENDING_UPDATE.name(), settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+                             return true;
+@@ -1137,12 +1187,12 @@ public void delaySettlement(DelaySettlementRequest delaySettlementRequest, Settl
+             switch (s.getState()) {
+                 case CREATED:
+                     Optional<Settlement> settlementData = updateSettlementState(s, SettlementState.ON_HOLD);
+-                    if(settlementData.isPresent()) {
++                    if (settlementData.isPresent()) {
+                         publishStatusEvent(preSettlementStatus, settlementData.get().getState().name(), settlementData.get(), WebhookData.Type.SETTLEMENT);
+                     }
+                 case SCHEDULED:
+                 case ON_HOLD:
+-                    scheduleSettlement(s, (delaySettlementRequest.getAttemptAfter() - System.currentTimeMillis())/ONE_MINUTE, settlementRelayerReason);
++                    scheduleSettlement(s, (delaySettlementRequest.getAttemptAfter() - System.currentTimeMillis()) / ONE_MINUTE, settlementRelayerReason);
+                     break;
+                 case PENDING_UPDATE:
+                     handlePendingUpdateForDelay(s, delaySettlementRequest);
+@@ -1163,7 +1213,7 @@ public void delaySettlement(DelaySettlementRequest delaySettlementRequest, Settl
+ 
+     private void handlePendingUpdateForDelay(Settlement s, DelaySettlementRequest delaySettlementRequest) {
+         //TODO : Get all Pending Update SA without calling SettlementAttempt Details
+-        List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()),s.getTenantId(),false);
++        List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()), s.getTenantId(), false);
+         if (null != settlementDetailsList && !settlementDetailsList.isEmpty()) {
+             List<SettlementAttemptDetails> settlementAttemptDetailsList = settlementDetailsList.get(0).getSettlementAttemptDetails();
+             if (null != settlementAttemptDetailsList && !settlementAttemptDetailsList.isEmpty()) {
+@@ -1179,18 +1229,18 @@ private void handlePendingUpdateForDelay(Settlement s, DelaySettlementRequest de
+                         case FORCE_FAILED:
+                         case FAILED:
+                             settlementAttemptData = settlementAttemptRepository.updateSettlementAttempt(response.getSettlementAttempt()).orElse(null);
+-                            if(Objects.nonNull(settlementAttemptData)){
+-                                publishStatusEvent(previousAttemptStatus,settlementAttemptData.getState().name(),settlementAttemptData,WebhookData.Type.SETTLEMENT_ATTEMPT);
+-                                scheduleSettlement(settlementDetailsList.get(0).getSettlement(), (delaySettlementRequest.getAttemptAfter() - System.currentTimeMillis())/ONE_MINUTE, SettlementRelayerReason.delay);
++                            if (Objects.nonNull(settlementAttemptData)) {
++                                publishStatusEvent(previousAttemptStatus, settlementAttemptData.getState().name(), settlementAttemptData, WebhookData.Type.SETTLEMENT_ATTEMPT);
++                                scheduleSettlement(settlementDetailsList.get(0).getSettlement(), (delaySettlementRequest.getAttemptAfter() - System.currentTimeMillis()) / ONE_MINUTE, SettlementRelayerReason.delay);
+                             }
+                             return;
+                         case COMPLETED:
+                             log.info("Status Check returned settlement completed");
+                             settlementAttemptData = settlementAttemptRepository.updateSettlementAttempt(response.getSettlementAttempt()).orElse(null);
+-                            if(Objects.nonNull(settlementAttemptData)){
+-                                publishStatusEvent(previousAttemptStatus,settlementAttemptData.getState().name(),settlementAttemptData,WebhookData.Type.SETTLEMENT_ATTEMPT);
++                            if (Objects.nonNull(settlementAttemptData)) {
++                                publishStatusEvent(previousAttemptStatus, settlementAttemptData.getState().name(), settlementAttemptData, WebhookData.Type.SETTLEMENT_ATTEMPT);
+                                 Optional<Settlement> settlementDataOpt = updateSettlementState(s, SettlementState.COMPLETED);
+-                                if(settlementDataOpt.isPresent()) {
++                                if (settlementDataOpt.isPresent()) {
+                                     settlementData = settlementDataOpt.get();
+                                     publishStatusEvent(preSettlementStatus, settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+                                 }
+@@ -1242,7 +1292,7 @@ public Map<String, SettlementSummary> bulkSyncSettlement(BulkSettlementActionReq
+                 .getSettlements(syncSettlementRequest.getTenantId(), syncSettlementRequest.getSettlementReferenceIds());
+         if (null != settlements && !settlements.isEmpty()) {
+             List<String> settlementIds = settlements.stream().map(Settlement::getId).collect(Collectors.toList());
+-            List<SettlementSummary> settlementSummaries = getSettlementDetails(settlementIds,syncSettlementRequest.getTenantId(),false)
++            List<SettlementSummary> settlementSummaries = getSettlementDetails(settlementIds, syncSettlementRequest.getTenantId(), false)
+                     .stream().map(sd ->
+                             SettlementSummary.builder().settlement(sd.getSettlement()).settlementAttemptDetails(
+                                     sd.getSettlementAttemptDetails().stream().map(SettlementAttemptDetails::getSettlementAttempt).collect(Collectors.toList()).stream().sorted(
+@@ -1253,8 +1303,8 @@ public Map<String, SettlementSummary> bulkSyncSettlement(BulkSettlementActionReq
+         }
+     }
+ 
+-    private boolean filterForSync(SettlementAttempt sa){
+-        if (System.currentTimeMillis() - sa.getUpdatedAt().getTime() < FIVE_MINUTES){
++    private boolean filterForSync(SettlementAttempt sa) {
++        if (System.currentTimeMillis() - sa.getUpdatedAt().getTime() < FIVE_MINUTES) {
+             return !BLOCKED_AND_CREATED_STATES.contains(sa.getState());
+         }
+         return !BLOCKED_STATES.contains(sa.getState());
+@@ -1267,7 +1317,7 @@ public SettlementSummary forceSyncSettlement(SettlementActionRequest forceSyncSe
+         if (settlement.isPresent()) {
+ 
+             Settlement s = settlement.get();
+-            List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()),forceSyncSettlementRequest.getTenantId(),false);
++            List<SettlementDetails> settlementDetailsList = getSettlementDetails(Collections.singletonList(s.getId()), forceSyncSettlementRequest.getTenantId(), false);
+ 
+             if (null != settlementDetailsList && !settlementDetailsList.isEmpty()) {
+ 
+@@ -1283,7 +1333,7 @@ public SettlementSummary forceSyncSettlement(SettlementActionRequest forceSyncSe
+                                 handleResponse(getStatus(settlementAttempt), finalSettlementDetails, previousState);
+                             });
+                     //Fixme settlementAttempt.getState().name() ;
+-                    settlementDetails = getSettlementDetails(Collections.singletonList(s.getId()),forceSyncSettlementRequest.getTenantId(),false).get(0);
++                    settlementDetails = getSettlementDetails(Collections.singletonList(s.getId()), forceSyncSettlementRequest.getTenantId(), false).get(0);
+                 }
+ 
+                 return SettlementSummary.builder().settlement(settlementDetails.getSettlement()).settlementAttemptDetails(
+@@ -1306,17 +1356,17 @@ public Map<String, SettlementSummary> forceSyncSettlement(BulkSettlementActionRe
+                 .getSettlements(forceSyncSettlementRequest.getTenantId(), forceSyncSettlementRequest.getSettlementReferenceIds());
+         if (null != settlements && !settlements.isEmpty()) {
+             List<String> settlementIds = settlements.stream().map(Settlement::getId).collect(Collectors.toList());
+-            List<SettlementDetails> settlementDetailsList = getSettlementDetails(settlementIds,forceSyncSettlementRequest.getTenantId(),false);
++            List<SettlementDetails> settlementDetailsList = getSettlementDetails(settlementIds, forceSyncSettlementRequest.getTenantId(), false);
+             settlementDetailsList.stream().filter(sd -> sd.getSettlementAttemptDetails() != null).forEach(
+                     settlementDetails -> settlementDetails.getSettlementAttemptDetails().stream().map(SettlementAttemptDetails::getSettlementAttempt)
+-                            .filter(sa-> (filterForSync(sa)))
++                            .filter(sa -> (filterForSync(sa)))
+                             .forEach(settlementAttempt -> {
+                                 String previousState = settlementAttempt.getState().name();
+ 
+                                 handleResponse(getStatus(settlementAttempt), settlementDetails, previousState);
+                             }));
+             //Fixme settlementAttempt.getState().name() ;
+-            List<SettlementSummary> settlementSummaries = getSettlementDetails(settlementIds,forceSyncSettlementRequest.getTenantId(),false).stream().map(sd -> SettlementSummary.builder().settlement(sd.getSettlement()).settlementAttemptDetails(
++            List<SettlementSummary> settlementSummaries = getSettlementDetails(settlementIds, forceSyncSettlementRequest.getTenantId(), false).stream().map(sd -> SettlementSummary.builder().settlement(sd.getSettlement()).settlementAttemptDetails(
+                     sd.getSettlementAttemptDetails().stream().map(SettlementAttemptDetails::getSettlementAttempt).collect(Collectors.toList()).stream().sorted(
+                             Comparator.comparing(SettlementAttempt::getCreatedAt).reversed()).collect(Collectors.toList())).build()).collect(Collectors.toList());
+             return settlementSummaries.stream().collect(Collectors.toMap(s -> s.getSettlement().getTenantReferenceId(), Function.identity()));
+@@ -1333,8 +1383,8 @@ public GetSettlementAttemptResponse getStatus(SettlementAttempt settlementAttemp
+ 
+         SettlementRailConfig railConfig = settlementRailService.getSettlementRailConfig(settlementRail).orElseThrow(Error.settlement_rail_config_not_found.getBuilder()::build);
+ 
+-        if(railConfig.isStatusChecksDisabled()){
+-            log.info("Status check is paused for rail {}", Rail.getRail(settlementRail).getKey()) ;
++        if (railConfig.isStatusChecksDisabled()) {
++            log.info("Status check is paused for rail {}", Rail.getRail(settlementRail).getKey());
+             return GetSettlementAttemptResponse.builder().settlementAttempt(settlementAttempt).build();
+         }
+ 
+@@ -1343,10 +1393,10 @@ public GetSettlementAttemptResponse getStatus(SettlementAttempt settlementAttemp
+         FetchSettlementAttemptRequest fetchSettlementAttemptRequest = FetchSettlementAttemptRequest.builder()
+                 .settlementAttempt(settlementAttempt).settlementRail(settlementRail).settlement(settlement).build();
+ 
+-        if (settlementAttempt.getProviderId().equalsIgnoreCase(Constant.Providers.INDUSIND)){
++        if (settlementAttempt.getProviderId().equalsIgnoreCase(Constant.Providers.INDUSIND)) {
+             //TODO : During deployment when settlement is created with old code but status check is happens with new
+             //TODO : Need to pause INDUS Rail during deployment to prevent this handling.
+-            if(!Objects.isNull(settlement.getTagsMap().get(Constant.PHONE_NUMBER))) {
++            if (!Objects.isNull(settlement.getTagsMap().get(Constant.PHONE_NUMBER))) {
+                 fetchSettlementAttemptRequest.setMobileNumber(settlement.getTagsMap().get(Constant.PHONE_NUMBER));
+             } else {
+                 fetchSettlementAttemptRequest.setMobileNumber(userService.getMobileNumber(settlement.getTenantOwnerReferenceId()));
+@@ -1356,40 +1406,40 @@ public GetSettlementAttemptResponse getStatus(SettlementAttempt settlementAttemp
+         return PaymentProviderSettlementServiceFactory.get(settlementAttempt.getProviderId()).getSettlementAttempt(fetchSettlementAttemptRequest);
+     }
+ 
+-    public void injectSettlementAttempt(SettlementAttempt recentAttempt,SettlementDetails settlementDetails){
++    public void injectSettlementAttempt(SettlementAttempt recentAttempt, SettlementDetails settlementDetails) {
+         SettlementRail rail = settlementRailService.find(Rail.builder()
+-                                                             .providerId(recentAttempt.getProviderId())
+-                                                             .railId(recentAttempt.getSettlementRailId())
+-                                                             .tenantId(recentAttempt.getTenantId())
+-                                                             .build())
+-                                                   .orElseThrow(Error.settlement_rail_not_found.getBuilder()::build);
++                        .providerId(recentAttempt.getProviderId())
++                        .railId(recentAttempt.getSettlementRailId())
++                        .tenantId(recentAttempt.getTenantId())
++                        .build())
++                .orElseThrow(Error.settlement_rail_not_found.getBuilder()::build);
+ 
+         SettlementAttemptDetails attemptDetails = SettlementAttemptDetails.builder()
+-                                                                          .settlementAttempt(recentAttempt)
+-                                                                          .settlementRail(rail)
+-                                                                          .build();
++                .settlementAttempt(recentAttempt)
++                .settlementRail(rail)
++                .build();
+         settlementDetails.getSettlementAttemptDetails().add(attemptDetails);
+-        log.info("Added attemptDetails for Settlement uid {} and Settlement attempt uid {}",settlementDetails.getSettlement().getUId(),recentAttempt.getUId());
++        log.info("Added attemptDetails for Settlement uid {} and Settlement attempt uid {}", settlementDetails.getSettlement().getUId(), recentAttempt.getUId());
+     }
+ 
+-    public long handleResponse(GetSettlementAttemptResponse response, SettlementDetails settlement,String prevAttemptState) {
++    public long handleResponse(GetSettlementAttemptResponse response, SettlementDetails settlement, String prevAttemptState) {
+         String preAttemptStatus = prevAttemptState;
+-        if(SettlementAttemptState.COMPLETED.name().equals(preAttemptStatus)) {
+-            if(!SettlementAttemptState.COMPLETED.equals(response.getSettlementAttempt().getState())) {
++        if (SettlementAttemptState.COMPLETED.name().equals(preAttemptStatus)) {
++            if (!SettlementAttemptState.COMPLETED.equals(response.getSettlementAttempt().getState())) {
+                 log.warn("prevented automatic reversals for settlement attempt uid {} to state {}", response.getSettlementAttempt().getUId(), response.getSettlementAttempt().getState());
+                 metricAdapter.inc(String.format("%s_%s_%s", GenieMetrics.automatic_reversal_prevented.name(), response.getSettlementAttempt().getTenantId(), response.getSettlementAttempt().getSettlementRailId()));
+                 metricAdapter.inc(String.format("%s_%s", GenieMetrics.automatic_reversal_prevented.name(), response.getSettlementAttempt().getTenantId()));
+             }
+             return 0;
+         }
+-        log.info("Previous Attempt at entry for id {} is {}",response.getSettlementAttempt().getId(),preAttemptStatus);
++        log.info("Previous Attempt at entry for id {} is {}", response.getSettlementAttempt().getId(), preAttemptStatus);
+         String preSettlementStatus = settlement.getSettlement().getState().name();
+-        log.info("Response State for id {} is {}",response.getSettlementAttempt().getId(),response.getSettlementAttempt().getState().name());
++        log.info("Response State for id {} is {}", response.getSettlementAttempt().getId(), response.getSettlementAttempt().getState().name());
+         SettlementAttempt settlementAttemptData = settlementAttemptRepository.updateSettlementAttempt(response.getSettlementAttempt()).orElse(null);
+-        if(Objects.isNull(settlementAttemptData)){
++        if (Objects.isNull(settlementAttemptData)) {
+             return 0;//fixme. Response 0 not honoured anywhere. TODO
+         }
+-        log.info("Current Attempt at entry for id {} is {}",response.getSettlementAttempt().getId(),settlementAttemptData.getState().name());
++        log.info("Current Attempt at entry for id {} is {}", response.getSettlementAttempt().getId(), settlementAttemptData.getState().name());
+ 
+         Settlement settlementData;
+         Optional<Settlement> settlementDataOpt;
+@@ -1399,13 +1449,13 @@ public long handleResponse(GetSettlementAttemptResponse response, SettlementDeta
+                 publishStatusEvent(preAttemptStatus, SettlementAttemptState.COMPLETED.name(), settlementAttemptData, WebhookData.Type.SETTLEMENT_ATTEMPT);
+                 updateHealthMetrics(response, settlement, HealthEvent.SUCCESS);
+                 settlementDataOpt = updateSettlementState(settlement.getSettlement(), SettlementState.COMPLETED);
+-                if(settlementDataOpt.isPresent()) {
++                if (settlementDataOpt.isPresent()) {
+                     settlementData = settlementDataOpt.get();
+                     publishStatusEvent(preSettlementStatus, settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+                 }
+                 break;
+             case PENDING_UPDATE:
+-                log.info("Status Check returned settlement attempt {} for attempt uid {}",response.getSettlementAttempt().getState(), response.getSettlementAttempt().getUId());
++                log.info("Status Check returned settlement attempt {} for attempt uid {}", response.getSettlementAttempt().getState(), response.getSettlementAttempt().getUId());
+                 handleDeemedState(response, settlement);
+                 //Redundant code is temporary. Else condition to be removed when status check goes 100% live.
+                 long nextAttemptAfter = -1;
+@@ -1416,15 +1466,15 @@ public long handleResponse(GetSettlementAttemptResponse response, SettlementDeta
+                 } else {
+                     log.error("Settlement Attempt not found in SettlementDetails : {}", response.getSettlementAttempt().getUId());
+                 }
+-                if(-1 == nextAttemptAfter) {
+-                    log.info("No further status check. Marking the Settlement Attempt {} to {}",response.getSettlementAttempt().getId(),SettlementState.MANUAL_REVIEW);
++                if (-1 == nextAttemptAfter) {
++                    log.info("No further status check. Marking the Settlement Attempt {} to {}", response.getSettlementAttempt().getId(), SettlementState.MANUAL_REVIEW);
+                     //Mark in Manual Review
+                     boolean updated = settlementAttemptRepository.updateSettlementAttempt(
+                             response.getSettlementAttempt().getUId(),
+                             SettlementAttemptState.MANUAL_REVIEW.name(),
+                             response.getSettlementAttempt().getTenantId()
+                     );
+-                    if(updated) {
++                    if (updated) {
+                         preAttemptStatus = settlementAttemptData.getState().name();
+                         settlementAttemptData.setState(SettlementAttemptState.MANUAL_REVIEW);
+                         log.info("Previous Attempt at entry for id {} is {}", response.getSettlementAttempt().getId(), preAttemptStatus);
+@@ -1432,7 +1482,7 @@ public long handleResponse(GetSettlementAttemptResponse response, SettlementDeta
+                         publishStatusEvent(preAttemptStatus, settlementAttemptData.getState().name(), settlementAttemptData, WebhookData.Type.SETTLEMENT_ATTEMPT);
+                     }
+                     settlementDataOpt = updateSettlementState(settlement.getSettlement(), SettlementState.MANUAL_REVIEW);
+-                    if(settlementDataOpt.isPresent()) {
++                    if (settlementDataOpt.isPresent()) {
+                         settlementData = settlementDataOpt.get();
+                         promiseService.asyncCalculatePromiseTime(settlementData);
+                         publishStatusEvent(preSettlementStatus, settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+@@ -1440,7 +1490,7 @@ public long handleResponse(GetSettlementAttemptResponse response, SettlementDeta
+                     return nextAttemptAfter;
+                 }
+                 settlementDataOpt = updateSettlementState(settlement.getSettlement(), SettlementState.PENDING_UPDATE);
+-                if(settlementDataOpt.isPresent()) {
++                if (settlementDataOpt.isPresent()) {
+                     settlementData = settlementDataOpt.get();
+                     promiseService.asyncCalculatePromiseTime(settlementData);
+                     publishStatusEvent(preSettlementStatus, settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+@@ -1449,14 +1499,14 @@ public long handleResponse(GetSettlementAttemptResponse response, SettlementDeta
+                 scheduleNextStatusCheck(response.getSettlementAttempt(), nextAttemptAfter);
+                 return nextAttemptAfter;
+             case MANUAL_REVIEW:
+-                log.info("Status Check returned settlement attempt {} for attempt uid {}",response.getSettlementAttempt().getState(), response.getSettlementAttempt().getUId());
++                log.info("Status Check returned settlement attempt {} for attempt uid {}", response.getSettlementAttempt().getState(), response.getSettlementAttempt().getUId());
+                 handleDeemedState(response, settlement);
+                 publishStatusEvent(preAttemptStatus, SettlementAttemptState.MANUAL_REVIEW.name(), settlementAttemptData, WebhookData.Type.SETTLEMENT_ATTEMPT);
+                 settlementDataOpt = updateSettlementState(settlement.getSettlement(), SettlementState.MANUAL_REVIEW);
+-                if(settlementDataOpt.isPresent()) {
++                if (settlementDataOpt.isPresent()) {
+                     settlementData = settlementDataOpt.get();
+                     promiseService.asyncCalculatePromiseTime(settlementData);
+-                    publishStatusEvent(preSettlementStatus,settlementData.getState().name(),settlementData, WebhookData.Type.SETTLEMENT);
++                    publishStatusEvent(preSettlementStatus, settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+                 }
+                 break;
+             case FORCE_FAILED:
+@@ -1481,47 +1531,46 @@ private void handleFailure(GetSettlementAttemptResponse response, SettlementDeta
+     }
+ 
+ 
+-    private void updateHealthMetricsForDeemded(SettlementAttempt attempt,SettlementMode mode , String bankCode,String tenantId){
+-        if ("true".equals(attempt.getMetaDataMap().getOrDefault(Constant.DEEMED,"false"))) {
+-            if  ("false".equals(attempt.getMetaDataMap().getOrDefault(Constant.DEEMED_HEALTH_MARKED,"false"))) {
++    private void updateHealthMetricsForDeemded(SettlementAttempt attempt, SettlementMode mode, String bankCode, String tenantId) {
++        if ("true".equals(attempt.getMetaDataMap().getOrDefault(Constant.DEEMED, "false"))) {
++            if ("false".equals(attempt.getMetaDataMap().getOrDefault(Constant.DEEMED_HEALTH_MARKED, "false"))) {
+                 try {
+                     String deemedCounterKey = Util.getFailureCountKey(bankCode, mode.name());
+-                    int deemedCount = globalFailedAttemptCounter.incr(deemedCounterKey, RedisFailedAttemptCounter.Type.HEALTH_CHECK,true);
+-                    settlementRailService.updateHealth(bankCode,mode.name(),getUpdatedDeemedHealth(bankCode,mode,deemedCount));
++                    int deemedCount = globalFailedAttemptCounter.incr(deemedCounterKey, RedisFailedAttemptCounter.Type.HEALTH_CHECK, true);
++                    settlementRailService.updateHealth(bankCode, mode.name(), getUpdatedDeemedHealth(bankCode, mode, deemedCount));
+                     attempt.getMetaDataMap().put(Constant.DEEMED_HEALTH_MARKED, "true");
+                     attempt.setMetaData(JsonObjectMapper.getMapper().writeValueAsString(attempt.getMetaDataMap()));
+                     settlementAttemptRepository.updateSettlementAttempt(attempt);
+                     // Add Metrics here .
+-                    log.info("Deemed health marked for attempt uid {} and settlement uid {}",attempt.getUId(),attempt.getSettlementId());
+-                    metricAdapter.inc(String.format("%s_%s_%s_%s", GenieMetrics.deemed_transaction.name(), Constants.DI.GLOBAL,bankCode,mode.name()));
++                    log.info("Deemed health marked for attempt uid {} and settlement uid {}", attempt.getUId(), attempt.getSettlementId());
++                    metricAdapter.inc(String.format("%s_%s_%s_%s", GenieMetrics.deemed_transaction.name(), Constants.DI.GLOBAL, bankCode, mode.name()));
+                     metricAdapter.inc(String.format("%s_%s", GenieMetrics.deemed_transaction.name(), Constants.DI.GLOBAL));
+                 } catch (Exception ignore) {
+-                    log.error("Deemded mapping fail for settlement id {} and attempt id {}",attempt.getSettlementId(),attempt.getId());
++                    log.error("Deemded mapping fail for settlement id {} and attempt id {}", attempt.getSettlementId(), attempt.getId());
+                 }
+             }
+         }
+     }
+ 
+-    private void handleDeemedState(GetSettlementAttemptResponse response, SettlementDetails settlement){
++    private void handleDeemedState(GetSettlementAttemptResponse response, SettlementDetails settlement) {
+         publishSettlementAttemptDeemedEvent(response.getSettlementAttempt());
+-        updateHealthMetrics(response,settlement,HealthEvent.DEEMED);
++        updateHealthMetrics(response, settlement, HealthEvent.DEEMED);
+     }
+ 
+-    public void publishSettlementAttemptDeemedEvent(SettlementAttempt attempt){
+-        if(configService.featureEnabled(Config.Name.WEBHOOKS_DEEMED_ENABLED) && "true".equals(attempt.getMetaDataMap().getOrDefault(Constant.DEEMED,"false"))) {
+-            if("false".equals(attempt.getMetaDataMap().getOrDefault(Constant.DEEMED_EVENT_SENT,"false"))){
++    public void publishSettlementAttemptDeemedEvent(SettlementAttempt attempt) {
++        if (configService.featureEnabled(Config.Name.WEBHOOKS_DEEMED_ENABLED) && "true".equals(attempt.getMetaDataMap().getOrDefault(Constant.DEEMED, "false"))) {
++            if ("false".equals(attempt.getMetaDataMap().getOrDefault(Constant.DEEMED_EVENT_SENT, "false"))) {
+                 try {
+                     attempt.getMetaDataMap().put(Constant.DEEMED_EVENT_SENT, "true");
+                     attempt.setMetaData(JsonObjectMapper.getMapper().writeValueAsString(attempt.getMetaDataMap()));
+                     Optional<SettlementAttempt> saOpt = settlementAttemptRepository.updateSettlementAttempt(attempt);
+-                    if(saOpt.isPresent()) {
++                    if (saOpt.isPresent()) {
+                         publishEvent(attempt, WebhookData.Type.SETTLEMENT_ATTEMPT_DEEMED);
+                     } else {
+-                        log.error("DEEMED_EVENT_SENT mapping fail for settlement id {} and attempt id {}",attempt.getSettlementId(),attempt.getId());
++                        log.error("DEEMED_EVENT_SENT mapping fail for settlement id {} and attempt id {}", attempt.getSettlementId(), attempt.getId());
+                     }
+-                }
+-                catch (Exception ignore) {
+-                    log.error("DEEMED_EVENT_SENT mapping fail for settlement id {} and attempt id {}",attempt.getSettlementId(),attempt.getId());
++                } catch (Exception ignore) {
++                    log.error("DEEMED_EVENT_SENT mapping fail for settlement id {} and attempt id {}", attempt.getSettlementId(), attempt.getId());
+                 }
+             }
+         }
+@@ -1537,7 +1586,7 @@ public long getNextStatusCheckInterval(SettlementAttemptDetails settlementAttemp
+             Long d = (b.isTimeSinceCreatedInSeconds()) ? b.getTimeSinceCreated() : b.getTimeSinceCreated() * 60;
+             return c.compareTo(d);
+         });
+-        for(StatusCheckIntervalConfig statusCheckIntervalConfig: statusCheckConfig){
++        for (StatusCheckIntervalConfig statusCheckIntervalConfig : statusCheckConfig) {
+             long timeSinceCreated = (statusCheckIntervalConfig.isTimeSinceCreatedInSeconds()) ? statusCheckIntervalConfig.getTimeSinceCreated() * 1000 : statusCheckIntervalConfig.getTimeSinceCreated() * 60 * 1000;
+             if (new Timestamp(System.currentTimeMillis()).compareTo(new Timestamp(settlementAttempt.getCreatedAt().getTime() + timeSinceCreated)) < 0) {
+                 log.info("Matched the status check policy {} for attempt Uid {}", statusCheckIntervalConfig.toString(), settlementAttempt.getUId());
+@@ -1545,7 +1594,7 @@ public long getNextStatusCheckInterval(SettlementAttemptDetails settlementAttemp
+                 break;
+             }
+         }
+-        if( -1 == nextStatusCheckInterval)
++        if (-1 == nextStatusCheckInterval)
+             log.info("Did not match any status check policy for attempt uid {}. Returning -1", settlementAttempt.getUId());
+ 
+         return nextStatusCheckInterval;
+@@ -1557,7 +1606,7 @@ public void scheduleNextStatusCheck(SettlementAttempt settlementAttempt, long ne
+             return;
+         }
+         // Due to invoker limitation
+-        nextAttemptAfter = (nextAttemptAfter == 10)? 11 :nextAttemptAfter;
++        nextAttemptAfter = (nextAttemptAfter == 10) ? 11 : nextAttemptAfter;
+ 
+         Timestamp newScheduleTime = new Timestamp(System.currentTimeMillis() + nextAttemptAfter * 60 * 1000);
+         if (!shouldScheduleStatusCheck(settlementAttempt, newScheduleTime)) {
+@@ -1620,13 +1669,12 @@ public void scheduleNextStatusCheck(SettlementAttempt settlementAttempt, long ne
+         }
+     }
+ 
+-    private void scheduleToEventi(SettlementAttempt attempt, int nextAttemptAfter, StatusCheckScheduleRequest request){
++    private void scheduleToEventi(SettlementAttempt attempt, int nextAttemptAfter, StatusCheckScheduleRequest request) {
+         Timestamp newScheduleTime = new Timestamp(System.currentTimeMillis() + (long) nextAttemptAfter * 60 * 1000);
+         try {
+             log.info("Scheduling status check for attempt uid {}", attempt.getUId());
+             eventPublisherService.scheduleEvent(request, attempt, ScheduleEventData.Type.STATUS_CHECK, nextAttemptAfter);
+-        }
+-        catch (Exception e){
++        } catch (Exception e) {
+             log.error("Exception calling invoker for attempt id {} with message {}", attempt.getUId(), e.getMessage());
+             metricAdapter.inc("exception_" + GenieMetrics.schedule_to_eventi_failed.name());
+             addSettlementAttemptToRelay(attempt, newScheduleTime);
+@@ -1637,19 +1685,18 @@ private void scheduleToEventi(SettlementAttempt attempt, int nextAttemptAfter, S
+             attempt.setMetaData(JsonObjectMapper.getMapper().writeValueAsString(metaDataMap));
+             attempt.setUpdatedBy(EVENTI);
+             settlementAttemptRepository.updateSettlementAttempt(attempt);
+-        }
+-        catch (Exception e){
++        } catch (Exception e) {
+             log.error("Unable to update invoker details for attempt id {}, message = {}", attempt.getUId(), e.getMessage(), e);
+         }
+     }
+ 
+     /**
+      * Case 1: Not scheduled OR Scheduled time less than NOW
+-     *          Schedule = true
++     * Schedule = true
+      * Case 2: Scheduled for future and new time > current scheduled time
+-     *          Schedule = false
++     * Schedule = false
+      * Case 3: Scheduled for future and new time < current scheduled time - 5 minutes
+-     *          Schedule = true
++     * Schedule = true
+      */
+     private boolean shouldScheduleStatusCheck(SettlementAttempt settlementAttempt, Timestamp newScheduleTime) {
+         if (settlementAttempt.getMetaDataMap().containsKey(NEXT_SC_SCHEDULED_AT) && null != settlementAttempt.getMetaDataMap().get(NEXT_SC_SCHEDULED_AT)) {
+@@ -1687,9 +1734,6 @@ private void addSettlementAttemptToRelay(SettlementAttempt settlementAttempt, Ti
+     }
+ 
+ 
+-
+-
+-
+     private void updateHealthMetrics(GetSettlementAttemptResponse response, SettlementDetails settlement, HealthEvent event) {
+         try {
+ 
+@@ -1704,18 +1748,18 @@ private void updateHealthMetrics(GetSettlementAttemptResponse response, Settleme
+             SettlementRail rail = settlementAttemptDetails.getSettlementRail();
+             if (null != rail && null != rail.getMode() && null != settlement.getSettlement().getBankCode()) {
+                 String mode = rail.getMode().name();
+-                String bankCode = settlement.getSettlement().getBankCode() ;
++                String bankCode = settlement.getSettlement().getBankCode();
+                 switch (event) {
+                     case SUCCESS:
+-                        settlementRailService.updateHealth(bankCode,mode,getUpdatedSuccessHealth(bankCode,rail.getMode()));
++                        settlementRailService.updateHealth(bankCode, mode, getUpdatedSuccessHealth(bankCode, rail.getMode()));
+                         break;
+                     case FAIL:
+                         String failuresCounterKey = Util.getFailureCountKey(bankCode, mode);
+-                        int failCount = globalFailedAttemptCounter.incr(failuresCounterKey, RedisFailedAttemptCounter.Type.HEALTH_CHECK,true);
+-                        settlementRailService.updateHealth(bankCode,mode,getUpdatedFailureHealth(rail.getMode(),failCount));
++                        int failCount = globalFailedAttemptCounter.incr(failuresCounterKey, RedisFailedAttemptCounter.Type.HEALTH_CHECK, true);
++                        settlementRailService.updateHealth(bankCode, mode, getUpdatedFailureHealth(rail.getMode(), failCount));
+                         break;
+                     case DEEMED:
+-                        updateHealthMetricsForDeemded(response.getSettlementAttempt(),rail.getMode(),bankCode,tenantId);
++                        updateHealthMetricsForDeemded(response.getSettlementAttempt(), rail.getMode(), bankCode, tenantId);
+                         break;
+                 }
+             }
+@@ -1728,29 +1772,29 @@ private void updateHealthMetrics(GetSettlementAttemptResponse response, Settleme
+ 
+     private int getUpdatedSuccessHealth(String bankCode, SettlementMode mode) {
+         int health = 100;
+-        int currentHealth = settlementRailService.getBenBankHealth(bankCode,mode.name());
++        int currentHealth = settlementRailService.getBenBankHealth(bankCode, mode.name());
+         switch (mode) {
+             case IMPS:
+             case UPI:
+-                health = Math.min(100, (int)Math.ceil((103.0d*currentHealth)/100.0d));
++                health = Math.min(100, (int) Math.ceil((103.0d * currentHealth) / 100.0d));
+                 break;
+             default:
+         }
+         return health;
+     }
+ 
+-    private int getUpdatedDeemedHealth(String bankCode,SettlementMode mode, int count) {
++    private int getUpdatedDeemedHealth(String bankCode, SettlementMode mode, int count) {
+         int health = 100;
+-        int currentHealth = settlementRailService.getBenBankHealth(bankCode,mode.name());
++        int currentHealth = settlementRailService.getBenBankHealth(bankCode, mode.name());
+         switch (mode) {
+             case IMPS:
+             case UPI:
+-                if(count > 0 && count <= 2) {
+-                    health = Math.max(2, (int)Math.ceil((50.0d*currentHealth)/100.0d));
+-                } else if(count > 2 && count <= 5 ) {
+-                    health = Math.max(2, (int)Math.ceil((25.0d*currentHealth)/100.0d));
+-                } else if(count > 5 && count <= 10) {
+-                    health = Math.max(2, (int)Math.ceil((5.0d*currentHealth)/100.0d));
++                if (count > 0 && count <= 2) {
++                    health = Math.max(2, (int) Math.ceil((50.0d * currentHealth) / 100.0d));
++                } else if (count > 2 && count <= 5) {
++                    health = Math.max(2, (int) Math.ceil((25.0d * currentHealth) / 100.0d));
++                } else if (count > 5 && count <= 10) {
++                    health = Math.max(2, (int) Math.ceil((5.0d * currentHealth) / 100.0d));
+                 } else {
+                     health = 2;
+                 }
+@@ -1760,16 +1804,16 @@ private int getUpdatedDeemedHealth(String bankCode,SettlementMode mode, int coun
+         return health;
+     }
+ 
+-    private int getUpdatedFailureHealth(SettlementMode mode,int count){
++    private int getUpdatedFailureHealth(SettlementMode mode, int count) {
+         int health = 100;
+         switch (mode) {
+             case IMPS:
+             case UPI:
+-                if(count > 0 && count <= 2) {
++                if (count > 0 && count <= 2) {
+                     health = 50;
+-                } else if(count > 2 && count <= 5 ) {
++                } else if (count > 2 && count <= 5) {
+                     health = 25;
+-                } else if(count > 5 && count <= 10) {
++                } else if (count > 5 && count <= 10) {
+                     health = 10;
+                 } else {
+                     health = 2;
+@@ -1786,26 +1830,25 @@ private void handleRetry(RetryLogicResponse rlResponse, SettlementDetails settle
+         if (rlResponse.isAttempt() && isSettlementPossible) {
+             if (null == rlResponse.getAttemptAfter()) {
+                 scheduleSettlement(settlement.getSettlement(), 0, SettlementRelayerReason.retry_logic);
+-            }
+-            else {
++            } else {
+                 int total = (int) settlement.getSettlementAttemptDetails().stream()
+                         .filter(sad -> SettlementAttemptState.FAILED.equals(sad.getSettlementAttempt().getState()))
+                         .filter(sad -> sad.getSettlementAttempt().getSettlementRailId().equals(context.getCurrentStatus().getSettlementAttempt().getSettlementRailId())).count();
+-                scheduleSettlement(settlement.getSettlement(), rlResponse.getAttemptAfter() * (total+1)/ONE_MINUTE, SettlementRelayerReason.retry_logic);
++                scheduleSettlement(settlement.getSettlement(), rlResponse.getAttemptAfter() * (total + 1) / ONE_MINUTE, SettlementRelayerReason.retry_logic);
+ 
+             }
+         } else {
+             Optional<Settlement> settlementDataOpt = updateSettlementState(settlement.getSettlement(), SettlementState.FAILED);
+-            if(settlementDataOpt.isPresent()) {
++            if (settlementDataOpt.isPresent()) {
+                 Settlement settlementData = settlementDataOpt.get();
+                 publishStatusEvent(preSettlementState, settlementData.getState().name(), settlementData, WebhookData.Type.SETTLEMENT);
+             }
+         }
+     }
+ 
+-    public void publishStatusEvent(String oldStatus,String newStatus,Object data,WebhookData.Type type){
+-        if (!Objects.equals(oldStatus, newStatus)){
+-            publishEvent(data,type);
++    public void publishStatusEvent(String oldStatus, String newStatus, Object data, WebhookData.Type type) {
++        if (!Objects.equals(oldStatus, newStatus)) {
++            publishEvent(data, type);
+         }
+     }
+ 
+@@ -1824,34 +1867,36 @@ public void publishEvent(Object data, WebhookData.Type type) {
+                 event.setEventType(Constant.EVENT_TYPE.replaceAll("%s%", settlement.getTenantId()));
+                 event.setPartitionKey(settlement.getId());
+                 publishKafkaEvents(settlement);
+-                log.info("Making Setttlement event data with id {} with state {}",settlement.getId(),settlement.getState().name());
++                log.info("Making Setttlement event data with id {} with state {}", settlement.getId(), settlement.getState().name());
+                 break;
+             case SETTLEMENT_ATTEMPT:
+                 SettlementAttempt settlementAttempt = (SettlementAttempt) data;
++                settlementAttempt.setUtr(extractUTRFromMetadata(settlementAttempt));
+                 builder.eventId(settlementAttempt.getId());
+                 event.setEntityId(settlementAttempt.getId());
+                 event.setEntityType(WebhookData.Type.SETTLEMENT_ATTEMPT.name());
+                 event.setEventType(Constant.EVENT_TYPE.replaceAll("%s%", settlementAttempt.getTenantId()));
+                 event.setPartitionKey(settlementAttempt.getSettlementId());
+                 publishKafkaEvents(settlementAttempt);
+-                log.info("Making attempt event data with id {} with state {}",settlementAttempt.getId(),settlementAttempt.getState().name());
++                log.info("Making attempt event data with id {} with state {}", settlementAttempt.getId(), settlementAttempt.getState().name());
+                 break;
+             case SETTLEMENT_ATTEMPT_DEEMED:
+                 SettlementAttempt settlementAttemptDeemed = (SettlementAttempt) data;
++                settlementAttemptDeemed.setUtr(extractUTRFromMetadata(settlementAttemptDeemed));
+                 builder.eventId(settlementAttemptDeemed.getId());
+                 event.setEntityId(settlementAttemptDeemed.getId());
+                 event.setEntityType(WebhookData.Type.SETTLEMENT_ATTEMPT_DEEMED.name());
+                 event.setEventType(Constant.EVENT_TYPE.replaceAll("%s%", settlementAttemptDeemed.getTenantId()));
+                 event.setPartitionKey(settlementAttemptDeemed.getSettlementId());
+                 publishKafkaEvents(settlementAttemptDeemed);
+-                log.info("Making attempt event data with id {} with state {} as DEEMED",settlementAttemptDeemed.getId(),settlementAttemptDeemed.getState().name());
++                log.info("Making attempt event data with id {} with state {} as DEEMED", settlementAttemptDeemed.getId(), settlementAttemptDeemed.getState().name());
+                 break;
+         }
+         event.addData(builder.build());
+-        if (type.equals(WebhookData.Type.SETTLEMENT_ATTEMPT) && !configService.featureEnabled(Config.Name.ATTEMPT_WEBHOOKS_ENABLED)){
++        if (type.equals(WebhookData.Type.SETTLEMENT_ATTEMPT) && !configService.featureEnabled(Config.Name.ATTEMPT_WEBHOOKS_ENABLED)) {
+             return;
+         }
+-        if(configService.featureEnabled(Config.Name.WEBHOOKS_ENABLED)) {
++        if (configService.featureEnabled(Config.Name.WEBHOOKS_ENABLED)) {
+             eventiPublisher.publish(event);
+         }
+     }
+@@ -1863,21 +1908,21 @@ public Long getPriorityQueueSize(String tenantId) {
+     public void updateAttemptAdmin(long attemptUid, SettlementAttemptState state, Boolean allowRerun, String opsUser, Boolean overrideProvider) {
+         List<SettlementAttempt> attempts = settlementAttemptRepository.getSettlements(Lists.newArrayList(attemptUid));
+ 
+-        if(attempts.isEmpty()) {
++        if (attempts.isEmpty()) {
+             throw Error.settlement_not_found.getBuilder().build();
+         }
+ 
+         SettlementAttempt attempt = attempts.get(0);
+         SettlementAttemptState previousAttemptState = attempt.getState();
+ 
+-            //Check with provider.
++        //Check with provider.
+         if (!proceedWithAdminUpdate(attempt, state, overrideProvider, attemptUid)) {
+             throw Error.invalid_request.getBuilder().message("Provider status miss match").build();
+         }
+ 
+         List<SettlementDetails> settlementDetailsList = getSettlementDetails(Lists.newArrayList(attempt.getSettlementId()), attempt.getTenantId(), false);
+ 
+-        if(null == settlementDetailsList || settlementDetailsList.isEmpty()){
++        if (null == settlementDetailsList || settlementDetailsList.isEmpty()) {
+             throw Error.settlement_not_found.getBuilder().build();
+         }
+ 
+@@ -1891,13 +1936,13 @@ public void updateAttemptAdmin(long attemptUid, SettlementAttemptState state, Bo
+             case PENDING_UPDATE:
+                 log.info("request to force update for PENDING_UPDATE attempt uid {} ", attempt.getUId());
+             case MANUAL_REVIEW:
+-                if( (SettlementAttemptState.FAILED.equals(state) || SettlementAttemptState.COMPLETED.equals(state)) &&
+-                        (SettlementState.MANUAL_REVIEW.equals(settlement.getState()) || SettlementState.PENDING_UPDATE.equals(settlement.getState())) ) {
++                if ((SettlementAttemptState.FAILED.equals(state) || SettlementAttemptState.COMPLETED.equals(state)) &&
++                        (SettlementState.MANUAL_REVIEW.equals(settlement.getState()) || SettlementState.PENDING_UPDATE.equals(settlement.getState()))) {
+                     attempt.setState(state);
+-                    if(SettlementAttemptState.FAILED.equals(state) && allowRerun){
++                    if (SettlementAttemptState.FAILED.equals(state) && allowRerun) {
+                         settlementChanged = false;
+                         handleFailure(GetSettlementAttemptResponse.builder().settlementAttempt(attempt).build(), settlementDetails);
+-                    }else{
++                    } else {
+                         settlement.setState(SettlementState.valueOf(state.name()));
+                     }
+                 } else {
+@@ -1905,10 +1950,10 @@ public void updateAttemptAdmin(long attemptUid, SettlementAttemptState state, Bo
+                 }
+                 break;
+             case FAILED:
+-                if(SettlementAttemptState.COMPLETED.equals(state)) {
++                if (SettlementAttemptState.COMPLETED.equals(state)) {
+                     //Might be two different attempts getting completed but can't do anything about it.
+                     attempt.setState(state);
+-                    if(!SettlementState.COMPLETED.equals(settlement.getState())) {
++                    if (!SettlementState.COMPLETED.equals(settlement.getState())) {
+                         settlement.setState(SettlementState.valueOf(state.name()));
+                     } else {
+                         settlementChanged = false;
+@@ -1918,7 +1963,7 @@ public void updateAttemptAdmin(long attemptUid, SettlementAttemptState state, Bo
+                 }
+                 break;
+             case COMPLETED:
+-                if(SettlementAttemptState.FAILED.equals(state)) {
++                if (SettlementAttemptState.FAILED.equals(state)) {
+                     attempt.setState(state);
+                     settlement.setState(SettlementState.valueOf(state.name()));
+                 } else {
+@@ -1935,7 +1980,7 @@ public void updateAttemptAdmin(long attemptUid, SettlementAttemptState state, Bo
+             log.error("failed to force update settlement attempt {}", attempt.getUId());
+             throw Error.invalid_request.getBuilder().build();
+         }
+-        if(settlementChanged) {
++        if (settlementChanged) {
+             settlement.getMetaDataMap().put(Constant.ADMIN_OVERRIDE, "true");
+             try {
+                 settlement.setMetaData(JsonObjectMapper.getMapper().writeValueAsString(settlement.getMetaDataMap()));
+@@ -1947,7 +1992,7 @@ public void updateAttemptAdmin(long attemptUid, SettlementAttemptState state, Bo
+             }
+ 
+             Optional<Settlement> settlementOpt = settlementRepository.forceUpdate(settlement);
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   120    0   120    0     0    530      0 --:--:-- --:--:-- --:--:--   530

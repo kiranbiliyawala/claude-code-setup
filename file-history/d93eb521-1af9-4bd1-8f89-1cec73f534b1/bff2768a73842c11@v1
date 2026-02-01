@@ -1,0 +1,306 @@
+# 06 - Study Path
+
+> **Purpose:** Track your progress through the codebase learning journey
+> **Usage:** Check off items as you complete them
+> **Estimated Time:** 4 weeks (part-time study)
+
+---
+
+## How to Use This Guide
+
+1. Work through each week sequentially
+2. Check off items as you complete them
+3. Use this file to resume after breaks
+4. Refer to specific docs when working on related features
+
+---
+
+## Week 1: Foundation
+
+### Day 1-2: Setup & Overview
+
+- [ ] Read [README.md](./README.md) completely
+- [ ] Read [01-overview.md](./01-overview.md)
+- [ ] Clone and build the project (`./gradlew build`)
+- [ ] Explore `DarwinApplication.java`
+- [ ] Scan `application.properties` (first 200 lines)
+
+### Day 3-4: Project Structure
+
+- [ ] Map the directory structure mentally
+- [ ] Identify the V2 package as primary
+- [ ] Understand controller → service → workflow pattern
+- [ ] Review API endpoints table
+
+### Day 5: Core Concepts
+
+- [ ] Understand Order → Payment → PaymentAttempt hierarchy
+- [ ] Learn the 7-step workflow pattern
+- [ ] Study entity lifecycle states
+- [ ] Review internal service dependencies
+
+### Week 1 Checkpoint
+
+- [ ] **CHECKPOINT 1:** Can explain the tech stack
+- [ ] **CHECKPOINT 1:** Know the project structure
+- [ ] **CHECKPOINT 1:** Understand core payment hierarchy
+
+---
+
+## Week 2: Data Layer
+
+### Day 1-2: Entities
+
+- [ ] Read [02-data-layer.md](./02-data-layer.md)
+- [ ] Study `BaseEntity.java` and `BaseExternalEntity.java`
+- [ ] Review `OrderEntity.java` structure
+- [ ] Study `PaymentV2Entity.java` and relationships
+- [ ] Understand `PaymentAttemptV2Entity.java` (most complex)
+
+### Day 3: Database Architecture
+
+- [ ] Understand Master-Replica routing
+- [ ] Study `MasterDataSourceConfiguration.java`
+- [ ] Study `ReplicaDataSourceConfiguration.java`
+- [ ] Learn `@ReplicaRepository` usage
+
+### Day 4: Repositories & Queries
+
+- [ ] Review `OrderRepository.java` FETCH JOIN patterns
+- [ ] Study `PaymentAttemptRepository.java`
+- [ ] Understand DAO pattern with custom EntityManager
+
+### Day 5: Caching & DynamoDB
+
+- [ ] Study `ClientConfigurationCache.java`
+- [ ] Understand jittered TTL pattern
+- [ ] Review DynamoDB tables and entities
+- [ ] Study `AbstractDynamoDBDAO.java`
+
+### Week 2 Checkpoint
+
+- [ ] **CHECKPOINT 2:** Can explain entity hierarchy
+- [ ] **CHECKPOINT 2:** Know Master-Replica routing
+- [ ] **CHECKPOINT 2:** Understand caching patterns
+- [ ] **CHECKPOINT 2:** Know when MySQL vs DynamoDB
+
+---
+
+## Week 3: Provider Integration
+
+### Day 1-2: Adapter Architecture
+
+- [ ] Read [03-provider-integration.md](./03-provider-integration.md)
+- [ ] Study `IPaymentProviderAdapter.java`
+- [ ] Understand `PaymentProviderFactory.java`
+- [ ] Review adapter inheritance diagram
+
+### Day 3: Decision Tree Routing
+
+- [ ] Study `ProviderDeciderRouter.java`
+- [ ] Understand LCM vs Decision Tree routing
+- [ ] Review `DecisionTreeObjectCache.java`
+- [ ] Study decision factors
+
+### Day 4: Provider Implementations
+
+- [ ] Study `CashfreeProviderAdapter.java`
+- [ ] Review `CybersourceProviderAdapter.java` (3DS)
+- [ ] Understand two-phase payment creation
+- [ ] Study provider response mapping
+
+### Day 5: Webhooks
+
+- [ ] Review `WebhookController.java`
+- [ ] Study `CashfreeWebhookController.java`
+- [ ] Understand idempotency handling
+- [ ] Review webhook → state machine flow
+
+### Week 3 Checkpoint
+
+- [ ] **CHECKPOINT 3:** Can explain adapter pattern
+- [ ] **CHECKPOINT 3:** Know how provider routing works
+- [ ] **CHECKPOINT 3:** Understand webhook processing
+- [ ] **CHECKPOINT 3:** Know error handling patterns
+
+---
+
+## Week 4: Payment Flow & Advanced
+
+### Day 1-2: Workflow Deep-Dive
+
+- [ ] Read [04-payment-flow.md](./04-payment-flow.md)
+- [ ] Study `Workflow.java` template
+- [ ] Master `PaymentAttemptCreateWorkflow.java`
+- [ ] Understand context enrichment pipeline
+
+### Day 3: State Machines
+
+- [ ] Study `PaymentStateMachine.java`
+- [ ] Study `OrderStateMachine.java`
+- [ ] Understand event cascading
+- [ ] Review terminal states
+
+### Day 4: Authentication Flows
+
+- [ ] Understand 3DS redirect flow
+- [ ] Study Native OTP flow
+- [ ] Review `PaymentAttemptAuthenticateWorkflow.java`
+- [ ] Study DynamoDB OTP storage
+
+### Day 5: Advanced Patterns
+
+- [ ] Study `SequentialWorkflow.java` (distributed locks)
+- [ ] Review Guava EventBus setup
+- [ ] Understand instrument processing
+- [ ] Study async processing (Kafka, SQS)
+
+### Week 4 Checkpoint
+
+- [ ] **CHECKPOINT 4:** Can trace payment creation flow
+- [ ] **CHECKPOINT 4:** Understand state machine cascading
+- [ ] **CHECKPOINT 4:** Know authentication flows
+- [ ] **CHECKPOINT 4:** Understand distributed locking
+
+---
+
+## Expert Level Challenges
+
+After completing the 4 weeks, attempt these challenges:
+
+### Challenge 1: Trace a Card Payment
+
+- [ ] Start from `PaymentAttemptV2Controller`
+- [ ] Follow through `PaymentAttemptCreateWorkflow`
+- [ ] Trace provider adapter selection
+- [ ] Follow 3DS flow if triggered
+- [ ] Track state machine events
+- [ ] End at final order status
+
+### Challenge 2: Add a New Provider
+
+- [ ] Identify extension points
+- [ ] Create adapter extending `IPaymentProviderAdapter`
+- [ ] Register in `PaymentProviderFactory`
+- [ ] Add webhook controller
+- [ ] Implement status mapping
+
+### Challenge 3: Debug a Failed Payment
+
+- [ ] Find payment attempt by external_id
+- [ ] Check provider_status and error_code
+- [ ] Review DynamoDB workflow context
+- [ ] Check state machine logs
+- [ ] Identify root cause
+
+### Challenge 4: Optimize a Query
+
+- [ ] Identify N+1 query in codebase
+- [ ] Add FETCH JOIN
+- [ ] Consider caching
+- [ ] Evaluate replica usage
+
+### Expert Checkpoint
+
+- [ ] **CHECKPOINT 5:** Can trace any payment flow end-to-end
+- [ ] **CHECKPOINT 5:** Can debug production issues
+- [ ] **CHECKPOINT 5:** Can design new features
+- [ ] **CHECKPOINT 5:** Can optimize performance
+
+---
+
+## Quick Reference During Work
+
+### When Working On...
+
+| Task | Start Here |
+|------|------------|
+| Payment issues | [04-payment-flow.md](./04-payment-flow.md) |
+| Provider issues | [03-provider-integration.md](./03-provider-integration.md) |
+| Database issues | [02-data-layer.md](./02-data-layer.md) |
+| File lookup | [05-key-files-reference.md](./05-key-files-reference.md) |
+| General overview | [01-overview.md](./01-overview.md) |
+
+### Common Debug Paths
+
+```
+Payment stuck in PROCESSING:
+1. Check PaymentAttemptV2Entity.status
+2. Check provider_status
+3. Check DynamoDB workflow context
+4. Check PaymentStateMachine logs
+
+Webhook not processed:
+1. Check WebhookController logs
+2. Verify signature validation
+3. Check idempotency (status changed?)
+4. Check state machine subscription
+
+Provider routing failed:
+1. Check ProviderDeciderRouter logs
+2. Verify decision tree cache
+3. Check client configuration
+4. Verify provider account active
+
+Cache stale data:
+1. Check cache TTL configuration
+2. Verify cache key generation
+3. Check for refresh triggers
+4. Consider manual invalidation
+```
+
+---
+
+## Progress Summary
+
+| Week | Status | Completion Date |
+|------|--------|-----------------|
+| Week 1: Foundation | ☐ Not Started | |
+| Week 2: Data Layer | ☐ Not Started | |
+| Week 3: Provider Integration | ☐ Not Started | |
+| Week 4: Payment Flow | ☐ Not Started | |
+| Expert Challenges | ☐ Not Started | |
+
+---
+
+## Notes Section
+
+Use this space to add your own notes as you study:
+
+### Week 1 Notes
+```
+[Your notes here]
+```
+
+### Week 2 Notes
+```
+[Your notes here]
+```
+
+### Week 3 Notes
+```
+[Your notes here]
+```
+
+### Week 4 Notes
+```
+[Your notes here]
+```
+
+### Questions to Research
+```
+[Your questions here]
+```
+
+### Key Insights
+```
+[Your insights here]
+```
+
+---
+
+*Good luck on your journey to becoming a Darwin expert!*
+
+---
+
+*Generated by Claude Code - December 2025*

@@ -1,0 +1,17 @@
+[
+  {
+    "content": "Investigate IllegalStateException in test initialization",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Fix Docker environment issue for Testcontainers",
+    "status": "in_progress",
+    "id": "2"
+  },
+  {
+    "content": "Run build again to verify fixes",
+    "status": "pending",
+    "id": "3"
+  }
+]

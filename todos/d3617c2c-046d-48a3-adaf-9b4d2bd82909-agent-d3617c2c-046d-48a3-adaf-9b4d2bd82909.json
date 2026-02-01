@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Explore project structure and main directories",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Examine build configuration and dependencies",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Review core domain models and entities",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Analyze service layer and business logic",
+    "status": "completed",
+    "id": "4"
+  },
+  {
+    "content": "Understand API structure and endpoints",
+    "status": "completed",
+    "id": "5"
+  },
+  {
+    "content": "Review database schema and data access",
+    "status": "completed",
+    "id": "6"
+  }
+]

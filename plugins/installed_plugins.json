@@ -1,0 +1,41 @@
+{
+  "version": 2,
+  "plugins": {
+    "github@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/d49ad3558669",
+        "version": "d49ad3558669",
+        "installedAt": "2025-12-31T07:13:37.901Z",
+        "lastUpdated": "2026-01-29T10:53:49.202Z"
+      }
+    ],
+    "pr-review-toolkit@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/d49ad3558669",
+        "version": "d49ad3558669",
+        "installedAt": "2025-12-31T07:14:28.562Z",
+        "lastUpdated": "2026-01-29T10:53:49.212Z"
+      }
+    ],
+    "canvas@claude-canvas": [
+      {
+        "scope": "user",
+        "installPath": "/Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0",
+        "version": "0.1.0",
+        "installedAt": "2026-01-07T15:45:14.924Z",
+        "lastUpdated": "2026-01-07T15:45:14.924Z"
+      }
+    ],
+    "code-simplifier@claude-plugins-official": [
+      {
+        "scope": "user",
+        "installPath": "/Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0",
+        "version": "1.0.0",
+        "installedAt": "2026-01-09T11:41:50.745Z",
+        "lastUpdated": "2026-01-09T11:41:50.745Z"
+      }
+    ]
+  }
+}

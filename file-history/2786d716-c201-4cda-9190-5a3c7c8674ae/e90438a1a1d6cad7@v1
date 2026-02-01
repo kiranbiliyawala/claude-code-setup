@@ -1,0 +1,399 @@
+# finhq-verse Cheatsheet
+
+Quick reference for common patterns and commands.
+
+---
+
+## Service Ports
+
+| Service | Port |
+|---------|------|
+| Foundation | 7080 |
+| Bookkeeping | 7081 |
+| Consumer | 7082 |
+| Configuration | 7084 |
+| Calendar | 7085 |
+| Settlement | 7086 |
+| OpenAPI | 7090 |
+| MySQL | 3306 |
+| Redis | 6379 |
+| Temporal | 8080 |
+| Jaeger | 16686 |
+
+---
+
+## HTTP Headers
+
+```
+X-Finhq-Mode: LIVE                    # or SANDBOX
+X-Finhq-Org-Id: org_01H123...
+X-Finhq-Namespace-Id: ns_01H456...
+X-Finhq-Request-Id: req_01H789...     # Optional, auto-generated
+```
+
+---
+
+## Development Commands
+
+### Nx
+
+```bash
+npx nx build <project>           # Build single project
+npx nx test <project>            # Test single project
+npx nx serve <project>           # Run project
+npx nx graph                      # Dependency visualization
+npx nx affected --target=build   # Build changed only
+npx nx run-many --target=build --all  # Build all
+npx nx reset                      # Clear cache
+```
+
+### Make
+
+```bash
+make up          # Start Docker stack
+make down        # Stop Docker stack
+make refresh     # Build affected
+make restart     # Rebuild all
+make logs        # View logs
+```
+
+### Gradle
+
+```bash
+./gradlew build              # Build
+./gradlew test               # Test
+./gradlew spotlessApply      # Format code
+```
+
+---
+
+## Entity Base Classes
+
+```java
+AbstractEntity                    // System-level
+AbstractOrgScopedEntity           // Org-scoped (+ orgId)
+AbstractNamespaceScopedEntity     // Namespace-scoped (+ namespaceId)
+```
+
+---
+
+## Repository Scope
+
+```java
+RepositoryScope.create()      // From PassportContext (most common)
+RepositoryScope.empty()       // System operations
+RepositoryScope.builder()     // Manual construction
+    .orgId("...")
+    .namespaceId("...")
+    .build();
+```
+
+---
+
+## Pagination
+
+```java
+// First page
+CursorPageRequest.first(20);
+
+// Next page
+new CursorPageRequest(cursor, 20, CursorDirection.NEXT);
+
+// Previous page
+new CursorPageRequest(cursor, 20, CursorDirection.PREVIOUS);
+```
+
+---
+
+## Throwing Errors
+
+```java
+// Simple
+throw new ApplicationException(GenericErrorCode.NOT_FOUND);
+
+// With message
+throw new ApplicationException(GenericErrorCode.BAD_REQUEST, "Invalid input");
+
+// With details
+throw new ApplicationException(GenericErrorCode.NOT_FOUND)
+    .withDetail("id", entityId)
+    .withDetail("type", "Account");
+```
+
+---
+
+## Common Error Codes
+
+| Code | HTTP | Usage |
+|------|------|-------|
+| `BAD_REQUEST` | 400 | Invalid input |
+| `NOT_FOUND` | 404 | Entity not found |
+| `CONFLICT` | 409 | Duplicate/conflict |
+| `UNAUTHORIZED` | 401 | Not authenticated |
+| `ACCESS_DENIED` | 403 | Not authorized |
+| `UNEXPECTED` | 500 | Server error |
+
+---
+
+## Service Class Template
+
+```java
+@Service
+@Validated
+public class MyService
+        extends AbstractService<
+                MyEntity,                // Entity
+                MyRepository,            // Repository
+                MyModel,                 // API Model
+                CreateMyRequest,         // Create DTO
+                UpdateMyRequest,         // Update DTO
+                MyListResponse>          // List Response
+        implements MyApiDelegate {
+
+    public MyService(MyRepository repository,
+                     MyMapper mapper,
+                     MyValidator validator) {
+        super(repository, mapper, validator);
+    }
+
+    @Override
+    public MyModel createMy(CreateMyRequest request) {
+        return createEntity(request);
+    }
+
+    @Override
+    public MyModel getMy(String id) {
+        return getEntity(id);
+    }
+
+    @Override
+    public MyListResponse listMy(Optional<String> pageAfter,
+                                  Optional<String> pageBefore,
+                                  Optional<Integer> pageSize) {
+        return listEntities(pageAfter, pageBefore, pageSize, null,
+                MyListResponse::new);
+    }
+
+    @Override
+    public MyModel updateMy(String id, UpdateMyRequest request) {
+        return updateEntity(id, request);
+    }
+}
+```
+
+---
+
+## Entity Template
+
+```java
+@Entity
+@Audited
+@Table(name = "my_entities")
+@Getter
+@Setter
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class MyEntity extends AbstractNamespaceScopedEntity
+        implements Auditable {
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+    @Column(nullable = false)
+    private String name;
+
+    // Required for JPA
+    protected MyEntity() {
+        super();
+    }
+}
+```
+
+---
+
+## Mapper Template
+
+```java
+@Component
+public class MyMapper implements EntityMapper<MyEntity, MyModel,
+        CreateMyRequest, UpdateMyRequest> {
+
+    @Override
+    public MyEntity mapCreateRequestToEntity(CreateMyRequest request) {
+        return MyEntity.builder()
+                .name(request.getName())
+                .status(Status.ACTIVE)
+                .build();
+    }
+
+    @Override
+    public EntityUpdates<MyEntity> mapUpdateRequestToEntityUpdates(
+            MyEntity entity, UpdateMyRequest request) {
+        Set<String> nullProps = new HashSet<>();
+
+        if (request.getName() != null) {
+            entity.setName(request.getName());
+        }
+
+        return new EntityUpdates<>(entity, nullProps);
+    }
+
+    @Override
+    public MyModel mapEntityToApiModel(MyEntity entity) {
+        return new MyModel()
+                .id(entity.getExternalId())
+                .name(entity.getName())
+                .status(MyModel.StatusEnum.valueOf(entity.getStatus().name()));
+    }
+}
+```
+
+---
+
+## Validator Template
+
+```java
+@Component
+public class MyValidator implements EntityRequestValidator<
+        CreateMyRequest, UpdateMyRequest> {
+
+    @Override
+    public void validateCreateRequest(CreateMyRequest request) {
+        // Add validation logic
+    }
+
+    @Override
+    public void validateUpdateRequest(String id, UpdateMyRequest request) {
+        // Add validation logic
+    }
+}
+```
+
+---
+
+## Flyway Migration Template
+
+```sql
+-- V1__create_my_entities.sql
+CREATE TABLE my_entities (
+    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+    external_id     VARCHAR(36) NOT NULL UNIQUE,
+    org_id          VARCHAR(36) NOT NULL,
+    namespace_id    VARCHAR(36) NOT NULL,
+    version         INT NOT NULL DEFAULT 0,
+    status          VARCHAR(20) NOT NULL DEFAULT 'ACTIVE',
+    name            VARCHAR(255) NOT NULL,
+    created_at      DATETIME NOT NULL,
+    updated_at      DATETIME NOT NULL,
+    created_by      VARCHAR(36) NOT NULL DEFAULT 'SYSTEM',
+    updated_by      VARCHAR(36) NOT NULL DEFAULT 'SYSTEM',
+
+    INDEX idx_org_namespace (org_id, namespace_id),
+    INDEX idx_external_id (external_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- Audit table
+CREATE TABLE my_entities_aud (
+    id              BIGINT NOT NULL,
+    rev             INT NOT NULL,
+    revtype         TINYINT,
+    external_id     VARCHAR(36),
+    org_id          VARCHAR(36),
+    namespace_id    VARCHAR(36),
+    version         INT,
+    status          VARCHAR(20),
+    name            VARCHAR(255),
+    created_at      DATETIME,
+    updated_at      DATETIME,
+    created_by      VARCHAR(36),
+    updated_by      VARCHAR(36),
+
+    PRIMARY KEY (id, rev)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+```
+
+---
+
+## Test Template
+
+```java
+@SpringBootTest
+@Testcontainers
+class MyServiceTest {
+
+    @Autowired
+    private MyService service;
+
+    @BeforeEach
+    void setUp() {
+        PassportContext.set(Passport.builder()
+                .requestId("test-request")
+                .mode("LIVE")
+                .orgId("test-org")
+                .namespaceId("test-ns")
+                .build());
+    }
+
+    @AfterEach
+    void tearDown() {
+        PassportContext.remove();
+    }
+
+    @Test
+    void shouldCreateEntity() {
+        // Given
+        CreateMyRequest request = new CreateMyRequest()
+                .name("Test Entity");
+
+        // When
+        MyModel result = service.createMy(request);
+
+        // Then
+        assertAll(
+            () -> assertNotNull(result.getId()),
+            () -> assertEquals("Test Entity", result.getName())
+        );
+    }
+}
+```
+
+---
+
+## Useful cURL Commands
+
+```bash
+# Create organization
+curl -X POST http://localhost:7080/v1/organizations \
+  -H "Content-Type: application/json" \
+  -H "X-Finhq-Mode: LIVE" \
+  -d '{"name": "Test Org", "country": "IN", "timezone": "Asia/Kolkata"}'
+
+# List with pagination
+curl "http://localhost:7080/v1/organizations?pageSize=10" \
+  -H "X-Finhq-Mode: LIVE"
+
+# Get by ID
+curl http://localhost:7080/v1/organizations/01H123... \
+  -H "X-Finhq-Mode: LIVE"
+
+# Update
+curl -X PATCH http://localhost:7080/v1/organizations/01H123... \
+  -H "Content-Type: application/json" \
+  -H "X-Finhq-Mode: LIVE" \
+  -d '{"name": "Updated Name"}'
+```
+
+---
+
+## File Locations
+
+| What | Where |
+|------|-------|
+| Conventions | `README_LLM.md` |
+| Passport | `finhq-commons-java/finhq-context/src/main/java/.../Passport.java` |
+| Repository | `finhq-commons-spring/finhq-entity/src/main/java/.../Repository.java` |
+| AbstractEntity | `finhq-commons-spring/finhq-entity/src/main/java/.../AbstractEntity.java` |
+| AbstractService | `finhq-commons-spring/finhq-entity/src/main/java/.../AbstractService.java` |
+| GlobalExceptionHandler | `finhq-commons-spring/finhq-spring/src/main/java/.../GlobalExceptionHandler.java` |
+| OpenAPI Specs | `finhq-openapi/specs/` |

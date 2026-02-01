@@ -1,0 +1,784 @@
+# Settlement Creation Flow
+
+This document provides a detailed explanation of the **Settlement Creation** step in the Settlement Service workflow.
+
+---
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Prerequisites](#prerequisites)
+- [Flow Summary](#flow-summary)
+- [Detailed Step-by-Step Flow](#detailed-step-by-step-flow)
+- [Data Models](#data-models)
+- [Amount Calculation Logic](#amount-calculation-logic)
+- [State Transitions](#state-transitions)
+- [Sequence Diagram](#sequence-diagram)
+- [Events Published](#events-published)
+- [Error Handling](#error-handling)
+- [Key Code References](#key-code-references)
+
+---
+
+## Overview
+
+Settlement Creation is **Step 5** in the main settlement workflow (`SettleViaWorkflow`). This step is responsible for:
+
+1. Creating a new settlement record in the database
+2. Associating eligible transactions with the settlement
+3. Calculating settlement amounts (total, fee, tax, net)
+4. Publishing the `settlement_initiated` event
+5. Triggering the downstream `ProcessCreatedSettlement` sub-workflow
+
+The settlement creation is embedded within the **ProcessTransactions** activity and is not a standalone atomic operation. It involves multiple database operations executed within a transactional context.
+
+---
+
+## Prerequisites
+
+Before the Settlement Creation step executes, the following steps must be completed:
+
+| Step | Activity | Description |
+|------|----------|-------------|
+| 1 | AcquireOperationLock | Distributed lock acquired to prevent concurrent settlements for the same partner |
+| 2 | ExecuteQueryAsync | Query submitted to fetch settleable transactions (via Databricks/Batch Platform) |
+| 3 | PollQueryStatus | Query execution status polled until completion |
+| 4 | FetchTransactionsFromResultSet | Transaction data fetched from S3 result location |
+
+**Input to Settlement Creation:**
+- `ProcessSettlementRequest` containing partner details, tenant info, and configuration
+- Transaction data (parsed from S3 JSON)
+- Active workflow execution context (`WorkflowRun`)
+
+---
+
+## Flow Summary
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    SETTLEMENT CREATION FLOW                         │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  1. Cancel Pending Settlements (Draft/Initiated status)            │
+│                           │                                         │
+│                           ▼                                         │
+│  2. Create New Settlement (status = Initiated, amounts = 0)        │
+│                           │                                         │
+│                           ▼                                         │
+│  3. Process Transactions in Batches                                │
+│      ├── Filter skippable transactions                             │
+│      ├── Classify amounts (Fee/Tax/Total)                          │
+│      ├── Create Transaction records                                │
+│      └── Update Settlement amounts                                 │
+│                           │                                         │
+│                           ▼                                         │
+│  4. Update Settlement Status (Draft → Created)                     │
+│                           │                                         │
+│                           ▼                                         │
+│  5. Publish settlement_initiated Event                             │
+│                           │                                         │
+│                           ▼                                         │
+│  6. Trigger ProcessCreatedSettlement Sub-workflow                  │
+│                                                                     │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Detailed Step-by-Step Flow
+
+### Step 1: Cancel Pending Settlements
+
+Before creating a new settlement, the system cancels any existing settlements in `Draft` or `Initiated` status for the same workflow.
+
+**Purpose:** Ensures idempotency - if the workflow is retried, previous incomplete settlements are cleaned up.
+
+**Implementation:**
+```go
+// File: internal/settlement/core.go
+pendingSettlements, err := c.repo.findSettlementsByWorkflowIdAndStatuses(
+    ctx, tx, request.TenantID, workflowID,
+    []Status{StatusDraft, StatusInitiated},
+)
+
+for _, settlement := range pendingSettlements {
+    c.repo.updateStatus(ctx, tx, settlement, StatusCancelled)
+}
+```
+
+**Database Query:**
+```sql
+SELECT * FROM settlements
+WHERE tenant_id = ?
+  AND workflow_id = ?
+  AND status IN ('Draft', 'Initiated')
+```
+
+---
+
+### Step 2: Create Initiated Settlement
+
+A new settlement entity is created with initial values.
+
+**Implementation:**
+```go
+// File: internal/settlement/helper.go (line 105-122)
+func NewSettlementEntity(request ProcessSettlementRequest, workflowRun WorkflowRun) *Settlement {
+    return &Settlement{
+        TenantID:         request.TenantID,
+        PartnerType:      request.PartnerType,
+        PartnerID:        request.PartnerID,
+        SettlementID:     ulid.MustNew(),           // Generate unique ULID
+        ScheduleID:       request.ScheduleID,
+        DBKAccountNumber: request.DbkAccountNo,
+        CurrencyCode:     common.CurrencyCodeINR,   // Default: INR
+        TotalAmount:      0,                        // Initialized to 0
+        FeeAmount:        0,                        // Initialized to 0
+        TaxAmount:        0,                        // Initialized to 0
+        NetAmount:        0,                        // Initialized to 0
+        Status:           StatusInitiated,          // Initial status
+        WorkflowID:       workflowRun.WorkflowID,
+        WorkflowRunID:    workflowRun.WorkflowRunID,
+    }
+}
+```
+
+**Database Operation:**
+```sql
+INSERT INTO settlements (
+    tenant_id, partner_type, partner_id, settlement_id, schedule_id,
+    dbk_account_number, currency_code, total_amount, fee_amount,
+    tax_amount, net_amount, status, workflow_id, workflow_run_id,
+    created_at, updated_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, 0, 0, 0, 0, 'Initiated', ?, ?, NOW(), NOW())
+```
+
+**Key Points:**
+- `SettlementID` is a ULID (Universally Unique Lexicographically Sortable Identifier)
+- All amounts are initialized to 0 and populated during batch processing
+- `WorkflowID` and `WorkflowRunID` link the settlement to its workflow execution
+
+---
+
+### Step 3: Process Transactions in Batches
+
+Transactions are processed in configurable batch sizes to optimize memory usage and database performance.
+
+#### 3.1 Filter Skippable Transactions
+
+Transactions that are already part of a settlement in a "skippable" state are excluded.
+
+**Skippable Settlement States:**
+- `Processed` - Already settled
+- `Payout` - Payout in progress
+- `Processing` - Currently being processed
+
+```go
+// File: internal/settlement/core.go
+func (c *Service) filterSkippableTransactions(
+    ctx context.Context,
+    transactions []TransactionGroup,
+) ([]TransactionGroup, error) {
+    // Get transaction IDs that are in skippable states
+    skippableSettlements := c.repo.findSettlementsByStatuses(ctx, skippableStatuses)
+    // Filter out transactions belonging to these settlements
+    return filteredTransactions, nil
+}
+```
+
+#### 3.2 Classify Amounts
+
+Each transaction is classified by its sub-type to determine the amount category.
+
+**Amount Classification Rules:**
+
+| Transaction Sub-Type | Amount Category | Description |
+|---------------------|-----------------|-------------|
+| `MDR_FEE` | Fee Amount | Merchant Discount Rate fee |
+| `MDR_REVERT` | Fee Amount | MDR fee reversal |
+| `TAX` | Tax Amount | Tax on fees (GST) |
+| `TAX_REVERT` | Tax Amount | Tax reversal |
+| All Others | Total Amount | Main transaction amount |
+
+**Implementation:**
+```go
+// File: internal/settlement/helper.go (line 35-69)
+func classifyAmounts(groupedTxn *TransactionGroup) *AmountBreakup {
+    amountBreakup := &AmountBreakup{}
+
+    for _, txn := range groupedTxn.Transactions {
+        amount := getMoneyAsAddableNumber(txn.Amount)
+
+        switch txn.SubType {
+        case "MDR_FEE", "MDR_REVERT":
+            amountBreakup.FeeAmount += amount
+        case "TAX", "TAX_REVERT":
+            amountBreakup.TaxAmount += amount
+        default:
+            amountBreakup.TotalAmount += amount
+        }
+    }
+    return amountBreakup
+}
+```
+
+#### 3.3 Create Transaction Records
+
+For each transaction in the batch, a `Transaction` record is created and linked to the settlement.
+
+```go
+// File: internal/settlement/core.go
+func createTransactionEntity(
+    settlement *Settlement,
+    txnGroup *TransactionGroup,
+) *Transaction {
+    return &Transaction{
+        TenantID:               settlement.TenantID,
+        PartnerType:            settlement.PartnerType,
+        PartnerID:              settlement.PartnerID,
+        SettlementID:           settlement.SettlementID,  // Foreign key link
+        DBKTransactionID:       txnGroup.TransactionID,
+        DBKSourceTransactionID: txnGroup.SourceTransactionID,
+        DBKAccountNumber:       settlement.DBKAccountNumber,
+        TransactionTime:        txnGroup.TransactionTime,
+    }
+}
+```
+
+**Database Operation:**
+```sql
+INSERT INTO transactions (
+    tenant_id, partner_type, partner_id, settlement_id,
+    dbk_transaction_id, dbk_source_transaction_id,
+    dbk_account_number, transaction_time, created_at, updated_at
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+-- Executed in batches using CreateInBatches()
+```
+
+#### 3.4 Update Settlement Amounts
+
+After processing each batch, the settlement amounts are updated.
+
+```go
+// File: internal/settlement/service.go (line 439-456)
+func (c *Service) processBatch(
+    ctx context.Context,
+    tx *gorm.DB,
+    transactions []*Transaction,
+    settlement *Settlement,
+    amountBreakup *AmountBreakup,
+) error {
+    // Create transaction records
+    if err := c.repo.createTransactions(ctx, tx, transactions); err != nil {
+        return err
+    }
+
+    // Update settlement with accumulated amounts
+    return c.updateSettlementTransactional(ctx, tx, settlement, Settlement{
+        TotalAmount: amountBreakup.TotalAmount,
+        FeeAmount:   amountBreakup.FeeAmount,
+        TaxAmount:   amountBreakup.TaxAmount,
+        NetAmount:   amountBreakup.TotalAmount - amountBreakup.TaxAmount - amountBreakup.FeeAmount,
+        Status:      StatusDraft,
+        Metadata:    metadataJSON,
+    })
+}
+```
+
+**Database Operation:**
+```sql
+UPDATE settlements
+SET total_amount = total_amount + ?,
+    fee_amount = fee_amount + ?,
+    tax_amount = tax_amount + ?,
+    net_amount = ?,
+    status = 'Draft',
+    metadata = ?,
+    updated_at = NOW()
+WHERE settlement_id = ?
+```
+
+---
+
+### Step 4: Update Settlement Status to Created
+
+After all batches are processed, the settlement status transitions from `Draft` to `Created`.
+
+```go
+// File: internal/settlement/core.go
+settlement.Status = StatusCreated
+c.repo.update(ctx, tx, settlement)
+```
+
+---
+
+### Step 5: Publish Settlement Initiated Event
+
+The `settlement_initiated` event is published to Eventi for downstream consumers.
+
+```go
+// File: internal/settlement/workflow.go (line 52-72)
+func createSettlementEvent(
+    eventType event.EventType,
+    settlement *Settlement,
+    statusDescription string,
+    payoutReference *PayoutReference,
+) *eventpkg.Event {
+    data := event.SettlementEventPayload{
+        Settlement: mapToSettlementEvent(settlement, statusDescription),
+        CompletedPayoutReference: mapToPayoutReferenceEvent(payoutReference),
+    }
+
+    newEvent := eventpkg.New(
+        settlement.SettlementID,
+        string(eventType),
+        string(eventType),
+        event.SOURCE,
+        event.HOSTNAME,
+        1,
+        structs.Map(data),
+        make(map[string]interface{}),
+    )
+    newEvent.PartitionKey = settlement.PartnerID  // Ordering by partner
+    return newEvent
+}
+
+// Publishing
+event := createSettlementEvent(event.EventTypeSettlementInitiated, settlement, "", nil)
+w.eventiProducer.Publish(ctx, event)
+```
+
+---
+
+### Step 6: Trigger ProcessCreatedSettlement Sub-workflow
+
+For each created settlement, a child workflow is executed to continue processing.
+
+```go
+// File: internal/settlement/init_settlement.go (line 122-143)
+settlements, err := w.settlementService.repo.getSettlementsByWorkflowID(
+    ctx, w.settlementService.repo.DB,
+    request.TenantID, workflowID, workflowRun.WorkflowRunID,
+)
+
+for _, settlement := range settlements {
+    subWorkflowRequest := NewProcessSettlementSubWorkflowRequestFromSettlement(settlement)
+    future := workflow.ExecuteChildWorkflow(ctx, ProcessCreatedSettlement, subWorkflowRequest)
+    futures = append(futures, future)
+}
+```
+
+---
+
+## Data Models
+
+### Settlement Entity
+
+```go
+// File: internal/settlement/model.go
+type Settlement struct {
+    gorm.Model                          // ID, CreatedAt, UpdatedAt, DeletedAt
+    Version          int                // Optimistic locking version
+    TenantID         string             // Multi-tenant isolation key
+    PartnerType      string             // Type of partner (merchant category)
+    PartnerID        string             // Unique partner identifier
+    SettlementID     string             // Primary business key (ULID)
+    ScheduleID       string             // Settlement schedule reference
+    DBKAccountNumber string             // Bookkeeping account number
+    CurrencyCode     string             // ISO currency code (INR)
+    TotalAmount      int64              // Total transaction amount in nanos
+    FeeAmount        int64              // Fee amount in nanos
+    TaxAmount        int64              // Tax amount in nanos
+    NetAmount        int64              // Net payable amount in nanos
+    Status           Status             // Current settlement status
+    WorkflowID       string             // Temporal workflow ID
+    WorkflowRunID    string             // Temporal workflow run ID
+    Metadata         json.RawMessage    // Additional metadata (JSON)
+}
+```
+
+### Transaction Entity
+
+```go
+// File: internal/settlement/model.go
+type Transaction struct {
+    gorm.Model
+    TenantID               string      // Multi-tenant isolation key
+    PartnerType            string      // Type of partner
+    PartnerID              string      // Partner identifier
+    SettlementID           string      // Foreign key to Settlement
+    DBKTransactionID       string      // Bookkeeping transaction ID
+    DBKSourceTransactionID string      // Source transaction reference
+    DBKAccountNumber       string      // Bookkeeping account
+    TransactionTime        time.Time   // Original transaction timestamp
+    Settlement             Settlement  `gorm:"references:SettlementID"`
+}
+```
+
+### Amount Breakup
+
+```go
+// File: internal/settlement/dto.go (line 134-174)
+type AmountBreakup struct {
+    TaxAmount   int64   // Accumulated tax amount
+    FeeAmount   int64   // Accumulated fee amount
+    TotalAmount int64   // Accumulated total amount
+}
+
+func (ab *AmountBreakup) getNetAmount() int64 {
+    return ab.TotalAmount - ab.FeeAmount - ab.TaxAmount
+}
+```
+
+---
+
+## Amount Calculation Logic
+
+### Formula
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│   Net Amount = Total Amount - Fee Amount - Tax Amount       │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Amount Nature Handling
+
+Amounts are stored in **nanos** (1 INR = 1,000,000,000 nanos) and their direction is determined by the **Amount Nature**:
+
+| Amount Nature | Effect |
+|---------------|--------|
+| `CREDIT` | Positive value (adds to settlement) |
+| `DEBIT` | Negative value (subtracts from settlement) |
+
+```go
+// File: internal/settlement/helper.go (line 71-85)
+func getMoneyAsAddableNumber(money *Money) int64 {
+    if money == nil {
+        return 0
+    }
+
+    amount := money.Nanos
+
+    switch money.Nature {
+    case AmountNatureDebit:
+        return -amount
+    case AmountNatureCredit:
+        return amount
+    default:
+        return amount
+    }
+}
+```
+
+### Example Calculation
+
+| Transaction | Sub-Type | Nature | Amount (nanos) | Category | Added Value |
+|-------------|----------|--------|----------------|----------|-------------|
+| Txn 1 | SALE | CREDIT | 100,000,000 | Total | +100,000,000 |
+| Txn 2 | SALE | CREDIT | 50,000,000 | Total | +50,000,000 |
+| Txn 3 | MDR_FEE | DEBIT | 3,000,000 | Fee | +3,000,000 |
+| Txn 4 | TAX | DEBIT | 540,000 | Tax | +540,000 |
+
+**Result:**
+- Total Amount: 150,000,000 nanos (₹150.00)
+- Fee Amount: 3,000,000 nanos (₹3.00)
+- Tax Amount: 540,000 nanos (₹0.54)
+- **Net Amount: 146,460,000 nanos (₹146.46)**
+
+---
+
+## State Transitions
+
+### During Settlement Creation
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                                                                 │
+│                         (Entry Point)                           │
+│                              │                                  │
+│                              ▼                                  │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                     INITIATED                            │   │
+│  │  • Settlement record created                             │   │
+│  │  • All amounts = 0                                       │   │
+│  │  • WorkflowID attached                                   │   │
+│  └────────────────────────┬────────────────────────────────┘   │
+│                           │                                     │
+│                           │ First batch processed               │
+│                           ▼                                     │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                       DRAFT                              │   │
+│  │  • Transactions associated                               │   │
+│  │  • Amounts being accumulated                             │   │
+│  │  • Processing in progress                                │   │
+│  └────────────────────────┬────────────────────────────────┘   │
+│                           │                                     │
+│                           │ All batches processed               │
+│                           ▼                                     │
+│  ┌─────────────────────────────────────────────────────────┐   │
+│  │                      CREATED                             │   │
+│  │  • All transactions linked                               │   │
+│  │  • Final amounts calculated                              │   │
+│  │  • Ready for ProcessCreatedSettlement                    │   │
+│  └─────────────────────────────────────────────────────────┘   │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Complete Settlement State Machine
+
+```
+                        ┌──────────────┐
+                        │  Initiated   │ ◄── Settlement Creation starts here
+                        └──────┬───────┘
+                               │
+                        ┌──────▼───────┐
+                        │    Draft     │ ◄── Transactions being processed
+                        └──────┬───────┘
+                               │
+                        ┌──────▼───────┐
+                        │   Created    │ ◄── Settlement Creation ends here
+                        └──────┬───────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+       ┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼──────┐
+       │   Skipped   │  │ Processing  │  │  Cancelled  │
+       └─────────────┘  └──────┬──────┘  └─────────────┘
+                               │
+                        ┌──────▼───────┐
+                        │    Payout    │
+                        └──────┬───────┘
+                               │
+              ┌────────────────┼────────────────┐
+              │                │                │
+       ┌──────▼──────┐  ┌──────▼──────┐  ┌──────▼───────────┐
+       │  Processed  │  │   Failed    │  │ RetryableFailure │
+       └─────────────┘  └─────────────┘  └──────────────────┘
+```
+
+---
+
+## Sequence Diagram
+
+```mermaid
+sequenceDiagram
+    autonumber
+    participant WF as Settlement Workflow
+    participant SVC as Settlement Service
+    participant REPO as Settlement Repository
+    participant S3 as S3 Storage
+    participant DB as PostgreSQL
+    participant EVT as Eventi
+
+    Note over WF: ProcessTransactions Activity
+
+    rect rgb(240, 248, 255)
+        Note over WF,S3: Step 1: Fetch Transaction Data
+        WF->>S3: Fetch transaction data from ResultSet
+        S3-->>WF: Transaction records (JSON)
+    end
+
+    WF->>SVC: processTransactions(request, transactions, workflowRun)
+
+    rect rgb(255, 245, 238)
+        Note over SVC,DB: Step 2: Cancel Pending Settlements
+        SVC->>REPO: findSettlementsByWorkflowIdAndStatuses(Draft/Initiated)
+        REPO->>DB: SELECT * FROM settlements WHERE status IN (...)
+        DB-->>REPO: Pending settlements (if any)
+        REPO-->>SVC: pendingSettlements[]
+
+        opt Pending settlements exist
+            SVC->>REPO: updateStatus(settlement, Cancelled)
+            REPO->>DB: UPDATE settlements SET status='Cancelled'
+            DB-->>REPO: OK
+        end
+    end
+
+    rect rgb(240, 255, 240)
+        Note over SVC,DB: Step 3: Create Initiated Settlement
+        SVC->>SVC: NewSettlementEntity(request, workflowRun)
+        Note right of SVC: Generate ULID<br/>Status = Initiated<br/>Amounts = 0
+
+        SVC->>REPO: create(settlement)
+        REPO->>DB: INSERT INTO settlements
+        DB-->>REPO: Settlement created
+        REPO-->>SVC: settlement
+    end
+
+    rect rgb(255, 250, 240)
+        Note over SVC,DB: Step 4: Process Transactions in Batches
+        loop For each batch of transactions
+            SVC->>SVC: filterSkippableTransactions(transactions)
+            Note right of SVC: Remove already settled transactions
+
+            SVC->>SVC: classifyAmounts(transactionGroup)
+            Note right of SVC: MDR_FEE → FeeAmount<br/>TAX → TaxAmount<br/>Others → TotalAmount
+
+            SVC->>SVC: Create Transaction entities
+            Note right of SVC: Link via SettlementID
+
+            SVC->>REPO: createTransactions(transactions[])
+            REPO->>DB: INSERT INTO transactions (batch)
+            DB-->>REPO: Transactions created
+
+            SVC->>SVC: Calculate NetAmount
+            Note right of SVC: Net = Total - Fee - Tax
+
+            SVC->>REPO: updateSettlementTransactional(settlement, amounts)
+            REPO->>DB: UPDATE settlements SET amounts, status='Draft'
+            DB-->>REPO: Updated
+        end
+    end
+
+    rect rgb(245, 245, 255)
+        Note over SVC,DB: Step 5: Finalize Settlement Status
+        SVC->>REPO: updateStatus(settlement, Created)
+        REPO->>DB: UPDATE settlements SET status='Created'
+        DB-->>REPO: OK
+    end
+
+    REPO-->>SVC: settlement (with final amounts)
+    SVC-->>WF: ProcessTransactionsResponse{settlement}
+
+    rect rgb(255, 240, 245)
+        Note over WF,EVT: Step 6: Publish Event
+        WF->>WF: createSettlementEvent(settlement_initiated, settlement)
+        WF->>EVT: Publish(settlement_initiated)
+        EVT-->>WF: Event published
+    end
+
+    rect rgb(240, 255, 255)
+        Note over WF: Step 7: Trigger Sub-workflows
+        WF->>REPO: getSettlementsByWorkflowID(workflowID)
+        REPO->>DB: SELECT * FROM settlements WHERE workflow_id=?
+        DB-->>REPO: settlements[]
+        REPO-->>WF: settlements[]
+
+        loop For each settlement
+            WF->>WF: ExecuteChildWorkflow(ProcessCreatedSettlement)
+        end
+    end
+```
+
+---
+
+## Events Published
+
+### Settlement Initiated Event
+
+**Event Type:** `settlement_initiated`
+
+**Trigger:** After settlement is created with all transactions associated
+
+**Payload Structure:**
+```json
+{
+  "settlement": {
+    "id": 12345,
+    "created_at": "2024-01-15T10:30:00Z",
+    "updated_at": "2024-01-15T10:30:00Z",
+    "tenant_id": "tenant_001",
+    "partner_type": "MERCHANT",
+    "partner_id": "partner_001",
+    "settlement_id": "01HQXYZ123ABC456DEF789",
+    "schedule_id": "schedule_001",
+    "dbk_account_number": "ACC123456",
+    "currency_code": "INR",
+    "total_amount": 150000000000,
+    "fee_amount": 3000000000,
+    "tax_amount": 540000000,
+    "net_amount": 146460000000,
+    "status": "Created",
+    "status_description": ""
+  },
+  "completed_payout_reference": null
+}
+```
+
+**Event Properties:**
+| Property | Value |
+|----------|-------|
+| Event ID | SettlementID |
+| Event Type | `settlement_initiated` |
+| Source | Settlement Service |
+| Partition Key | PartnerID (for ordered delivery per partner) |
+| Version | 1 |
+
+---
+
+## Error Handling
+
+### Transactional Integrity
+
+All database operations during settlement creation are wrapped in a transaction:
+
+```go
+err := c.repo.DB.Transaction(func(tx *gorm.DB) error {
+    // Cancel pending settlements
+    // Create new settlement
+    // Process batches
+    // Update amounts
+    return nil
+})
+```
+
+If any operation fails, the entire transaction is rolled back.
+
+### Error Scenarios
+
+| Error | Handling | Recovery |
+|-------|----------|----------|
+| Database connection failure | Transaction rollback | Workflow retry |
+| S3 fetch failure | Activity retry | Exponential backoff |
+| Duplicate settlement | Cancel existing, create new | Idempotent operation |
+| Invalid transaction data | Skip invalid, log error | Continue processing |
+| Lock acquisition failure | Return error | Workflow retry with backoff |
+
+### Retry Configuration
+
+```go
+// Temporal activity retry policy
+RetryPolicy: &temporal.RetryPolicy{
+    InitialInterval:    time.Second,
+    BackoffCoefficient: 2.0,
+    MaximumInterval:    time.Minute,
+    MaximumAttempts:    3,
+}
+```
+
+---
+
+## Key Code References
+
+| Component | File Path | Line Number |
+|-----------|-----------|-------------|
+| Settlement Entity | `internal/settlement/model.go` | 1-50 |
+| Transaction Entity | `internal/settlement/model.go` | 52-70 |
+| Settlement Status Enum | `internal/settlement/model.go` | 58-72 |
+| NewSettlementEntity | `internal/settlement/helper.go` | 105-122 |
+| classifyAmounts | `internal/settlement/helper.go` | 35-69 |
+| getMoneyAsAddableNumber | `internal/settlement/helper.go` | 71-85 |
+| processTransactions | `internal/settlement/core.go` | 222-301 |
+| createInitiatedSettlement | `internal/settlement/core.go` | 615-628 |
+| CreateSettlement (service) | `internal/settlement/service.go` | 276-281 |
+| processBatch | `internal/settlement/service.go` | 439-456 |
+| create (repository) | `internal/settlement/repo.go` | 208-210 |
+| createTransactions | `internal/settlement/repo.go` | 252-254 |
+| AmountBreakup | `internal/settlement/dto.go` | 134-174 |
+| createSettlementEvent | `internal/settlement/workflow.go` | 52-72 |
+| mapToSettlementEvent | `internal/settlement/mapper.go` | 89-112 |
+| Event Types | `internal/event/types.go` | 1-50 |
+| Init Settlement Workflow | `internal/settlement/init_settlement.go` | 122-143 |
+
+---
+
+## Related Documentation
+
+- [Main Settlement Flow](./settlement-flows.md#main-settlement-flow)
+- [Process Created Settlement Sub-workflow](./settlement-flows.md#step-3-process-created-settlement-sub-workflow)
+- [Settlement States](./settlement-flows.md#settlement-states)
+- [Events](./settlement-flows.md#events)

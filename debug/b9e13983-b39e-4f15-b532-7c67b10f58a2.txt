@@ -1,0 +1,210 @@
+2026-01-28T09:59:59.485Z [DEBUG] Full reset (shrink->below): prevHeight=59, nextHeight=55, viewport=58
+2026-01-28T09:59:59.918Z [DEBUG] Started caffeinate to prevent sleep
+2026-01-28T09:59:59.919Z [DEBUG] Getting matching hook commands for SessionEnd with query: clear
+2026-01-28T09:59:59.919Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:59:59.919Z [DEBUG] Matched 0 unique hooks for query "clear" (0 before deduplication)
+2026-01-28T09:59:59.919Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-28T09:59:59.920Z [DEBUG] Cleared all session hooks for session 8cef0517-57e8-4827-a669-50f44d046800
+2026-01-28T09:59:59.921Z [DEBUG] Getting matching hook commands for SessionStart with query: clear
+2026-01-28T09:59:59.921Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:59:59.921Z [DEBUG] Matched 0 unique hooks for query "clear" (0 before deduplication)
+2026-01-28T09:59:59.931Z [DEBUG] FileHistory: Added snapshot for be16615f-8f1c-48f5-80bd-ae7c73ca2b9d, tracking 0 files
+2026-01-28T09:59:59.971Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-28T09:59:59.971Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-28T09:59:59.971Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at LGA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1609:27769)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async _ (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4254:16162)
+2026-01-28T09:59:59.972Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at LGA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1609:27769)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Z (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4254:16678)
+2026-01-28T09:59:59.972Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-01-28T09:59:59.972Z [DEBUG] [claudeai-mcp] Gate returned: false
+2026-01-28T09:59:59.972Z [DEBUG] [claudeai-mcp] Disabled via gate
+2026-01-28T09:59:59.986Z [DEBUG] Stopped caffeinate, allowing sleep
+2026-01-28T10:03:38.322Z [DEBUG] Metrics opt-out check failed: No API key available
+2026-01-28T10:03:38.323Z [DEBUG] Metrics check failed, defaulting to disabled
+2026-01-28T10:03:38.323Z [DEBUG] Metrics export disabled by organization setting
+2026-01-28T10:20:22.130Z [DEBUG] High write ratio: blit=0, write=1028 (100.0% writes), screen=22x121
+2026-01-28T10:20:22.136Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769595622136
+2026-01-28T10:20:22.136Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T10:20:22.137Z [DEBUG] Temp file written successfully, size: 39687 bytes
+2026-01-28T10:20:22.137Z [DEBUG] Applied original permissions to temp file
+2026-01-28T10:20:22.137Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769595622136 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T10:20:22.137Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T10:20:22.197Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769595622197
+2026-01-28T10:20:22.197Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T10:20:22.197Z [DEBUG] Temp file written successfully, size: 39687 bytes
+2026-01-28T10:20:22.197Z [DEBUG] Applied original permissions to temp file
+2026-01-28T10:20:22.197Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769595622197 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T10:20:22.197Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T14:14:49.789Z [DEBUG] npm view failed with code 1
+2026-01-28T14:14:49.793Z [DEBUG] npm stderr: (empty)
+2026-01-28T14:48:44.938Z [DEBUG] npm view failed with code 1
+2026-01-28T14:48:44.938Z [DEBUG] npm stderr: (empty)
+2026-01-28T15:20:01.932Z [DEBUG] npm view failed with code 1
+2026-01-28T15:20:01.932Z [DEBUG] npm stderr: (empty)
+2026-01-28T15:51:38.050Z [DEBUG] npm view failed with code 1
+2026-01-28T15:51:38.051Z [DEBUG] npm stderr: (empty)
+2026-01-28T16:25:12.939Z [DEBUG] npm view failed with code 1
+2026-01-28T16:25:12.939Z [DEBUG] npm stderr: (empty)
+2026-01-29T01:30:04.802Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T01:30:04.802Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T01:30:09.432Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769650209432
+2026-01-29T01:30:09.433Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T01:30:09.433Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T01:30:09.433Z [DEBUG] Applied original permissions to temp file
+2026-01-29T01:30:09.433Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769650209432 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T01:30:09.434Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T02:06:43.959Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T02:06:43.959Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T02:06:47.994Z [ERROR] Error: Error: Failed to install Claude CLI package: npm error code ENOENT
+npm error syscall mkdir
+npm error path /Users/kiranbiliyawala/.claude/local/node_modules/@img/sharp-linux-arm64
+npm error errno -2
+npm error enoent ENOENT: no such file or directory, mkdir '/Users/kiranbiliyawala/.claude/local/node_modules/@img/sharp-linux-arm64'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.npm/_logs/2026-01-29T02_06_45_524Z-debug-0.log
+    at sjA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2280:685)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:6139:15080)
+2026-01-29T02:39:08.650Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T02:39:08.651Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T02:39:12.705Z [ERROR] Error: Error: Failed to install Claude CLI package: npm error code ENOENT
+npm error syscall mkdir
+npm error path /Users/kiranbiliyawala/.claude/local/node_modules/@img/sharp-linux-arm
+npm error errno -2
+npm error enoent ENOENT: no such file or directory, mkdir '/Users/kiranbiliyawala/.claude/local/node_modules/@img/sharp-linux-arm'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.npm/_logs/2026-01-29T02_39_10_051Z-debug-0.log
+    at sjA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2280:685)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:6139:15080)
+2026-01-29T03:23:55.819Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T03:23:55.820Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T03:24:00.529Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769657040529
+2026-01-29T03:24:00.529Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T03:24:00.529Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T03:24:00.529Z [DEBUG] Applied original permissions to temp file
+2026-01-29T03:24:00.529Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769657040529 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T03:24:00.530Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T04:08:43.844Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T04:08:43.844Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T04:08:47.475Z [ERROR] Failed to save config with lock: Error: Lock file is already being held
+2026-01-29T04:08:47.481Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769659727481
+2026-01-29T04:08:47.481Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T04:08:47.482Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T04:08:47.488Z [DEBUG] Applied original permissions to temp file
+2026-01-29T04:08:47.488Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769659727481 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T04:08:47.489Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T04:43:29.195Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T04:43:29.195Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T04:43:33.257Z [ERROR] Failed to save config with lock: Error: Lock file is already being held
+2026-01-29T04:43:33.260Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769661813260
+2026-01-29T04:43:33.260Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T04:43:33.261Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T04:43:33.261Z [DEBUG] Applied original permissions to temp file
+2026-01-29T04:43:33.261Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769661813260 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T04:43:33.262Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T05:20:04.001Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T05:20:04.001Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T05:20:07.963Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769664007963
+2026-01-29T05:20:07.963Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T05:20:07.963Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T05:20:07.964Z [DEBUG] Applied original permissions to temp file
+2026-01-29T05:20:07.964Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769664007963 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T05:20:07.965Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T05:50:04.092Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T05:50:04.093Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T05:50:08.586Z [ERROR] Failed to save config with lock: Error: Lock file is already being held
+2026-01-29T05:50:08.601Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769665808601
+2026-01-29T05:50:08.601Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T05:50:08.602Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T05:50:08.602Z [DEBUG] Applied original permissions to temp file
+2026-01-29T05:50:08.602Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769665808601 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T05:50:08.613Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T06:22:31.082Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T06:22:31.082Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T06:22:35.000Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769667755000
+2026-01-29T06:22:35.000Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T06:22:35.001Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T06:22:35.001Z [DEBUG] Applied original permissions to temp file
+2026-01-29T06:22:35.001Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769667755000 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T06:22:35.001Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T06:55:31.136Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T06:55:31.137Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T06:55:35.534Z [ERROR] Failed to save config with lock: Error: Lock file is already being held
+2026-01-29T06:55:35.536Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769669735536
+2026-01-29T06:55:35.536Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T06:55:35.537Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T06:55:35.537Z [DEBUG] Applied original permissions to temp file
+2026-01-29T06:55:35.537Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769669735536 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T06:55:35.538Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T07:30:04.123Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T07:30:04.123Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T07:30:07.803Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769671807803
+2026-01-29T07:30:07.803Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T07:30:07.804Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T07:30:07.804Z [DEBUG] Applied original permissions to temp file
+2026-01-29T07:30:07.804Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769671807803 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T07:30:07.805Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T08:12:23.095Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T08:12:23.095Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T08:12:28.051Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769674348051
+2026-01-29T08:12:28.051Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T08:12:28.051Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T08:12:28.053Z [DEBUG] Applied original permissions to temp file
+2026-01-29T08:12:28.053Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769674348051 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T08:12:28.053Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T08:42:20.438Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T08:42:20.438Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T08:42:21.517Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769676141517
+2026-01-29T08:42:21.517Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T08:42:21.517Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T08:42:21.517Z [DEBUG] Applied original permissions to temp file
+2026-01-29T08:42:21.517Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769676141517 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T08:42:21.517Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T09:12:20.717Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T09:12:20.717Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T09:12:22.193Z [ERROR] Failed to save config with lock: Error: Lock file is already being held
+2026-01-29T09:12:22.199Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769677942199
+2026-01-29T09:12:22.199Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T09:12:22.199Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T09:12:22.199Z [DEBUG] Applied original permissions to temp file
+2026-01-29T09:12:22.199Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769677942199 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T09:12:22.199Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T09:44:33.544Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T09:44:33.544Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T09:44:37.257Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769679877257
+2026-01-29T09:44:37.257Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T09:44:37.258Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T09:44:37.258Z [DEBUG] Applied original permissions to temp file
+2026-01-29T09:44:37.258Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769679877257 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T09:44:37.260Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T10:14:31.624Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-01-29T10:14:31.624Z [DEBUG] AutoUpdater: Using local update method
+2026-01-29T10:14:32.777Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769681672777
+2026-01-29T10:14:32.777Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T10:14:32.777Z [DEBUG] Temp file written successfully, size: 40776 bytes
+2026-01-29T10:14:32.777Z [DEBUG] Applied original permissions to temp file
+2026-01-29T10:14:32.777Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769681672777 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T10:14:32.777Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T10:40:26.810Z [DEBUG] High write ratio: blit=0, write=1055 (100.0% writes), screen=22x121
+2026-01-29T10:40:26.835Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769683226835
+2026-01-29T10:40:26.835Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T10:40:26.837Z [DEBUG] Temp file written successfully, size: 41053 bytes
+2026-01-29T10:40:26.837Z [DEBUG] Applied original permissions to temp file
+2026-01-29T10:40:26.837Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769683226835 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T10:40:26.837Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T10:40:26.903Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769683226903
+2026-01-29T10:40:26.903Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T10:40:26.903Z [DEBUG] Temp file written successfully, size: 41053 bytes
+2026-01-29T10:40:26.903Z [DEBUG] Applied original permissions to temp file
+2026-01-29T10:40:26.903Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769683226903 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T10:40:26.903Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T10:40:35.307Z [DEBUG] Getting matching hook commands for SessionEnd with query: other
+2026-01-29T10:40:35.307Z [DEBUG] Found 0 hook matchers in settings
+2026-01-29T10:40:35.308Z [DEBUG] Matched 0 unique hooks for query "other" (0 before deduplication)

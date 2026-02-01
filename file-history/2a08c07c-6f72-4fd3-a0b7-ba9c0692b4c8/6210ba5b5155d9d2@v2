@@ -1,0 +1,287 @@
+# Pre-Processing Validations Flow - Detailed Explanation
+
+## Overview
+
+Pre-Processing Validations is **Step 1** in the Main Settlement Flow. These validations occur **before** the settlement workflow is initiated to ensure the settlement operation is safe to proceed. All validations happen in the `settleViaWorkflowPreProcess` method in `/internal/settlement/service.go`.
+
+---
+
+## Entry Point
+
+The flow begins when `SettleViaWorkflow` API is called:
+
+**File:** `/internal/settlement/server.go` (Lines 60-96)
+
+```
+SettleViaWorkflow API
+       │
+       ▼
+validateSettleViaWorkflowRequest()  ──► Basic request validation (scheduleId, dbkAccountNumber)
+       │
+       ▼
+settleViaWorkflowPreProcess()  ──► Pre-Processing Validations (5 checks)
+       │
+       ▼
+ExecuteWorkflow()  ──► Start settlement workflow
+```
+
+---
+
+## The 5 Pre-Processing Validations
+
+### 1. Lock Check
+**Purpose:** Ensures no settlement operation is already in progress for the partner.
+
+**File:** `/internal/settlement/service.go` (Lines 345-357)
+
+**Logic:**
+- Calls `operationlock.IsLocked()` with partner ID
+- If locked, returns error: `"settlement operation is in progress for the partner"`
+- Prevents concurrent settlement operations on the same partner
+
+**Lock ID Format:** `settlement:{partnerID}`
+
+---
+
+### 2. Settlement Allowed Check (Holiday Check)
+**Purpose:** Verifies settlement is allowed on the current day (checks bank holidays).
+
+**File:** `/internal/settlement/service.go` (Lines 359-373, 415-427)
+
+**Logic:**
+1. Calls `calendar.IsBankHoliday()` with current date (IST timezone)
+2. If it's a bank holiday:
+   - Fetches `CONFIG_TYPE_ALLOW_ON_BANK_HOLIDAY` config for the partner
+   - If config is `false` or not set → returns error: `"settlement is not allowed today"`
+   - If config is `true` → allows settlement to proceed
+3. If not a holiday → allows settlement to proceed
+
+**External Dependency:** Calendar Service
+
+---
+
+### 3. Mode Enabled Check
+**Purpose:** Verifies that settlement mode is enabled for the partner.
+
+**File:** `/internal/settlement/service.go` (Lines 375-391)
+
+**Logic:**
+- Fetches `CONFIG_TYPE_MODE` config for the partner
+- Checks `modeConfig.Enabled` field
+- If `false` → returns error: `"settlement is not enabled for this partner"`
+- Must be explicitly enabled for settlements to work
+
+**Config Location:** `/internal/config/service.go` (Lines 136-149)
+
+---
+
+### 4. On-Hold Check
+**Purpose:** Verifies that settlement for the partner is not on hold.
+
+**File:** `/internal/settlement/service.go` (Lines 393-408)
+
+**Logic:**
+- Fetches `CONFIG_TYPE_ON_HOLD_FLAG` config for the partner
+- If config not found → defaults to `false` (not on hold)
+- If `onHold = true` → returns error: `"settlement for this partner is on hold"`
+- If `onHold = false` → allows settlement to proceed
+
+**Config Location:** `/internal/config/service.go` (Lines 161-173)
+
+---
+
+### 5. Request Validation
+**Purpose:** Validates the incoming API request structure.
+
+**File:** `/internal/settlement/validator.go` (Lines 210-223)
+
+**Validates:**
+- `ScheduleId` - Required, must match `ScheduleIDRegex`
+- `DbkAccountNumber` - Required, must match `DBKAccountNumberRegex`, length constraints
+
+---
+
+## Sequence Diagram
+
+```
+┌──────────┐     ┌──────────────┐     ┌─────────────┐     ┌─────────────┐     ┌──────────────┐
+│  Client  │     │Settlement    │     │Operation    │     │Calendar     │     │Config        │
+│          │     │Server        │     │Lock Service │     │Service      │     │Service       │
+└────┬─────┘     └──────┬───────┘     └──────┬──────┘     └──────┬──────┘     └──────┬───────┘
+     │                  │                    │                   │                   │
+     │ SettleViaWorkflow│                    │                   │                   │
+     │─────────────────>│                    │                   │                   │
+     │                  │                    │                   │                   │
+     │                  │ validateRequest()  │                   │                   │
+     │                  │────────┐           │                   │                   │
+     │                  │        │           │                   │                   │
+     │                  │<───────┘           │                   │                   │
+     │                  │                    │                   │                   │
+     │                  │ ┌──────────────────────────────────────────────────────────┐
+     │                  │ │           settleViaWorkflowPreProcess()                  │
+     │                  │ └──────────────────────────────────────────────────────────┘
+     │                  │                    │                   │                   │
+     │                  │ 1. IsLocked()      │                   │                   │
+     │                  │───────────────────>│                   │                   │
+     │                  │                    │                   │                   │
+     │                  │    locked=false    │                   │                   │
+     │                  │<───────────────────│                   │                   │
+     │                  │                    │                   │                   │
+     │                  │ 2. IsBankHoliday() │                   │                   │
+     │                  │───────────────────────────────────────>│                   │
+     │                  │                    │                   │                   │
+     │                  │    holiday=true/false                  │                   │
+     │                  │<───────────────────────────────────────│                   │
+     │                  │                    │                   │                   │
+     │                  │ 2a. GetAllowOnBankHolidayConfig() (if holiday=true)        │
+     │                  │──────────────────────────────────────────────────────────> │
+     │                  │                    │                   │                   │
+     │                  │    allowOnHoliday=true/false                               │
+     │                  │<──────────────────────────────────────────────────────────│
+     │                  │                    │                   │                   │
+     │                  │ 3. GetModeConfig() │                   │                   │
+     │                  │──────────────────────────────────────────────────────────> │
+     │                  │                    │                   │                   │
+     │                  │    modeConfig.Enabled=true/false                           │
+     │                  │<──────────────────────────────────────────────────────────│
+     │                  │                    │                   │                   │
+     │                  │ 4. GetOnHoldConfigElseDefault()        │                   │
+     │                  │──────────────────────────────────────────────────────────> │
+     │                  │                    │                   │                   │
+     │                  │    onHold=true/false                                       │
+     │                  │<──────────────────────────────────────────────────────────│
+     │                  │                    │                   │                   │
+     │                  │ ┌──────────────────────────────────────────────────────────┐
+     │                  │ │         All validations passed                           │
+     │                  │ └──────────────────────────────────────────────────────────┘
+     │                  │                    │                   │                   │
+     │                  │ ExecuteWorkflow()  │                   │                   │
+     │                  │────────┐           │                   │                   │
+     │                  │        │ Start     │                   │                   │
+     │                  │<───────┘ workflow  │                   │                   │
+     │                  │                    │                   │                   │
+     │  WorkflowId,     │                    │                   │                   │
+     │  WorkflowRunId   │                    │                   │                   │
+     │<─────────────────│                    │                   │                   │
+     │                  │                    │                   │                   │
+```
+
+---
+
+## Validation Flow Decision Tree
+
+```
+                         ┌─────────────────────┐
+                         │  SettleViaWorkflow  │
+                         │      Request        │
+                         └──────────┬──────────┘
+                                    │
+                         ┌──────────▼──────────┐
+                         │ Validate Request    │
+                         │ (ScheduleId, DBK#)  │
+                         └──────────┬──────────┘
+                                    │
+                              Valid? ├───No───► Return Validation Error
+                                    │
+                                   Yes
+                                    │
+                         ┌──────────▼──────────┐
+                         │  1. Lock Check      │
+                         │    IsLocked()?      │
+                         └──────────┬──────────┘
+                                    │
+                             Locked? ├───Yes──► Return "operation in progress"
+                                    │
+                                   No
+                                    │
+                         ┌──────────▼──────────┐
+                         │  2. Holiday Check   │
+                         │  IsBankHoliday()?   │
+                         └──────────┬──────────┘
+                                    │
+                        ┌───────────┴───────────┐
+                       Yes                      No
+                        │                       │
+            ┌───────────▼───────────┐           │
+            │ AllowOnBankHoliday    │           │
+            │     Config?           │           │
+            └───────────┬───────────┘           │
+                        │                       │
+              ┌─────────┴─────────┐             │
+             No                  Yes            │
+              │                   │             │
+              ▼                   └─────────────┤
+      Return "not                               │
+      allowed today"                            │
+                                                │
+                         ┌──────────────────────┘
+                         │
+                         ▼
+                ┌────────────────────┐
+                │  3. Mode Check     │
+                │ ModeConfig.Enabled?│
+                └────────┬───────────┘
+                         │
+                Enabled? ├───No───► Return "not enabled for partner"
+                         │
+                        Yes
+                         │
+                ┌────────▼───────────┐
+                │  4. On-Hold Check  │
+                │    OnHold flag?    │
+                └────────┬───────────┘
+                         │
+                OnHold?  ├───Yes──► Return "partner is on hold"
+                         │
+                        No
+                         │
+                ┌────────▼───────────┐
+                │  All Validations   │
+                │      Passed        │
+                └────────┬───────────┘
+                         │
+                         ▼
+                ┌────────────────────┐
+                │  Execute Workflow  │
+                │  (Start Settlement)│
+                └────────────────────┘
+```
+
+---
+
+## Summary Table
+
+| # | Validation | Service | Method | Config Type | Default | Error Message |
+|---|------------|---------|--------|-------------|---------|---------------|
+| 1 | Lock Check | OperationLock | `IsLocked()` | N/A | Blocks if locked | "settlement operation is in progress for the partner" |
+| 2 | Holiday Check | Calendar + Config | `IsBankHoliday()` + `GetAllowOnBankHolidayConfigElseDefault()` | `CONFIG_TYPE_ALLOW_ON_BANK_HOLIDAY` | false (block on holidays) | "settlement is not allowed today" |
+| 3 | Mode Enabled | Config | `GetModeConfig()` | `CONFIG_TYPE_MODE` | Must be enabled | "settlement is not enabled for this partner" |
+| 4 | On-Hold | Config | `GetOnHoldConfigElseDefault()` | `CONFIG_TYPE_ON_HOLD_FLAG` | false (not on hold) | "settlement for this partner is on hold" |
+
+---
+
+## Key Files
+
+| File | Purpose |
+|------|---------|
+| `/internal/settlement/server.go` | API entry point (`SettleViaWorkflow`) |
+| `/internal/settlement/service.go` | Pre-processing logic (`settleViaWorkflowPreProcess`, `isSettlementAllowed`) |
+| `/internal/settlement/validator.go` | Request validation |
+| `/internal/config/service.go` | Config service for mode, holiday, on-hold checks |
+| `/internal/operationlock/service.go` | Operation lock service |
+
+---
+
+## Error Response Format
+
+All validation failures return the same response structure:
+
+```go
+&settlementpb.SettleViaWorkflowResponse{
+    Status: &bankstack_commons.ResponseStatus{
+        Success:   false,
+        Message:   map[string]string{"reason": "<error message>"},
+        ErrorType: "NOT_ALLOWED",
+    },
+}
+```

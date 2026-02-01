@@ -1,0 +1,99 @@
+# Mandate Service PR Reviews - Archana Badagi
+
+## PR #110 - UPI Mandate Revoke Flow Support
+**Merged:** July 29, 2025 | **Size:** +143/-25 | **Files:** 16
+
+### Summary
+Comprehensive implementation of UPI mandate revoke flow with Axis integration.
+
+### Key Changes
+- Added web update mandate API support for revoke operations
+- Implemented `syncMandateByUniqueReferenceId()` for UMN-based lookup
+- Added backfill endpoint for unique reference ID migration
+- Extended webhook handling for `MERCHANT_INCOMING_UPDATE_MANDATE`
+- Added `status` field to Mandate event mapper
+
+### Implementation Details
+- New revoke flow using `WebUpdateMandateRequest` instead of `UpdateMandateRequest`
+- Proper transaction prefix handling with fallback to default
+- UUID without hyphen generation utility
+
+### PR Documentation
+Excellent deployment checklist:
+- DB ticket for unique_reference_id column size increase
+- Index creation ticket
+- Axis Client release version
+- Open API PR
+
+### Positive Aspects
+- Complete feature implementation
+- Proper deployment planning
+- Good error handling
+- Status mapping for various gateway codes
+
+### Rating: 4.5/5
+---
+
+## PR #112 - UPI Mandate Pause Webhook Integration
+**Merged:** August 5, 2025 | **Size:** +256/-8 | **Files:** 4
+
+### Summary
+Added support for UPI mandate pause webhook consumption.
+
+### Key Changes
+- Extended webhook handling for `MERCHANT_INCOMING_PAUSE_MANDATE`
+- Refactored status mapping method to accept current status parameter
+- Added PAUSED + "00" -> CONFIRMED special case logic
+- Comprehensive parameterized test suite (241 lines)
+
+### Code Quality
+Clean status mapping with special case handling:
+```java
+private MandateStatus mapToMandateStatusForSyncAPIData(String gatewayResponseCode, MandateStatus currentStatus) {
+    if (Objects.isNull(gatewayResponseCode)) {
+        return currentStatus;
+    }
+    return switch (gatewayResponseCode) {
+        case "00" -> MandateStatus.PAUSED.equals(currentStatus)
+                ? MandateStatus.CONFIRMED
+                : MandateStatus.AUTHENTICATION_SUCCESSFUL;
+        // ...
+    };
+}
+```
+
+### Test Quality
+Excellent parameterized tests covering:
+- All gateway code mappings
+- PAUSED status special handling
+- Edge cases (spaces, lowercase, null)
+
+### Rating: 4.5/5
+---
+
+## PR #115 - Duplicate Axis Webhook Fix
+**Merged:** August 11, 2025 | **Size:** +25/-11 | **Files:** 8
+
+### Summary
+Fixed duplicate webhook handling and improved logging for mandate state changes.
+
+### Key Changes
+- Extended ALLOWED_STATUS_FOR_CONFIRMED to include both PAUSED and CONFIRMED
+- Enhanced `logMandateStateChange()` to include mandate ID
+- Updated all callers to pass mandate ID for better debugging
+
+### Code Quality
+Improved logging utility:
+```java
+public static void logMandateStateChange(
+        String flow, String mandateId, MandateStatus prevStatus, MandateStatus newStatus) {
+    log.info("in {}, updating mandate {} status from {} to {}", flow, mandateId, prevStatus, newStatus);
+}
+```
+
+### Positive Aspects
+- Consistent logging across all state change flows
+- Better debugging capability
+- Handles edge case of already confirmed mandates
+
+### Rating: 4/5

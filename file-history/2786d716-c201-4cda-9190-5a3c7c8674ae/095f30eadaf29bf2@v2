@@ -1,0 +1,485 @@
+# Deep Study Guide: finhq-verse Repository
+
+A comprehensive study guide to master the finhq-verse monorepo - a microservices platform for financial operations.
+
+---
+
+## Executive Summary
+
+**finhq-verse** is a **Gradle + Nx managed Java/Spring monorepo** containing:
+- **6 microservices** for financial operations
+- **6 shared libraries** providing reusable infrastructure
+- **API-first design** with OpenAPI 3.0 specifications
+
+**Tech Stack:** Java 21, Spring Boot 3.5.0, MySQL 8.0, Gradle 8.4, Nx 21.0
+
+---
+
+## Study Path Overview
+
+| Phase | Topic | Estimated Depth |
+|-------|-------|-----------------|
+| 1 | Repository Architecture | Foundation |
+| 2 | Shared Libraries (Commons) | Core |
+| 3 | Entity & Repository Framework | Core |
+| 4 | Individual Services | Applied |
+| 5 | API & OpenAPI Patterns | Applied |
+| 6 | Infrastructure & DevOps | Advanced |
+| 7 | Testing Patterns | Advanced |
+
+---
+
+## Phase 1: Repository Architecture
+
+### 1.1 Monorepo Structure
+
+```
+finhq-verse/
+├── finhq-foundation/          # Core service (orgs, namespaces, partners)
+├── finhq-bookkeeping/         # Ledger & transaction service
+├── finhq-calendar/            # Events & scheduling service
+├── finhq-settlement/          # Settlement processing service
+├── finhq-configuration/       # Centralized config management
+├── finhq-consumer/            # Event consumer framework
+├── finhq-commons-java/        # Pure Java utilities
+│   ├── finhq-context/         # Thread-local context
+│   ├── finhq-errors/          # Error handling
+│   └── finhq-helpers/         # Utility functions
+├── finhq-commons-spring/      # Spring-integrated libraries
+│   ├── finhq-entity/          # Entity framework & ORM
+│   ├── finhq-spring/          # Web & middleware
+│   └── finhq-slt/             # System-level testing
+├── finhq-openapi/             # OpenAPI specifications (Node.js)
+└── finhq-openapi-java/        # Generated Java models
+```
+
+### 1.2 Service Dependencies
+
+```
+Foundation (core)
+    ↑
+    └── All other services depend on Foundation
+
+Bookkeeping, Calendar, Settlement, Configuration, Consumer
+    ↓
+    └── Share commons libraries
+```
+
+### 1.3 Port Allocation
+
+| Service | Port | Description |
+|---------|------|-------------|
+| Foundation | 7080 | Organizations, Namespaces, Partners |
+| Bookkeeping | 7081 | Accounts, Transactions, Ledger |
+| Consumer | 7082 | Event consumption framework |
+| Configuration | 7084 | Config management |
+| Calendar | 7085 | Events & scheduling |
+| Settlement | 7086 | Settlement processing |
+| OpenAPI | 7090 | API documentation (Node.js) |
+
+### 1.4 Key Files to Study First
+
+- `README_LLM.md` - Comprehensive development guide
+- `nx.json` - Monorepo configuration & dependencies
+- `docker-compose.yml` - Infrastructure stack definition
+- `Makefile` - Development commands
+
+---
+
+## Phase 2: Shared Libraries (finhq-commons-java)
+
+### 2.1 Context Management (`finhq-context`)
+
+**Purpose:** Thread-local context propagation for multi-tenancy
+
+**Key Classes:**
+- `Context.java` - Generic thread-local storage with inheritance
+- `Passport.java` - Immutable request context carrier
+- `PassportContext.java` - Convenience wrapper
+
+**Passport Fields:**
+```java
+- requestId      // Unique request identifier
+- mode           // LIVE or SANDBOX
+- orgId          // Organization tenant ID
+- namespaceId    // Namespace sub-tenant ID
+- partitionHintType/Value  // Data routing hints
+```
+
+**Study Path:**
+1. Read `/finhq-commons-java/finhq-context/src/main/java/io/finhq/commons/context/Context.java`
+2. Read `/finhq-commons-java/finhq-context/src/main/java/io/finhq/commons/context/Passport.java`
+
+### 2.2 Error Handling (`finhq-errors`)
+
+**Purpose:** Standardized exception handling across all services
+
+**Key Classes:**
+- `ApplicationException.java` - Primary exception type
+- `ErrorDescriptor` - Interface for error definitions
+- `GenericErrorCode` - Common error codes enum
+- `ErrorTag` - Error categorization
+
+**Common Error Codes:**
+| Code | HTTP Status | Usage |
+|------|-------------|-------|
+| BAD_REQUEST | 400 | Invalid input |
+| NOT_FOUND | 404 | Resource missing |
+| CONFLICT | 409 | Duplicate/conflict |
+| UNAUTHORIZED | 401 | Auth required |
+| ACCESS_DENIED | 403 | Permission denied |
+| UNEXPECTED | 500 | Server error |
+
+**Pattern:**
+```java
+throw ApplicationException.from(GenericErrorCode.NOT_FOUND)
+    .withDetail("id", entityId)
+    .build();
+```
+
+### 2.3 Helpers (`finhq-helpers`)
+
+**Utilities:**
+- `UlidHelper.generate()` - Time-ordered unique IDs (better than UUID for DB)
+- `DateHelper` - Date formatting, parsing, epoch conversions
+- `StringHelper` - String manipulation
+- `MapHelper.mapOf()` - Quick map creation
+
+---
+
+## Phase 3: Entity & Repository Framework (finhq-entity)
+
+### 3.1 Entity Hierarchy
+
+```
+AbstractEntity
+├── id: Long (DB primary key)
+├── externalId: String (ULID, API reference)
+├── version: Integer (optimistic locking)
+├── createdAt/updatedAt/modifiedAt: LocalDateTime
+├── createdBy/updatedBy: String
+│
+├── AbstractOrgScopedEntity
+│   └── orgId: String (tenant isolation)
+│
+└── AbstractNamespaceScopedEntity
+    └── namespaceId: String (sub-tenant isolation)
+```
+
+**JPA Callbacks:**
+- `@PrePersist` - Auto-generates externalId, sets timestamps
+- `@PreUpdate` - Updates timestamps
+- `@Audited` - Hibernate Envers tracking
+
+### 3.2 Repository Pattern
+
+**Repository<T> Interface Core Methods:**
+```java
+// Scoped queries (all queries filtered by tenant)
+Optional<T> findOne(RepositoryScope scope, Specification<T> spec);
+T findByExternalIdOrFail(RepositoryScope scope, String id);
+
+// CRUD
+<S extends T> S create(RepositoryScope scope, S entity);
+T update(RepositoryScope scope, T entity, EntityUpdates<T> updates);
+void delete(RepositoryScope scope, T entity);
+
+// Pagination (cursor-based)
+CursorPage<T> findAll(RepositoryScope scope, Specification<T> spec, CursorPageRequest req);
+
+// Audit
+T findRevision(RepositoryScope scope, String externalId, int revisionId);
+```
+
+**RepositoryScope:**
+```java
+RepositoryScope.create()  // From current PassportContext
+RepositoryScope.empty()   // System-level operations
+```
+
+### 3.3 Cursor-Based Pagination
+
+**Why Cursor vs Offset:**
+- Stable results (inserts don't shift pages)
+- Better performance on large datasets
+- Bidirectional navigation
+
+**Usage:**
+```java
+CursorPageRequest.first(20);  // First page, 20 items
+CursorPageRequest.after(cursor, 20);  // After specific item
+```
+
+### 3.4 Dual DataSource Architecture
+
+```
+DataSourceRouter
+├── Primary DataSource (production)
+└── Sandbox DataSource (testing)
+    └── Routes based on Passport.mode (LIVE/SANDBOX)
+```
+
+---
+
+## Phase 4: Individual Services Deep Dive
+
+### 4.1 Foundation Service (Study First)
+
+**Purpose:** Core tenant management - all other services depend on this
+
+**Domain Entities:**
+- `Organization` - Top-level tenant
+- `Namespace` - Sub-tenant isolation within org
+- `Partner` - Business partners
+- `Module` - Module registrations
+
+**Architecture Pattern:**
+```
+Controller (OpenAPI generated)
+    ↓
+Service (extends AbstractService)
+    ↓
+Validator (EntityRequestValidator)
+    ↓
+Repository (extends Repository<T>)
+    ↓
+Entity (extends AbstractEntity)
+```
+
+**Key Files:**
+- `/finhq-foundation/src/main/java/io/finhq/foundation/organization/`
+- `/finhq-foundation/src/main/resources/db/migration/` (Flyway)
+
+### 4.2 Bookkeeping Service
+
+**Purpose:** Double-entry ledger system
+
+**Domain Entities:**
+- `BookkeepingAccount` - Multi-currency accounts with normal balance
+- `BookkeepingTransaction` - Transaction posts (partitioned quarterly)
+- `BookkeepingTransactionLeg` - Multi-leg transaction support
+- `BookkeepingSpec` - Versioned schema definitions
+
+**Special Features:**
+- Quarterly table partitioning for scalability
+- Hibernate Envers for audit trail
+- Multi-leg transaction support
+
+### 4.3 Calendar Service
+
+**Purpose:** Time-bound rules and event management
+
+**Domain Entities:**
+- `Calendar` - Calendar definitions
+- `CalendarEvent` - Events (HOLIDAY, BLACKOUT, MAINTENANCE, CUSTOM)
+- `CalendarEventType` - Event type templates
+
+**Features:**
+- Overlap validation
+- Multiple calendar support
+
+### 4.4 Configuration Service
+
+**Purpose:** Centralized configuration with schema validation
+
+**Features:**
+- JSON Schema validation
+- Profile-based resolution
+- Target-specific overrides
+- Calls Foundation service for org context
+
+### 4.5 Consumer Service
+
+**Purpose:** Event consumption framework
+
+**Features:**
+- Kafka support (optional)
+- AWS SQS support
+- Resilience4j (retry, circuit breaker)
+- WebFlux for reactive processing
+- Scheduled task execution
+
+### 4.6 Settlement Service
+
+**Purpose:** Settlement processing
+
+**Features:**
+- Settlement configurations
+- Transaction leg assignment
+- Payout processing
+
+---
+
+## Phase 5: API & OpenAPI Patterns
+
+### 5.1 API-First Development
+
+**Flow:**
+```
+OpenAPI YAML (finhq-openapi)
+    ↓ (code generation)
+Spring Controllers + Models (finhq-openapi-java)
+    ↓ (implements)
+Service Delegates (in each service)
+```
+
+**Location:** `/finhq-openapi/specs/`
+- `foundation.yaml`
+- `bookkeeping.yaml`
+- `calendar.yaml`
+- `configuration.yaml`
+- `consumer.yaml`
+- `settlement.yaml`
+- `shared.yaml` (common definitions)
+
+### 5.2 Request Headers
+
+```
+X-Finhq-Mode: LIVE|SANDBOX
+X-Finhq-Org-Id: <org-external-id>
+X-Finhq-Namespace-Id: <namespace-external-id>
+X-Finhq-Request-Id: <correlation-id>
+X-Finhq-Partition-Hint-Type: <partition-type>
+X-Finhq-Partition-Hint-Value: <partition-value>
+```
+
+### 5.3 Error Response Format
+
+```json
+{
+  "code": "NOT_FOUND",
+  "message": "Resource not found",
+  "details": {
+    "id": "01H1234..."
+  }
+}
+```
+
+---
+
+## Phase 6: Infrastructure & DevOps
+
+### 6.1 Docker Compose Stack
+
+| Service | Port | Purpose |
+|---------|------|---------|
+| MySQL 8.0 | 3306 | Primary database |
+| Redis 7.2 | 6379 | Caching |
+| Temporal | 8080 | Workflow orchestration |
+| Jaeger | 16686 | Distributed tracing |
+
+### 6.2 Development Commands
+
+```bash
+make install    # Setup Mac dependencies
+make up         # Start Docker stack
+make refresh    # Build affected code
+make restart    # Rebuild and restart
+```
+
+### 6.3 Nx Commands
+
+```bash
+npx nx build finhq-foundation    # Build specific service
+npx nx test finhq-foundation     # Run tests
+npx nx serve finhq-foundation    # Start service
+npx nx graph                      # Visualize dependencies
+npx nx affected --target=build   # Build only changed
+```
+
+### 6.4 Observability
+
+- **Metrics:** Prometheus (Micrometer)
+- **Tracing:** OpenTelemetry → Jaeger
+- **Logging:** Logstash JSON encoder
+- **Health:** Spring Boot Actuator
+
+---
+
+## Phase 7: Testing Patterns
+
+### 7.1 Test Infrastructure (`finhq-slt`)
+
+- `MysqlTestContainer` - Docker MySQL for integration tests
+- `FinhqMockMvc` - MockMvc with passport headers
+- `FakerConfiguration` - DataFaker for test data
+
+### 7.2 Test Style: Given-When-Then
+
+```java
+@Test
+void shouldCreateOrganization() {
+    // Given
+    CreateOrganizationRequest request = ...
+
+    // When
+    Organization result = service.createOrganization(request);
+
+    // Then
+    assertThat(result.getName()).isEqualTo(expected);
+}
+```
+
+---
+
+## Recommended Study Order
+
+### Week 1: Foundation
+1. [ ] Read `README_LLM.md` thoroughly
+2. [ ] Understand `nx.json` and monorepo structure
+3. [ ] Study `finhq-context` (Passport, Context)
+4. [ ] Study `finhq-errors` (ApplicationException, ErrorDescriptor)
+
+### Week 2: Entity Framework
+1. [ ] Study `AbstractEntity` and entity hierarchy
+2. [ ] Understand `Repository` interface and patterns
+3. [ ] Learn cursor-based pagination
+4. [ ] Study dual DataSource routing
+
+### Week 3: Foundation Service
+1. [ ] Study Organization entity and service
+2. [ ] Understand the layered architecture
+3. [ ] Review Flyway migrations
+4. [ ] Run and test the service locally
+
+### Week 4: Other Services
+1. [ ] Study Bookkeeping service (most complex)
+2. [ ] Review Calendar and Configuration services
+3. [ ] Understand Consumer service event patterns
+4. [ ] Review Settlement service
+
+### Week 5: Integration
+1. [ ] Study OpenAPI specifications
+2. [ ] Understand code generation flow
+3. [ ] Review testing patterns
+4. [ ] Set up local development environment
+
+---
+
+## Key Files Quick Reference
+
+| Category | File Path |
+|----------|-----------|
+| Dev Guide | `README_LLM.md` |
+| Monorepo Config | `nx.json` |
+| Docker Stack | `docker-compose.yml` |
+| Context | `finhq-commons-java/finhq-context/.../Context.java` |
+| Passport | `finhq-commons-java/finhq-context/.../Passport.java` |
+| Errors | `finhq-commons-java/finhq-errors/.../ApplicationException.java` |
+| Entity Base | `finhq-commons-spring/finhq-entity/.../AbstractEntity.java` |
+| Repository | `finhq-commons-spring/finhq-entity/.../Repository.java` |
+| Service Base | `finhq-commons-spring/finhq-entity/.../AbstractService.java` |
+| Exception Handler | `finhq-commons-spring/finhq-spring/.../GlobalExceptionHandler.java` |
+| Passport Filter | `finhq-commons-spring/finhq-spring/.../PassportContextFilter.java` |
+
+---
+
+## Architecture Principles
+
+1. **Multi-tenancy:** All data scoped by orgId + namespaceId
+2. **API-First:** OpenAPI specs drive code generation
+3. **Audit Trail:** Hibernate Envers on all entities
+4. **Cursor Pagination:** Stable, efficient pagination
+5. **Error Standardization:** ApplicationException everywhere
+6. **Context Propagation:** Passport through thread-locals
+7. **Dual Environments:** LIVE/SANDBOX data isolation

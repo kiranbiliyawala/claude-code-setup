@@ -1,0 +1,1081 @@
+# FinHQ Ecosystem Deep Study Guide
+
+## Table of Contents
+1. [Executive Summary](#executive-summary)
+2. [Repository Overview](#repository-overview)
+3. [Architecture Diagram](#architecture-diagram)
+4. [Inter-Service Communication](#inter-service-communication)
+5. [Sequence Diagrams](#sequence-diagrams)
+6. [Deep Dive: Each Repository](#deep-dive-each-repository)
+7. [Database Schemas](#database-schemas)
+8. [Kafka Topics & Events](#kafka-topics--events)
+9. [Key Concepts & Nuances](#key-concepts--nuances)
+10. [Common Patterns](#common-patterns)
+11. [Troubleshooting Guide](#troubleshooting-guide)
+
+---
+
+## Executive Summary
+
+The FinHQ ecosystem is a **microservices-based financial platform** that handles:
+- **Fee calculation and pricing** (Tyrion)
+- **Tenant-specific transaction processing** (finhq-tenant-integrations)
+- **Double-entry bookkeeping and ledger management** (Bookkeeping)
+- **Settlement orchestration and payouts** (Settlement)
+- **Event consumption and routing** (Settlement-Consumer)
+
+### Technology Stack Overview
+
+| Repository | Language | Framework | Database | Message Queue |
+|------------|----------|-----------|----------|---------------|
+| Bookkeeping | Java 11 | Guice/gRPC | MySQL | Kafka |
+| finhq-tenant-integrations | Java 21 | Spring Boot 3.x | MySQL (JPA) | Kafka (Eventi) |
+| Settlement | Go 1.23 | gRPC/WorkflowXYZ | MySQL | Kafka/SQS |
+| Settlement-Consumer | Go 1.23 | Gin/Bootstrap-Go | None (Consumer) | Kafka/SQS |
+| Tyrion | Go 1.23 | gRPC/Bootstrap-Go | MySQL | Kafka |
+
+---
+
+## Repository Overview
+
+### 1. Bookkeeping (Java)
+**Purpose**: Core general ledger and accounting system for double-entry bookkeeping.
+
+**Key Responsibilities**:
+- Maintain chart of accounts per product/client
+- Post ledger entries (debits/credits)
+- Compute and maintain account balances
+- Create daily closing balance snapshots
+- Handle transaction reversals
+
+### 2. finhq-tenant-integrations (Java)
+**Purpose**: Tenant-specific orchestration layer for transaction processing and fee calculation.
+
+**Key Responsibilities**:
+- Process incoming transactions and calculate fees
+- Manage tenant configurations
+- Publish transaction events to downstream systems
+- Handle transaction reversals and repairs
+- Route tenant-specific events to appropriate handlers
+
+### 3. Settlement (Go)
+**Purpose**: Settlement orchestration service for liability management between platform and partners.
+
+**Key Responsibilities**:
+- Query settleable transactions from Databricks/Batch Platform
+- Create settlement records and initiate payouts
+- Manage partner and tenant configurations
+- Coordinate async settlement workflows
+- Track payout status and references
+
+### 4. Settlement-Consumer (Go)
+**Purpose**: Multi-source event processor and message router for settlement operations.
+
+**Key Responsibilities**:
+- Consume Kafka events and SQS messages
+- Route events to appropriate handlers
+- Handle payout webhooks
+- Trigger settlement workflows
+- Update payout statuses
+
+### 5. Tyrion (Go)
+**Purpose**: Pricing and fee discovery engine for dynamic pricing calculations.
+
+**Key Responsibilities**:
+- Calculate itemized pricing with fees and discounts
+- Manage fee configurations and rules
+- Integrate with offer engines (Falcon)
+- Support multiple entity types (SKU, Cart, Checkout, Payment, etc.)
+- Provide admin APIs for pricing configuration
+
+---
+
+## Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                    CLIENT APPLICATIONS                                    │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                                            │
+                                            ▼
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                                     API GATEWAY                                          │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+                                            │
+         ┌──────────────────────────────────┼──────────────────────────────────┐
+         │                                  │                                  │
+         ▼                                  ▼                                  ▼
+┌─────────────────┐              ┌─────────────────┐              ┌─────────────────┐
+│     TYRION      │              │  TENANT-INTEG   │              │   SETTLEMENT    │
+│  (Fee Engine)   │              │  (Orchestrator) │              │   (Payouts)     │
+│     [Go]        │◄────────────►│    [Java]       │◄────────────►│     [Go]        │
+└────────┬────────┘              └────────┬────────┘              └────────┬────────┘
+         │                                │                                │
+         │                                │                                │
+         │                                ▼                                │
+         │                    ┌─────────────────────┐                     │
+         │                    │    BOOKKEEPING      │                     │
+         │                    │  (General Ledger)   │◄────────────────────┘
+         │                    │      [Java]         │
+         │                    └─────────────────────┘
+         │                                │
+         │                                ▼
+         │                    ┌─────────────────────┐
+         └───────────────────►│  SETTLEMENT-CONSUMER│
+                              │  (Event Processor)  │
+                              │       [Go]          │
+                              └─────────────────────┘
+                                        │
+                                        ▼
+                              ┌─────────────────────┐
+                              │    KAFKA / SQS      │
+                              │   (Event Stream)    │
+                              └─────────────────────┘
+                                        │
+         ┌──────────────────────────────┼──────────────────────────────────┐
+         │                              │                                  │
+         ▼                              ▼                                  ▼
+┌─────────────────┐          ┌─────────────────┐              ┌─────────────────┐
+│   DATABRICKS    │          │     GENIE       │              │    ANALYTICS    │
+│  (Data Source)  │          │   (Payouts)     │              │   (Reporting)   │
+└─────────────────┘          └─────────────────┘              └─────────────────┘
+```
+
+---
+
+## Inter-Service Communication
+
+### Service Dependencies Matrix
+
+| From Service | To Service | Protocol | Purpose |
+|--------------|------------|----------|---------|
+| finhq-tenant-integrations | Tyrion | gRPC | Get fees for transactions |
+| finhq-tenant-integrations | Settlement | gRPC | Post transactions, get transaction details |
+| finhq-tenant-integrations | Kafka | Eventi | Publish transaction events |
+| Settlement | Bookkeeping | gRPC | Post settlement transactions |
+| Settlement | Databricks | HTTP | Query settleable amounts |
+| Settlement | Genie (Payout) | HTTP | Create payouts |
+| Settlement | Kafka | Eventi | Publish settlement events |
+| Settlement-Consumer | Settlement | gRPC | Initiate settlements, update payout status |
+| Settlement-Consumer | Bookkeeping | gRPC | Post/Revert transactions |
+| Settlement-Consumer | Kafka | Consumer | Process events |
+| Bookkeeping | DynamoDB | HTTP | Get transformation configs |
+| Bookkeeping | Kafka | Consumer | Ingest transaction events |
+
+### Kafka Topic Flow
+
+```
+┌─────────────────────────────────────────────────────────────────────────────────────────┐
+│                              KAFKA TOPIC ECOSYSTEM                                       │
+├─────────────────────────────────────────────────────────────────────────────────────────┤
+│                                                                                         │
+│  PRODUCERS:                                                                             │
+│  ┌──────────────────────┐    ┌──────────────────────┐    ┌──────────────────────┐     │
+│  │ finhq-tenant-integ   │    │     Settlement       │    │      Webhook         │     │
+│  │  TransactionEvents   │    │  SettlementEvents    │    │    PayoutEvents      │     │
+│  └──────────┬───────────┘    └──────────┬───────────┘    └──────────┬───────────┘     │
+│             │                           │                           │                  │
+│             ▼                           ▼                           ▼                  │
+│  ┌─────────────────────────────────────────────────────────────────────────────────┐  │
+│  │                            KAFKA TOPICS                                          │  │
+│  │  • BookkeepingProxyService#PostTransactionV2                                    │  │
+│  │  • BookkeepingProxyService#ReverseTransactionV2                                 │  │
+│  │  • settlement_initiated / settlement_processed / settlement_failed              │  │
+│  │  • payout_state_change                                                          │  │
+│  │  • bill-payments-settlement / flights / hotels / garage / motor-insurance       │  │
+│  └─────────────────────────────────────────────────────────────────────────────────┘  │
+│             │                           │                           │                  │
+│             ▼                           ▼                           ▼                  │
+│  CONSUMERS:                                                                             │
+│  ┌──────────────────────┐    ┌──────────────────────┐    ┌──────────────────────┐     │
+│  │ Settlement-Consumer  │    │     Bookkeeping      │    │ finhq-tenant-integ   │     │
+│  │  (Event Router)      │    │  (Ledger Posting)    │    │ (Settlement Events)  │     │
+│  └──────────────────────┘    └──────────────────────┘    └──────────────────────┘     │
+│                                                                                         │
+└─────────────────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Sequence Diagrams
+
+### 1. Transaction Processing with Fee Calculation
+
+```
+┌──────────┐  ┌──────────────────┐  ┌──────────┐  ┌──────────────┐  ┌──────────┐
+│  Client  │  │ tenant-integrations│  │  Tyrion  │  │   Kafka      │  │Bookkeeping│
+└────┬─────┘  └────────┬─────────┘  └────┬─────┘  └──────┬───────┘  └────┬─────┘
+     │                 │                 │               │               │
+     │ POST /process   │                 │               │               │
+     │ (transaction)   │                 │               │               │
+     │────────────────>│                 │               │               │
+     │                 │                 │               │               │
+     │                 │ GetFees(txn)    │               │               │
+     │                 │────────────────>│               │               │
+     │                 │                 │               │               │
+     │                 │   Fee List      │               │               │
+     │                 │<────────────────│               │               │
+     │                 │                 │               │               │
+     │                 │ [For each fee]  │               │               │
+     │                 │ Create child txn│               │               │
+     │                 │ with fee amount │               │               │
+     │                 │─────────────────│               │               │
+     │                 │                 │               │               │
+     │                 │ Publish Event   │               │               │
+     │                 │ (PostTransaction)               │               │
+     │                 │────────────────────────────────>│               │
+     │                 │                 │               │               │
+     │                 │                 │               │ Consume Event │
+     │                 │                 │               │──────────────>│
+     │                 │                 │               │               │
+     │                 │                 │               │ Post to Ledger│
+     │                 │                 │               │               │
+     │  Response       │                 │               │               │
+     │  (all txns)     │                 │               │               │
+     │<────────────────│                 │               │               │
+     │                 │                 │               │               │
+```
+
+### 2. Settlement Workflow (Schedule-Based)
+
+```
+┌────────┐  ┌──────────────────┐  ┌──────────────┐  ┌──────────┐  ┌──────────┐  ┌───────┐
+│Scheduler│  │Settlement-Consumer│  │  Settlement  │  │Databricks│  │Bookkeeping│  │ Genie │
+└───┬────┘  └────────┬─────────┘  └──────┬───────┘  └────┬─────┘  └────┬─────┘  └───┬───┘
+    │                │                   │               │              │            │
+    │ SQS: Partner   │                   │               │              │            │
+    │ Schedule       │                   │               │              │            │
+    │───────────────>│                   │               │              │            │
+    │                │                   │               │              │            │
+    │                │ SettleViaWorkflow │               │              │            │
+    │                │──────────────────>│               │              │            │
+    │                │                   │               │              │            │
+    │                │                   │ Query         │              │            │
+    │                │                   │ Transactions  │              │            │
+    │                │                   │──────────────>│              │            │
+    │                │                   │               │              │            │
+    │                │                   │   Results     │              │            │
+    │                │                   │<──────────────│              │            │
+    │                │                   │               │              │            │
+    │                │                   │ [For each partner/account]   │            │
+    │                │                   │               │              │            │
+    │                │                   │ Post Settlement Transaction  │            │
+    │                │                   │─────────────────────────────>│            │
+    │                │                   │               │              │            │
+    │                │                   │ Create Payout │              │            │
+    │                │                   │──────────────────────────────────────────>│
+    │                │                   │               │              │            │
+    │                │                   │ Publish: settlement_processed│            │
+    │                │                   │───────────────│──────────────│────────────│
+    │                │                   │               │              │            │
+```
+
+### 3. Payout Webhook Flow
+
+```
+┌─────────┐  ┌──────────────────┐  ┌───────┐  ┌──────────────────┐  ┌──────────────┐
+│  Genie  │  │Settlement-Consumer│  │ Kafka │  │Settlement-Consumer│  │  Settlement  │
+│(Webhook)│  │   (HTTP Handler)  │  │       │  │  (Event Handler) │  │   Service    │
+└────┬────┘  └────────┬─────────┘  └───┬───┘  └────────┬─────────┘  └──────┬───────┘
+     │                │                │               │                   │
+     │ POST /webhooks │                │               │                   │
+     │ /{tenant}/payout               │               │                   │
+     │───────────────>│                │               │                   │
+     │                │                │               │                   │
+     │                │ Validate       │               │                   │
+     │                │ HMAC Signature │               │                   │
+     │                │────────────────│               │                   │
+     │                │                │               │                   │
+     │                │ Publish Event  │               │                   │
+     │                │───────────────>│               │                   │
+     │                │                │               │                   │
+     │   200 OK       │                │ Consume       │                   │
+     │<───────────────│                │──────────────>│                   │
+     │                │                │               │                   │
+     │                │                │               │ UpdateSettlement │
+     │                │                │               │ PayoutStatus     │
+     │                │                │               │──────────────────>│
+     │                │                │               │                   │
+     │                │                │               │   Success        │
+     │                │                │               │<──────────────────│
+     │                │                │               │                   │
+```
+
+### 4. Transaction Reversal Flow
+
+```
+┌──────────┐  ┌──────────────────┐  ┌──────────────┐  ┌───────┐  ┌──────────┐
+│  Client  │  │ tenant-integrations│  │  Settlement  │  │ Kafka │  │Bookkeeping│
+└────┬─────┘  └────────┬─────────┘  └──────┬───────┘  └───┬───┘  └────┬─────┘
+     │                 │                   │              │            │
+     │ POST /reverse   │                   │              │            │
+     │ {txn_id}        │                   │              │            │
+     │────────────────>│                   │              │            │
+     │                 │                   │              │            │
+     │                 │ GetTransactionTree│              │            │
+     │                 │──────────────────>│              │            │
+     │                 │                   │              │            │
+     │                 │   Transaction +   │              │            │
+     │                 │   Children        │              │            │
+     │                 │<──────────────────│              │            │
+     │                 │                   │              │            │
+     │                 │ [For each reversible txn]        │            │
+     │                 │                   │              │            │
+     │                 │ Publish Event     │              │            │
+     │                 │ (ReverseTransaction)             │            │
+     │                 │───────────────────────────────>│            │
+     │                 │                   │              │            │
+     │                 │                   │              │ Consume    │
+     │                 │                   │              │───────────>│
+     │                 │                   │              │            │
+     │                 │                   │              │ Revert     │
+     │                 │                   │              │ Ledger     │
+     │                 │                   │              │ Entry      │
+     │                 │                   │              │            │
+     │  Reversed IDs   │                   │              │            │
+     │<────────────────│                   │              │            │
+     │                 │                   │              │            │
+```
+
+### 5. Balance Computation Workflow (Bookkeeping)
+
+```
+┌──────────────────┐  ┌──────────────────┐  ┌────────────┐
+│BalanceComputation│  │ GeneralLedger    │  │  MySQL     │
+│    Executor      │  │   Repository     │  │            │
+└────────┬─────────┘  └────────┬─────────┘  └─────┬──────┘
+         │                     │                  │
+         │ Acquire Lock        │                  │
+         │ (BALANCE_COMPUTATION)                  │
+         │────────────────────────────────────────│
+         │                     │                  │
+         │ Get Checkpoint      │                  │
+         │ (last processed ID) │                  │
+         │─────────────────────│──────────────────│
+         │                     │                  │
+   ┌─────│ [Loop while entries]│                  │
+   │     │                     │                  │
+   │     │ Fetch Pending       │                  │
+   │     │ Ledger Entries      │                  │
+   │     │ (batch: 100)        │                  │
+   │     │─────────────────────│──────────────────│
+   │     │                     │                  │
+   │     │ Update Account      │                  │
+   │     │ Balances            │                  │
+   │     │─────────────────────│──────────────────│
+   │     │                     │                  │
+   │     │ Create Credit/Debit │                  │
+   │     │ Snapshots           │                  │
+   │     │─────────────────────│──────────────────│
+   │     │                     │                  │
+   │     │ Update Checkpoint   │                  │
+   │     │─────────────────────│──────────────────│
+   │     │                     │                  │
+   └─────│                     │                  │
+         │                     │                  │
+         │ Release Lock        │                  │
+         │────────────────────────────────────────│
+         │                     │                  │
+         │ Sleep (30s)         │                  │
+         │─────────────────────│                  │
+         │                     │                  │
+```
+
+### 6. Full Transaction Lifecycle (End-to-End)
+
+```
+┌────────┐  ┌──────────┐  ┌──────────────────┐  ┌──────────┐  ┌─────────┐  ┌──────────────┐
+│ Client │  │  Tyrion  │  │ tenant-integrations│  │Bookkeeping│ │Settlement│ │   Genie      │
+└───┬────┘  └────┬─────┘  └────────┬─────────┘  └────┬─────┘  └────┬────┘  └──────┬───────┘
+    │            │                 │                 │             │              │
+    │ 1. TRANSACTION CREATION      │                 │             │              │
+    │            │                 │                 │             │              │
+    │ Process    │                 │                 │             │              │
+    │───────────────────────────>│                 │             │              │
+    │            │                 │                 │             │              │
+    │            │ GetFees         │                 │             │              │
+    │            │<────────────────│                 │             │              │
+    │            │                 │                 │             │              │
+    │            │ Fee Response    │                 │             │              │
+    │            │────────────────>│                 │             │              │
+    │            │                 │                 │             │              │
+    │            │                 │ Publish Event   │             │              │
+    │            │                 │────────────────>│             │              │
+    │            │                 │                 │             │              │
+    │            │                 │                 │ Post to     │              │
+    │            │                 │                 │ Ledger      │              │
+    │            │                 │                 │             │              │
+    │ 2. SETTLEMENT (Scheduled)    │                 │             │              │
+    │            │                 │                 │             │              │
+    │            │                 │                 │             │ Initiate     │
+    │            │                 │                 │             │<─────────────│
+    │            │                 │                 │             │              │
+    │            │                 │                 │ Post Settle │              │
+    │            │                 │                 │<────────────│              │
+    │            │                 │                 │             │              │
+    │            │                 │                 │             │ Create Payout│
+    │            │                 │                 │             │─────────────>│
+    │            │                 │                 │             │              │
+    │ 3. PAYOUT COMPLETION         │                 │             │              │
+    │            │                 │                 │             │              │
+    │            │                 │                 │             │   Webhook    │
+    │            │                 │                 │             │<─────────────│
+    │            │                 │                 │             │              │
+    │            │                 │ Settlement      │             │              │
+    │            │                 │ Processed Event │             │              │
+    │            │                 │<────────────────│─────────────│              │
+    │            │                 │                 │             │              │
+```
+
+---
+
+## Deep Dive: Each Repository
+
+### 1. Bookkeeping Deep Dive
+
+#### Key Components
+
+```
+bookkeeping/
+├── src/main/java/club/cred/bankstack/bookkeeping/
+│   ├── Main.java                          # Entry point
+│   ├── onboarding/                        # Client/Product/Account setup
+│   │   ├── controller/
+│   │   │   ├── ClientController.java      # gRPC: CreateClient, GetClient
+│   │   │   ├── ProductController.java     # gRPC: CreateProduct, ActivateProduct
+│   │   │   └── AccountController.java     # gRPC: CreateAccount
+│   │   └── service/
+│   ├── posting/                           # Core ledger operations
+│   │   ├── controller/
+│   │   │   └── GeneralLedgerController.java # gRPC: PostLedgerEntry, ReverseLedgerEntries
+│   │   └── service/
+│   │       ├── GeneralLedgerService.java  # Main posting logic
+│   │       └── TransactionProcessor.java  # Transaction → LedgerEntry conversion
+│   ├── ingestion/                         # Kafka event processing
+│   │   ├── manager/KafkaManager.java      # Consumer lifecycle
+│   │   ├── processor/TransactionMessageProcessor.java
+│   │   ├── ingestor/EventIngestor.java    # Transform & post
+│   │   └── enricher/Enricher.java         # Add metadata
+│   ├── processing/                        # Background workflows
+│   │   ├── workflow/BalanceComputationWorkflow.java
+│   │   └── executor/BalanceComputationExecutor.java
+│   ├── core/                              # Domain models & repositories
+│   │   ├── domain/
+│   │   │   ├── GeneralLedgerEntry.java    # Ledger entry model
+│   │   │   ├── Account.java               # Account model
+│   │   │   └── AccountBalance.java        # Balance model
+│   │   └── repository/
+│   └── admin/                             # Admin operations
+```
+
+#### Critical Nuances
+
+1. **Partitioned Tables**: `general_ledgers` table is partitioned by `posting_time` (monthly). Queries MUST include posting_time range.
+
+2. **Idempotency**: Uses hash of (source_transaction_id, account_no, nature) to prevent duplicates. Stored in `hash` column.
+
+3. **Amount Adjustment**: Allows MAX_ALLOWED_DIFF of 0.01 between total debits and credits. Auto-adjusts smallest entry.
+
+4. **GL Correlation ID**: Groups related ledger entries (e.g., debit + credit pair). UUID generated per transaction.
+
+5. **Checkpoint Processing**: Balance computation uses checkpoints to track progress. Never reprocesses entries.
+
+6. **Lock TTL**: Balance computation lock expires after 5 minutes. Prevents zombie locks.
+
+### 2. finhq-tenant-integrations Deep Dive
+
+#### Key Components
+
+```
+finhq-tenant-integrations/
+├── service/src/main/java/club/cred/finhq/tenant/integrations/
+│   ├── MainApplication.java               # Spring Boot entry
+│   ├── tenants/commons/
+│   │   ├── controllers/
+│   │   │   ├── TransactionController.java # POST /api/v1/transactions/process
+│   │   │   ├── TransactionReversalController.java
+│   │   │   └── TransactionRepairController.java
+│   │   ├── services/
+│   │   │   ├── TransactionProcessingService.java  # Core orchestration
+│   │   │   ├── PartnerResolutionService.java      # Resolve fee partners
+│   │   │   ├── TransactionEventPublisher.java     # Kafka publishing
+│   │   │   ├── TransactionReversalService.java
+│   │   │   └── TransactionRepairService.java
+│   │   ├── consumer/
+│   │   │   └── AbstractTransactionEventConsumer.java
+│   │   ├── handlers/
+│   │   │   ├── TransactionEventHandler.java
+│   │   │   ├── RepairTransactionEventHandler.java
+│   │   │   └── ReverseTransactionEventHandler.java
+│   │   └── entities/
+│   │       ├── TenantConfigEntity.java
+│   │       └── FeeConfigEntity.java
+│   ├── tenants/billpayments/              # Bill Payments specific
+│   │   ├── consumers/
+│   │   │   └── BillPaymentsSettlementServiceEventConsumer.java
+│   │   └── handlers/
+│   │       └── BillPaymentsSettlementHandler.java
+│   └── clients/
+│       ├── settlement/SettlementClient.java
+│       └── fee/FeeClient.java
+```
+
+#### Critical Nuances
+
+1. **Recursive Fee Processing**: Fees can have fees! MAX_RECURSION_DEPTH = 5 prevents infinite loops.
+
+2. **Transaction ID Format**:
+   - Standard: `txn_id`
+   - Fee child: `parent_txn_id#fee_type_suffix` (e.g., `TXN123#PROCESSING_FEE`)
+   - Repair: `original_txn_id#REPAIR`
+
+3. **Partner Resolution Types**:
+   - `SOURCE_PARTNER` / `DESTINATION_PARTNER` - Copy from parent
+   - `STATIC` - Use configured value
+   - `METADATA` - Extract from transaction metadata using dot notation
+
+4. **Reversal Strategies**:
+   - `NONE` - Only reverse specified transaction
+   - `EXCLUSIVE` - Only children (not parent)
+   - `INCLUSIVE` - Parent + all children
+
+5. **Metadata Enrichment**: Fee transactions get `transaction_time`, `fee_id`, `fee_merchant_id` added.
+
+### 3. Settlement Deep Dive
+
+#### Key Components
+
+```
+settlement/
+├── cmd/server/
+│   ├── main.go                            # Entry point
+│   └── setup/
+│       ├── server.go                      # gRPC service registration
+│       └── SQSConsumers.go                # SQS consumer setup
+├── internal/
+│   ├── settlement/
+│   │   ├── service.go                     # Main service interface
+│   │   ├── server.go                      # gRPC handlers
+│   │   ├── workflow.go                    # Async workflow definition
+│   │   ├── process_settlement.go          # Settlement processing
+│   │   ├── model.go                       # Settlement model
+│   │   ├── repo.go                        # Database operations
+│   │   └── core.go                        # Query building
+│   ├── bookkeeping/server.go              # Bookkeeping proxy service
+│   ├── config/service.go                  # Config management with hooks
+│   ├── payout/client.go                   # Genie payout client
+│   ├── partner/server.go                  # Partner management
+│   ├── tenant/server.go                   # Tenant management
+│   ├── databricks/client.go               # Data source client
+│   └── operationlock/                     # Distributed locking
+├── pkg/
+│   ├── eventi/producer.go                 # Kafka event publishing
+│   ├── calendar/                          # Bank holiday checks
+│   └── middleware/                        # gRPC middleware
+└── configs/config.yaml                    # Configuration template
+```
+
+#### Critical Nuances
+
+1. **Workflow Engine**: Uses WorkflowXYZ for async orchestration. Activities have automatic retry.
+
+2. **Optimistic Locking**: Settlement model has `version` field. Updates check `WHERE version = ?` and increment.
+
+3. **Shadow vs Live Mode**: `shadow_mode: true` skips actual payouts. Used for testing.
+
+4. **Account Number Format**: `{partnerType}_{partnerId}!@@!{accountType}`
+
+5. **Settlement Status Flow**:
+   ```
+   initiated → draft → created → processing → payout → processed
+                                     ↓
+                              retryable_failure
+                                     ↓
+                                  failed
+   ```
+
+6. **Config Hooks**: Config changes trigger external service notifications (scheduler, genie). No outbox pattern - potential reliability gap.
+
+7. **Query Sources**: Supports both Databricks (SQL) and Batch Platform (Iceberg). Configured per tenant.
+
+### 4. Settlement-Consumer Deep Dive
+
+#### Key Components
+
+```
+settlement-consumer/
+├── cmd/main.go                            # Entry point
+├── internal/
+│   ├── router/configurer.go               # HTTP route setup
+│   ├── options/options.go                 # Consumer setup
+│   ├── handler/
+│   │   ├── handler.go                     # Handler interface
+│   │   └── eventi/
+│   │       ├── payout/payout.go           # Payout state handler
+│   │       ├── bookkeepingproxy/transaction.go
+│   │       └── revert_transaction/revert_transaction.go
+│   ├── invoker/receiver.go                # SQS schedule handler
+│   ├── webhook/payout/handler.go          # HTTP webhook handler
+│   ├── sqs/consumer.go                    # SQS consumer
+│   └── clients/
+│       ├── settlement/client.go           # Settlement service client
+│       └── settlement_processor/client.go # Processor client
+├── pkg/
+│   ├── receiver/eventi/receiver.go        # Kafka event receiver
+│   ├── producer/kafka.go                  # Kafka producer
+│   └── dto/request.go                     # DTOs
+└── config/config.json                     # Configuration
+```
+
+#### Critical Nuances
+
+1. **Multi-Source Ingestion**: Consumes from Kafka (13+ topics), SQS (2 queues), HTTP webhooks.
+
+2. **Throttling**: Invoker sleeps 2 minutes between SQS messages. Prevents overload.
+
+3. **Webhook Signature Validation**: HMAC-SHA256 with timestamp. Prevents replay attacks.
+
+4. **Tenant Mapping**: Payout tenant → Settlement tenant mapping via `ListTenantConfigs()`.
+
+5. **Idempotency**: All handlers check for AlreadyExists errors and silently succeed.
+
+6. **Schedule ID Format**: `MD5(dbkAccountNo)--{day}-{month}-{year}-{invokerJobID}`
+
+### 5. Tyrion Deep Dive
+
+#### Key Components
+
+```
+tyrion/
+├── cmd/main.go                            # Entry point
+├── internal/
+│   ├── boot/
+│   │   ├── boot.go                        # Service initialization
+│   │   └── handler.go                     # gRPC handler registration
+│   ├── service/
+│   │   ├── pricing_service_server.go      # GetPrice endpoint
+│   │   └── admin_service_server.go        # Config management
+│   ├── core/
+│   │   ├── core.go                        # Price breakup logic
+│   │   ├── admin.go                       # Admin operations
+│   │   ├── workflow/                      # 30+ workflow handlers
+│   │   │   ├── SkuBreakupHandler.go
+│   │   │   ├── CartTotalBreakupHandler.go
+│   │   │   ├── CheckoutFeeHandler.go
+│   │   │   └── ...
+│   │   └── task_executor/                 # Workflow strategies
+│   ├── dto/price/                         # Request/Response DTOs
+│   └── generator/                         # Cache key generation
+├── feeengine/                             # Fee management engine
+│   ├── core/core.go                       # Fee discovery logic
+│   ├── service/fee_service_server.go      # GetFees endpoint
+│   ├── model/                             # Fee models
+│   │   ├── fee.go
+│   │   └── fee_configuration.go
+│   └── external/http/                     # External clients
+│       ├── merchant_service.go
+│       └── lucario.go
+└── pkg/clients/                           # HTTP clients
+    ├── falcon/                            # Offer discovery
+    ├── lcm/                               # Pricing service
+    ├── mps/                               # Merchant pricing
+    └── uas/                               # User attributes
+```
+
+#### Critical Nuances
+
+1. **Workflow Chain Pattern**: 30+ handlers execute in sequence. Each can modify request/response.
+
+2. **Strategy Selection**: Different workflows based on discovery stage:
+   - `ExecuteAllWorkflow` - Full price calculation
+   - `ExecuteSelectedOfferWorkflow` - Apply specific offer
+   - `ExecuteSingleAutoSelectWorkflow` - Auto-select best option
+
+3. **Entity Types Supported**: SKU, Cart, Checkout, Payment, Refund, Payout, Settlement, MDR, Interchange, Flights (multiple), Insurance, etc.
+
+4. **Fee State Machine**:
+   ```
+   DRAFT → PUBLISHED → LIVE → EXPIRED
+                ↓
+           REJECTED
+                ↓
+           ARCHIVED
+   ```
+
+5. **Rule Engine Integration**: Fee eligibility checked via compiled rules at runtime.
+
+6. **Multi-Layer Caching**:
+   - Response cache (full PriceResponse)
+   - User attributes cache
+   - Experiment assignments cache
+   - Merchant association cache
+
+---
+
+## Database Schemas
+
+### Bookkeeping Schema
+
+```sql
+-- Core tables
+CREATE TABLE clients (
+    id BIGINT PRIMARY KEY,
+    client_id VARCHAR(255) UNIQUE,
+    timezone VARCHAR(100),
+    currency_code VARCHAR(10)
+);
+
+CREATE TABLE products (
+    id BIGINT PRIMARY KEY,
+    product_id VARCHAR(255),
+    client_id BIGINT REFERENCES clients(id),
+    version INT,
+    status ENUM('ACTIVE', 'INACTIVE')
+);
+
+CREATE TABLE accounts (
+    id BIGINT PRIMARY KEY,
+    account_no VARCHAR(255),
+    product_id BIGINT REFERENCES products(id),
+    parent_account_no VARCHAR(255),
+    account_type VARCHAR(50)
+);
+
+-- Ledger (partitioned by posting_time)
+CREATE TABLE general_ledgers (
+    id BIGINT,
+    posting_time DATETIME,
+    product_id BIGINT,
+    client_id BIGINT,
+    account_no VARCHAR(255),
+    amount DECIMAL(20,2),
+    nature ENUM('DEBIT', 'CREDIT', 'META'),
+    source_transaction_id VARCHAR(255),
+    gl_correlation_id VARCHAR(255),
+    hash VARCHAR(255),
+    status ENUM('PENDING', 'PROCESSED'),
+    PRIMARY KEY (id, posting_time)
+) PARTITION BY RANGE (TO_DAYS(posting_time));
+
+-- Balances
+CREATE TABLE account_balances (
+    client_id BIGINT,
+    account_no VARCHAR(255),
+    balance DECIMAL(20,2),
+    PRIMARY KEY (client_id, account_no)
+);
+```
+
+### Settlement Schema
+
+```sql
+CREATE TABLE settlements (
+    id BIGINT,
+    created_at DATETIME,
+    tenant_id VARCHAR(255),
+    partner_type VARCHAR(50),
+    partner_id VARCHAR(255),
+    settlement_id VARCHAR(255),
+    schedule_id VARCHAR(255),
+    dbk_account_number VARCHAR(255),
+    total_amount DECIMAL(20,2),
+    fee_amount DECIMAL(20,2),
+    tax_amount DECIMAL(20,2),
+    net_amount DECIMAL(20,2),
+    status ENUM('initiated','draft','created','processing','payout','processed','failed'),
+    version INT,
+    workflow_id VARCHAR(255),
+    PRIMARY KEY (id, created_at)
+) PARTITION BY RANGE (TO_DAYS(created_at));
+
+CREATE TABLE payout_references (
+    id BIGINT PRIMARY KEY,
+    settlement_id BIGINT,
+    payout_reference_id VARCHAR(255),
+    status ENUM('PENDING','COMPLETED','FAILED'),
+    payout_utr VARCHAR(255),
+    payout_account JSON
+);
+
+CREATE TABLE configs (
+    id BIGINT PRIMARY KEY,
+    tenant_id VARCHAR(255),
+    partner_id VARCHAR(255),
+    partner_type VARCHAR(50),
+    account_type VARCHAR(50),
+    config_type VARCHAR(100),
+    config_value JSON,
+    UNIQUE (tenant_id, partner_id, partner_type, config_type, deleted_at_unix)
+);
+```
+
+### Tyrion Fee Schema
+
+```sql
+CREATE TABLE fees (
+    id BIGINT PRIMARY KEY,
+    tenant_id VARCHAR(255),
+    fee_id VARCHAR(255),
+    fee_type VARCHAR(100),
+    entity ENUM('SKU','CART','CHECKOUT','PAYMENT',...),
+    state ENUM('DRAFT','PUBLISHED','LIVE','EXPIRED','ARCHIVED'),
+    start_time DATETIME,
+    end_time DATETIME,
+    refundable BOOLEAN,
+    bearer VARCHAR(50),
+    rule_id VARCHAR(255),
+    INDEX (tenant_id, entity, fee_type)
+);
+
+CREATE TABLE fee_configurations (
+    id BIGINT PRIMARY KEY,
+    tenant_id VARCHAR(255),
+    entity_type VARCHAR(100),
+    fee_type VARCHAR(100),
+    fee_configuration JSON,
+    rule_configuration JSON,
+    INDEX (tenant_id, entity_type, fee_type)
+);
+```
+
+---
+
+## Kafka Topics & Events
+
+### Topic Mapping
+
+| Producer | Topic Pattern | Consumer |
+|----------|---------------|----------|
+| tenant-integrations | `BookkeepingProxyService#PostTransactionV2` | settlement-consumer |
+| tenant-integrations | `BookkeepingProxyService#ReverseTransactionV2` | settlement-consumer |
+| Settlement | `settlement_initiated` | Analytics |
+| Settlement | `settlement_processed` | tenant-integrations |
+| Settlement | `settlement_failed` | Alerting |
+| Settlement | `payout_state_change` | settlement-consumer |
+| Webhook | `payout_webhook_events` | settlement-consumer |
+
+### Event Payload Structures
+
+```protobuf
+// Transaction Event
+message TransactionEvent {
+    string event_type = 1;        // POST, REVERSE, REPAIR
+    string tenant_id = 2;
+    Transaction transaction = 3;
+    map<string, string> metadata = 4;
+}
+
+// Settlement Event
+message SettlementEvent {
+    string event_type = 1;        // initiated, processed, failed
+    Settlement settlement = 2;
+    string workflow_id = 3;
+}
+
+// Payout State Change
+message PayoutStateChange {
+    string payout_reference_id = 1;
+    string status = 2;            // PENDING, COMPLETED, FAILED
+    string utr = 3;
+    string error_message = 4;
+}
+```
+
+---
+
+## Key Concepts & Nuances
+
+### 1. Double-Entry Bookkeeping
+Every transaction creates balanced debit and credit entries:
+- **Debit** increases asset/expense accounts
+- **Credit** increases liability/revenue accounts
+- Total debits MUST equal total credits (within 0.01 tolerance)
+
+### 2. Settlement Lifecycle
+```
+Transactions Posted → Balance Accumulates → Schedule Triggers
+         ↓
+Query Databricks for Settleable Amount
+         ↓
+Create Settlement Record (INITIATED)
+         ↓
+Post Settlement Transaction to Bookkeeping
+         ↓
+Create Payout Request to Genie
+         ↓
+Wait for Webhook (PENDING → COMPLETED/FAILED)
+         ↓
+Update Settlement Status (PROCESSED/FAILED)
+```
+
+### 3. Fee Hierarchy
+```
+Original Transaction ($100)
+    ├── Processing Fee ($2)
+    │   └── Tax on Fee ($0.36)
+    ├── Platform Fee ($1)
+    │   └── Tax on Fee ($0.18)
+    └── Settlement Fee ($0.50)
+```
+
+### 4. Multi-Tenancy Pattern
+- All data scoped by `tenant_id`
+- Configurations stored per tenant
+- Different fee structures per tenant
+- Separate settlement schedules per tenant
+
+### 5. Idempotency Patterns
+- **Hash-based**: Compute hash of key fields, reject duplicates
+- **Upsert-based**: ON CONFLICT DO UPDATE
+- **Check-before-write**: Query existence before insert
+
+---
+
+## Common Patterns
+
+### 1. gRPC Error Handling Pattern
+```java
+// Bookkeeping pattern
+IController.process(
+    ctx,
+    response -> {
+        // Business logic
+        response.onNext(result);
+        response.onCompleted();
+    },
+    ErrorContext.GENERAL_LEDGER
+);
+```
+
+### 2. Kafka Consumer Pattern
+```go
+// Settlement-consumer pattern
+func (h *Handler) Handle(ctx context.Context, event *eventi.Event) error {
+    // Parse event
+    // Process business logic
+    // Handle idempotency (AlreadyExists → return nil)
+    // Return error for retry
+}
+```
+
+### 3. Workflow Activity Pattern
+```go
+// Settlement workflow pattern
+func InitializeSettlement(ctx workflow.Context) error {
+    // Activity 1: Acquire lock
+    // Activity 2: Execute query
+    // Activity 3: Process results
+    // Activity 4: Cleanup
+    // Each activity has automatic retry
+}
+```
+
+### 4. Cache-Aside Pattern
+```go
+// Tyrion caching pattern
+func GetPriceBreakup(request) {
+    if request.UseCache {
+        key := GenerateCacheKey(request)
+        if cached := CheckCache(key); cached != nil {
+            return cached
+        }
+    }
+    result := ComputePrice(request)
+    SaveToCache(key, result, ttl)
+    return result
+}
+```
+
+---
+
+## Troubleshooting Guide
+
+### Common Issues
+
+#### 1. Balance Mismatch
+**Symptoms**: Account balance doesn't match ledger sum
+**Check**:
+- Verify all ledger entries have status=PROCESSED
+- Check workflow_checkpoint for stuck processing
+- Look for orphaned PENDING entries
+**Fix**: Run `FixAccountBalances` admin API with auth token
+
+#### 2. Settlement Not Processing
+**Symptoms**: Settlement stuck in INITIATED or PROCESSING
+**Check**:
+- Verify operation_lock not held by zombie process
+- Check workflow status in WorkflowXYZ
+- Verify Databricks query not stuck
+**Fix**: Cancel workflow and retry, or release lock manually
+
+#### 3. Duplicate Transactions
+**Symptoms**: Same source_transaction_id posted twice
+**Check**:
+- Verify hash computation includes all unique fields
+- Check Kafka consumer offset management
+**Fix**: Normally prevented by idempotency. If occurred, reverse duplicate.
+
+#### 4. Fee Calculation Wrong
+**Symptoms**: Fees don't match expected values
+**Check**:
+- Verify fee configuration active (state=LIVE)
+- Check rule eligibility criteria
+- Verify experiment assignment
+**Fix**: Update fee configuration or rule
+
+#### 5. Payout Failed
+**Symptoms**: Settlement stuck in PAYOUT status
+**Check**:
+- Verify Genie webhook received
+- Check payout_references for error message
+- Verify bank account details correct
+**Fix**: Update settlement status and retry payout
+
+### Monitoring Queries
+
+```sql
+-- Stuck ledger entries
+SELECT COUNT(*) FROM general_ledgers
+WHERE status = 'PENDING'
+AND created_at < NOW() - INTERVAL 1 HOUR;
+
+-- Settlement status distribution
+SELECT status, COUNT(*) FROM settlements
+WHERE created_at > NOW() - INTERVAL 1 DAY
+GROUP BY status;
+
+-- Failed payouts
+SELECT * FROM payout_references
+WHERE status = 'FAILED'
+AND created_at > NOW() - INTERVAL 1 DAY;
+
+-- Balance computation lag
+SELECT product_id, MAX(id) as last_processed
+FROM workflow_checkpoints;
+```
+
+---
+
+## Study Checklist
+
+### Beginner Level
+- [ ] Understand double-entry bookkeeping basics
+- [ ] Know the purpose of each repository
+- [ ] Understand Kafka event flow
+- [ ] Know main API endpoints
+
+### Intermediate Level
+- [ ] Understand fee calculation flow
+- [ ] Know settlement workflow stages
+- [ ] Understand balance computation
+- [ ] Know idempotency patterns
+
+### Expert Level
+- [ ] Debug balance mismatches
+- [ ] Trace transaction through all services
+- [ ] Understand all configuration options
+- [ ] Handle production incidents
+
+---
+
+*Generated from codebase analysis. Last updated: 2026-01-02*

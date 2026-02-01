@@ -1,0 +1,95 @@
+# finhq-verse Study Guide
+
+**Author:** Learning documentation for experienced Java developer
+**Started:** December 2024
+**Status:** In Progress
+
+---
+
+## About This Guide
+
+This study guide is designed for an experienced Java developer (10+ years) who is new to the finhq domain. It skips basic Java/Spring concepts and focuses on finhq-specific patterns and architecture.
+
+## Directory Structure
+
+```
+docs/study-guide/
+├── README.md                    # This file - overview and progress tracking
+├── PROGRESS.md                  # Learning progress tracker with checkboxes
+├── architecture/
+│   ├── 01-overview.md           # High-level system architecture
+│   ├── 02-monorepo-structure.md # Nx monorepo organization
+│   └── 03-service-topology.md   # Service dependencies and communication
+├── patterns/
+│   ├── 01-passport-pattern.md   # Multi-tenancy via Passport
+│   ├── 02-repository-pattern.md # Custom Repository<T> interface
+│   ├── 03-service-pattern.md    # AbstractService template
+│   ├── 04-entity-pattern.md     # Entity hierarchy and auditing
+│   └── 05-error-handling.md     # ApplicationException pattern
+├── services/
+│   ├── 01-foundation.md         # Foundation service deep-dive
+│   ├── 02-bookkeeping.md        # Bookkeeping service deep-dive
+│   ├── 03-calendar.md           # Calendar service deep-dive
+│   ├── 04-configuration.md      # Configuration service deep-dive
+│   ├── 05-consumer.md           # Consumer service deep-dive
+│   └── 06-settlement.md         # Settlement service deep-dive
+├── examples/
+│   ├── 01-creating-entity.md    # How to create a new entity
+│   ├── 02-adding-api.md         # How to add a new API endpoint
+│   └── 03-common-tasks.md       # Common development tasks
+└── reference/
+    ├── cheatsheet.md            # Quick reference cheatsheet
+    ├── file-locations.md        # Important file paths
+    └── commands.md              # Development commands
+```
+
+## Quick Start
+
+1. **Day 1:** Read [Architecture Overview](./architecture/01-overview.md)
+2. **Day 2:** Study [Passport Pattern](./patterns/01-passport-pattern.md) and [Repository Pattern](./patterns/02-repository-pattern.md)
+3. **Day 3:** Deep-dive into [Foundation Service](./services/01-foundation.md)
+4. **Day 4:** Explore [Bookkeeping Service](./services/02-bookkeeping.md)
+5. **Day 5:** Try [Creating an Entity](./examples/01-creating-entity.md)
+
+## Key Differences from Standard Spring
+
+| What You Know | finhq-verse Does Instead |
+|---------------|--------------------------|
+| Spring Security | Custom `Passport` via thread-local |
+| `JpaRepository` | Custom `Repository<T>` with mandatory scoping |
+| `Pageable` (offset) | `CursorPageRequest` (cursor-based) |
+| Single DataSource | Dual DataSource (LIVE/SANDBOX routing) |
+| UUID | ULID (time-sortable) |
+| Hand-written controllers | OpenAPI-generated `*ApiDelegate` |
+
+## Essential Files to Read
+
+| Priority | File | Why |
+|----------|------|-----|
+| 1 | `README_LLM.md` | Complete conventions guide |
+| 2 | `Passport.java` | Multi-tenancy context carrier |
+| 3 | `Repository.java` | Custom data access interface |
+| 4 | `AbstractService.java` | Service layer template |
+| 5 | `OrganizationService.java` | Concrete example |
+
+## Resume Your Learning
+
+Check [PROGRESS.md](./PROGRESS.md) to see where you left off and track your progress.
+
+---
+
+## Session Notes
+
+Use this section to jot down notes as you learn:
+
+### Session 1 - [Date]
+- Topics covered:
+- Questions to explore:
+- Next steps:
+
+### Session 2 - [Date]
+- Topics covered:
+- Questions to explore:
+- Next steps:
+
+(Add more sessions as needed)

@@ -1,0 +1,300 @@
+# Important File Locations
+
+Quick reference for finding key files in the finhq-verse repository.
+
+---
+
+## Root Level
+
+| File | Purpose |
+|------|---------|
+| `README_LLM.md` | Comprehensive development guide |
+| `README.md` | Project overview |
+| `nx.json` | Nx monorepo configuration |
+| `workspace.json` | Nx workspace definition |
+| `docker-compose.yml` | Infrastructure stack |
+| `Makefile` | Development commands |
+| `.nvmrc` | Node.js version (v20.19.0) |
+| `.sdkmanrc` | Java SDK version |
+
+---
+
+## Commons - Java (No Spring Dependency)
+
+### Context (`finhq-commons-java/finhq-context/`)
+
+```
+src/main/java/io/finhq/commons/context/
+├── Context.java              # Generic thread-local storage
+├── Passport.java             # Request context carrier
+├── PassportContext.java      # Convenience wrapper
+└── ErrorCode.java            # Context-specific errors
+```
+
+### Errors (`finhq-commons-java/finhq-errors/`)
+
+```
+src/main/java/io/finhq/commons/errors/
+├── ApplicationException.java # Main exception class
+├── ErrorDescriptor.java      # Error definition interface
+├── GenericErrorCode.java     # Common error codes enum
+├── ErrorTag.java             # Error categorization
+└── HttpStatusCode.java       # HTTP status mapping
+```
+
+### Helpers (`finhq-commons-java/finhq-helpers/`)
+
+```
+src/main/java/io/finhq/commons/helpers/
+├── UlidHelper.java           # ULID generation
+├── DateHelper.java           # Date/time utilities
+├── StringHelper.java         # String utilities
+└── MapHelper.java            # Map utilities
+```
+
+---
+
+## Commons - Spring
+
+### Entity Framework (`finhq-commons-spring/finhq-entity/`)
+
+```
+src/main/java/io/finhq/commons/spring/entity/
+
+# Core
+├── AbstractService.java           # Service base class
+├── EntityMapper.java              # Mapper interface
+├── EntityRequestValidator.java    # Validator interface
+├── EntityUpdates.java             # Partial update wrapper
+├── EntityErrorCode.java           # Entity error codes
+
+# Entities
+├── entity/
+│   ├── AbstractEntity.java                    # Base entity
+│   ├── AbstractOrgScopedEntity.java           # Org-scoped
+│   ├── AbstractNamespaceScopedEntity.java     # Namespace-scoped
+│   ├── Auditable.java                         # Audit marker
+│   ├── ExternalReferenceable.java             # Alt key support
+│   └── SoftDeletable.java                     # Soft delete support
+
+# Repository
+├── repository/
+│   ├── Repository.java                        # Repository interface
+│   ├── AbstractRepositoryImpl.java            # Base implementation
+│   ├── RepositoryScope.java                   # Scoping container
+│   ├── CursorPageRequest.java                 # Pagination request
+│   ├── CursorPage.java                        # Pagination response
+│   └── CursorDirection.java                   # Pagination direction
+
+# DataSource
+├── datasource/
+│   ├── DataSourceConfiguration.java           # DataSource setup
+│   ├── DefaultDataSourceRouter.java           # LIVE/SANDBOX routing
+│   └── DataSourceProperties.java              # Config properties
+
+# Audit
+└── audit/
+    ├── EnversConfig.java                      # Hibernate Envers setup
+    ├── CustomRevisionEntity.java              # Revision metadata
+    └── CustomRevisionListener.java            # Revision listener
+```
+
+### Spring Web (`finhq-commons-spring/finhq-spring/`)
+
+```
+src/main/java/io/finhq/commons/spring/
+
+# Passport
+├── passport/
+│   ├── PassportContextFilter.java             # Extract headers → Passport
+│   └── PassportAutoConfiguration.java         # Auto-config
+
+# Exceptions
+├── exceptions/
+│   └── GlobalExceptionHandler.java            # Exception → Response
+
+# Config
+├── config/
+│   ├── SpringAutoConfiguration.java           # Main auto-config
+│   ├── JacksonConfig.java                     # JSON serialization
+│   ├── MoneyConfig.java                       # Money type support
+│   └── OpenTelemetryConfig.java               # Tracing config
+
+# Logging
+└── logging/
+    ├── LoggingMdcFilter.java                  # MDC setup
+    └── LogDetails.java                        # Log utilities
+```
+
+### Testing (`finhq-commons-spring/finhq-slt/`)
+
+```
+src/main/java/io/finhq/commons/slt/
+├── MysqlTestContainer.java                    # TestContainers setup
+├── MysqlTestContainerSupport.java             # Test support
+├── FinhqMockMvc.java                          # MockMvc wrapper
+├── MockMvcRequestBuilder.java                 # Request builder
+└── FakerConfiguration.java                    # Test data generation
+```
+
+---
+
+## OpenAPI
+
+### Specifications (`finhq-openapi/`)
+
+```
+specs/
+├── shared.yaml                # Common schemas, parameters
+├── foundation.yaml            # Foundation service API
+├── bookkeeping.yaml           # Bookkeeping service API
+├── calendar.yaml              # Calendar service API
+├── configuration.yaml         # Configuration service API
+├── consumer.yaml              # Consumer service API
+└── settlement.yaml            # Settlement service API
+
+postman/
+├── foundation.postman.json    # Postman collection
+└── ...
+```
+
+### Generated Java (`finhq-openapi-java/`)
+
+```
+build/generated/src/main/java/io/finhq/
+
+# Models
+openapi/model/
+├── Organization.java
+├── CreateOrganizationRequest.java
+├── UpdateOrganizationRequest.java
+├── OrganizationListResponse.java
+├── Error.java
+├── ListResponseMeta.java
+└── ...
+
+# API Delegates
+foundation/openapi/api/
+├── OrganizationApiDelegate.java
+├── NamespaceApiDelegate.java
+└── ...
+```
+
+---
+
+## Services
+
+### Foundation (`finhq-foundation/`)
+
+```
+src/main/java/io/finhq/foundation/
+├── FoundationApplication.java          # Entry point
+├── organization/
+│   ├── OrganizationEntity.java
+│   ├── OrganizationRepository.java
+│   ├── OrganizationRepositoryImpl.java
+│   ├── OrganizationJpaRepository.java
+│   ├── OrganizationMapper.java
+│   ├── OrganizationValidator.java
+│   ├── OrganizationService.java
+│   └── OrganizationSpecification.java
+├── namespace/
+│   └── ... (same pattern)
+├── partner/
+│   └── ... (same pattern)
+└── module/
+    └── ... (same pattern)
+
+src/main/resources/
+├── application.yml                     # Spring config
+└── db/migration/
+    ├── V1__create_organizations.sql
+    ├── V2__create_namespaces.sql
+    └── ...
+```
+
+### Bookkeeping (`finhq-bookkeeping/`)
+
+```
+src/main/java/io/finhq/bookkeeping/
+├── BookkeepingApplication.java
+├── account/
+│   ├── BookkeepingAccountEntity.java
+│   ├── BookkeepingAccountService.java
+│   └── ...
+├── transaction/
+│   ├── BookkeepingTransactionEntity.java
+│   ├── BookkeepingTransactionLegEntity.java
+│   ├── BookkeepingTransactionService.java
+│   └── ...
+├── spec/
+│   └── ...
+└── config/
+    └── BookkeepingErrorCode.java
+
+src/main/resources/db/migration/
+├── V1__create_bookkeeping_accounts.sql
+├── V2__create_bookkeeping_transactions.sql
+└── ...
+```
+
+### Other Services
+
+Each follows the same pattern:
+- `finhq-calendar/`
+- `finhq-configuration/`
+- `finhq-consumer/`
+- `finhq-settlement/`
+
+---
+
+## Configuration Files
+
+### Service Configuration
+
+```
+# Each service
+src/main/resources/
+├── application.yml              # Main config
+├── application-local.yml        # Local overrides
+└── application-test.yml         # Test config
+```
+
+### Build Configuration
+
+```
+# Each service
+build.gradle                     # Gradle build file
+
+# Root
+settings.gradle                  # Multi-project settings
+gradle.properties                # Gradle properties
+```
+
+---
+
+## Test Files
+
+```
+# Each service
+src/test/java/io/finhq/<service>/
+├── <Entity>ServiceTest.java
+├── <Entity>RepositoryTest.java
+└── ...
+
+src/test/resources/
+├── application-test.yml
+└── ...
+```
+
+---
+
+## Docker & Infrastructure
+
+```
+docker-compose.yml               # Full stack
+docker/
+├── mysql/
+│   └── init.sql                # DB initialization
+└── ...
+```

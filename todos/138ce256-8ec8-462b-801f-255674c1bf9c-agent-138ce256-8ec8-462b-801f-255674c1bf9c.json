@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Read README.md completely",
+    "status": "completed",
+    "activeForm": "Reading README.md"
+  },
+  {
+    "content": "Read 01-overview.md",
+    "status": "completed",
+    "activeForm": "Reading 01-overview.md"
+  },
+  {
+    "content": "Explore DarwinApplication.java entry point",
+    "status": "completed",
+    "activeForm": "Exploring DarwinApplication.java"
+  },
+  {
+    "content": "Scan application.properties (first 200 lines)",
+    "status": "completed",
+    "activeForm": "Scanning application.properties"
+  },
+  {
+    "content": "Complete Week 1 Day 1-2 checkpoint",
+    "status": "in_progress",
+    "activeForm": "Completing Week 1 Day 1-2 checkpoint"
+  }
+]

@@ -1,0 +1,165 @@
+# Payment Service (Darwin) - Expert Study Guide
+
+> **Purpose:** Comprehensive documentation for becoming an expert on the payment-service codebase.
+> **Last Updated:** December 31, 2025
+> **Estimated Study Time:** 4 weeks
+
+---
+
+## Quick Navigation
+
+| Document | Description | When to Read |
+|----------|-------------|--------------|
+| [01-overview.md](./01-overview.md) | Tech stack, project structure, core concepts | Week 1 |
+| [02-data-layer.md](./02-data-layer.md) | Entities, database architecture, caching, DynamoDB | Week 2 |
+| [03-provider-integration.md](./03-provider-integration.md) | Provider adapters, webhooks, decision tree routing | Week 3 |
+| [04-payment-flow.md](./04-payment-flow.md) | Workflows, state machines, end-to-end flow | Week 4 |
+| [05-key-files-reference.md](./05-key-files-reference.md) | Quick reference for all critical files | Anytime |
+| [06-study-path.md](./06-study-path.md) | Recommended learning path with checkboxes | Track progress |
+
+---
+
+## Executive Summary
+
+**Darwin** is an enterprise-grade payment processing microservice built with:
+
+| Technology | Version | Purpose |
+|------------|---------|---------|
+| Java | 17 | Runtime |
+| Spring Boot | 2.7.14 | Framework |
+| MySQL | - | Primary DB (Master-Replica) |
+| DynamoDB | - | Workflow state, audit |
+| Redis | 3.19.1 | Distributed cache/locks |
+| Kafka | - | Event streaming |
+| AWS SQS | - | Async task processing |
+
+**Server:** Port `9010`, Context Path: `/payments`
+
+---
+
+## Architecture at a Glance
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        API Layer                                 │
+│  Controllers (v2): Order, Payment, PaymentAttempt, Webhook      │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │
+┌──────────────────────────────▼──────────────────────────────────┐
+│                      Workflow Layer                              │
+│  7-Step Pipeline: Validate → Persist → Process → PostProcess    │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │
+┌──────────────────────────────▼──────────────────────────────────┐
+│                   Provider Integration                           │
+│  24+ Adapters: Cashfree, Cybersource, PayU, Razorpay, UPI...   │
+│  Decision Tree Routing → Provider Selection                      │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │
+┌──────────────────────────────▼──────────────────────────────────┐
+│                     State Machines                               │
+│  EventBus → PaymentStateMachine → OrderStateMachine             │
+└──────────────────────────────┬──────────────────────────────────┘
+                               │
+┌──────────────────────────────▼──────────────────────────────────┐
+│                      Data Layer                                  │
+│  MySQL (Master/Replica) │ DynamoDB │ Redis │ Caffeine Cache     │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Core Payment Flow (30-Second Overview)
+
+```
+1. Client → POST /v2/orders         → OrderCreateWorkflow
+2. Client → POST /v2/payments       → BulkPaymentCreateWorkflow
+3. Client → POST /v2/attempts       → PaymentAttemptCreateWorkflow
+                                           │
+                                           ├── Instrument Enrichment
+                                           ├── Provider Routing (Decision Tree)
+                                           ├── Provider API Call
+                                           └── State Machine Events
+                                           │
+4. Provider → Webhook               → Status Update → State Cascade
+5. Final State: Order COMPLETED
+```
+
+---
+
+## Key Patterns to Understand
+
+| Pattern | Where Used | Why It Matters |
+|---------|-----------|----------------|
+| **7-Step Workflow** | All create workflows | Core execution pipeline |
+| **State Machines** | Payment, Order, Refund | Event-driven state transitions |
+| **Factory Pattern** | Provider adapters | Dynamic provider selection |
+| **Decision Tree** | Provider routing | Rule-based provider selection |
+| **Master-Replica** | Database | Read/write separation |
+| **Distributed Lock** | Sequential workflows | Concurrency control |
+
+---
+
+## How to Use This Guide
+
+### First Session (2-3 hours)
+1. Read this README completely
+2. Read [01-overview.md](./01-overview.md)
+3. Explore `DarwinApplication.java` in the codebase
+4. Run the service locally if possible
+
+### Subsequent Sessions
+1. Check [06-study-path.md](./06-study-path.md) for where you left off
+2. Follow the week-by-week progression
+3. Use [05-key-files-reference.md](./05-key-files-reference.md) as quick lookup
+
+### When Working on Specific Features
+- Payment issues → [04-payment-flow.md](./04-payment-flow.md)
+- Provider integration → [03-provider-integration.md](./03-provider-integration.md)
+- Database/caching → [02-data-layer.md](./02-data-layer.md)
+
+---
+
+## Directory Structure Quick Reference
+
+```
+src/main/java/in/dreamplug/darwin/
+├── controller/v2/          # REST endpoints
+├── v2/workflow/create/     # Core workflows (CRITICAL)
+│   ├── paymentattempts/    # Payment attempt creation
+│   ├── payments/           # Payment creation
+│   └── providers/          # 24+ provider adapters
+├── statemachine/           # State machines
+│   ├── payment/            # PaymentStateMachine
+│   └── order/              # OrderStateMachine
+├── entity/v2/              # JPA entities
+├── repository/             # Data access
+├── cache/                  # Caffeine caches
+├── planner/                # Decision tree routing
+└── configuration/          # Spring configs
+```
+
+---
+
+## Resume Points
+
+Use these markers to quickly resume your study:
+
+- [ ] **CHECKPOINT 1:** Completed Overview (01-overview.md)
+- [ ] **CHECKPOINT 2:** Completed Data Layer (02-data-layer.md)
+- [ ] **CHECKPOINT 3:** Completed Provider Integration (03-provider-integration.md)
+- [ ] **CHECKPOINT 4:** Completed Payment Flow (04-payment-flow.md)
+- [ ] **CHECKPOINT 5:** Expert Level - Can trace any payment flow
+
+---
+
+## Contact & Resources
+
+- **Codebase:** `/Users/kiranbiliyawala/code/cred/payments/payment-service`
+- **Main Config:** `src/main/resources/application.properties` (1300+ lines)
+- **Build:** `./gradlew build`
+- **Run:** `./gradlew bootRun`
+
+---
+
+*Generated by Claude Code - December 2025*

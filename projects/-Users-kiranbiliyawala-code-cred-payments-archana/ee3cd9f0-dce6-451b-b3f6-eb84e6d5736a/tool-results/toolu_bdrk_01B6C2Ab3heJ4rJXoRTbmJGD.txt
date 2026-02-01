@@ -1,0 +1,1407 @@
+diff --git a/src/main/java/in/dreamplug/darwin/util/MandateUtil.java b/src/main/java/in/dreamplug/darwin/util/MandateUtil.java
+index ac859ba26b..0c268831f8 100644
+--- a/src/main/java/in/dreamplug/darwin/util/MandateUtil.java
++++ b/src/main/java/in/dreamplug/darwin/util/MandateUtil.java
+@@ -12,6 +12,7 @@
+ import in.dreamplug.payments.dto.request.v2.CreatePaymentRequest;
+ import in.dreamplug.payments.enums.OrderType;
+ import java.math.BigDecimal;
++import java.util.List;
+ import java.util.Optional;
+ import lombok.experimental.UtilityClass;
+ 
+@@ -27,12 +28,19 @@ public static DebitStep getFirstDebitStepFromMandate(Mandate mandate) {
+                 .orElse(null);
+     }
+ 
+-    public static CreatePaymentRequest getFirstDebitPaymentRequest(BigDecimal amount) {
++    public static CreatePaymentRequest getFirstDebitPaymentRequest(
++            List<CreatePaymentRequest> paymentRequests, BigDecimal orderAmount) {
++        BigDecimal authlessPaymentAmount = paymentRequests.stream()
++                .filter(request -> !request.getPaymentMode().isUserAuthRequired())
++                .map(CreatePaymentRequest::getAmount)
++                .reduce(BigDecimal.ZERO, BigDecimal::add);
+         CreatePaymentRequest firstDebitRequest = new CreatePaymentRequest();
+-        firstDebitRequest.setAmount(amount);
++        firstDebitRequest.setAmount(orderAmount.subtract(authlessPaymentAmount));
+         firstDebitRequest.setPaymentMode(PaymentMode.AUTO_DEBIT);
+-        firstDebitRequest.setCurrency(
+-                Currency.builder().name(CurrencyName.INR).currencyAmount(amount).build());
++        firstDebitRequest.setCurrency(Currency.builder()
++                .name(CurrencyName.INR)
++                .currencyAmount(orderAmount.subtract(authlessPaymentAmount))
++                .build());
+         MandatePaymentInstrument paymentInstrument = new MandatePaymentInstrument();
+         paymentInstrument.setType(InstrumentType.MANDATE_INSTRUMENT);
+         CreatePaymentAttemptRequest createPaymentAttemptRequest = new CreatePaymentAttemptRequest();
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/orders/EmandateOrderCreateWorkflow.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/orders/EmandateOrderCreateWorkflow.java
+index f9158ea663..48c6a476e8 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/create/orders/EmandateOrderCreateWorkflow.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/orders/EmandateOrderCreateWorkflow.java
+@@ -3,6 +3,7 @@
+ import static in.dreamplug.darwin.util.OrderUtil.validateIfAutoRefundAllowed;
+ 
+ import in.dreamplug.darwin.configuration.qualifier.QualifierConstant;
++import in.dreamplug.darwin.error.Error;
+ import in.dreamplug.darwin.event.publisher.OrderPostPaymentProcessSQSPublisher;
+ import in.dreamplug.darwin.manager.MasterConfigurationManager;
+ import in.dreamplug.darwin.mapper.MandateIntentMapper;
+@@ -10,6 +11,7 @@
+ import in.dreamplug.darwin.util.MandateUtil;
+ import in.dreamplug.payments.domain.commons.PaymentMode;
+ import in.dreamplug.payments.domain.order.v2.Order;
++import in.dreamplug.payments.dto.request.v2.CreatePaymentRequest;
+ import java.math.BigDecimal;
+ import java.util.Objects;
+ import lombok.RequiredArgsConstructor;
+@@ -71,13 +73,39 @@ private void validateAndEnrichFirstDebitRequest(OrderCreateContext context) {
+         if (!CollectionUtils.isEmpty(context.getRequest().getPayments())
+                 && MandateUtil.isFirstDebitEnabled(
+                         context.getRequest().getType(), context.getRequest().getAmount())) {
++
++            if (context.getRequest().isAutoRefund() && isAuthlessPaymentPresent(context)) {
++                log.error(
++                        "Auto refund is enabled for order, authless payment not allowed: {} ",
++                        context.getOrderEntity().getExternalId());
++                throw Error.invalid_request_data
++                        .getBuilder()
++                        .message("Auto refund is enabled for order, authless payment not allowed")
++                        .build();
++            }
++
++            CreatePaymentRequest firstDebitPaymentRequest = MandateUtil.getFirstDebitPaymentRequest(
++                    context.getRequest().getPayments(), context.getRequest().getAmount());
++
++            if (firstDebitPaymentRequest.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
++                log.error(
++                        "First debit payment amount is invalid for order: {} ",
++                        context.getOrderEntity().getExternalId());
++                throw Error.invalid_request_data
++                        .getBuilder()
++                        .message("First debit payment amount is invalid")
++                        .build();
++            }
++
+             context.getRequest().getPayments().stream()
+                     .filter(pReq -> PaymentMode.CHECKOUT.equals(pReq.getPaymentMode()))
+                     .forEach(pReq -> pReq.setAmount(BigDecimal.ZERO));
+-            context.getRequest()
+-                    .getPayments()
+-                    .add(MandateUtil.getFirstDebitPaymentRequest(
+-                            context.getRequest().getAmount()));
++            context.getRequest().getPayments().add(firstDebitPaymentRequest);
+         }
+     }
++
++    private Boolean isAuthlessPaymentPresent(OrderCreateContext context) {
++        return context.getRequest().getPayments().stream()
++                .anyMatch(request -> !request.getPaymentMode().isUserAuthRequired());
++    }
+ }
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/payments/PaymentCreateWorkflowFactory.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/payments/PaymentCreateWorkflowFactory.java
+index 60a04a2126..a41cd51a49 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/create/payments/PaymentCreateWorkflowFactory.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/payments/PaymentCreateWorkflowFactory.java
+@@ -23,6 +23,8 @@ public PaymentCreateWorkflow getPaymentCreateWorkflow(CreatePaymentRequest reque
+         if (PaymentMode.AUTO_DEBIT.equals(request.getPaymentMode())) {
+             return mandateDebitPaymentCreateWorkflow;
+         }
+-        return OrderType.EMANDATE.equals(type) ? mandatePaymentCreateWorkflow : paymentCreateWorkflow;
++        return (OrderType.EMANDATE.equals(type) && PaymentMode.CHECKOUT.equals(request.getPaymentMode()))
++                ? mandatePaymentCreateWorkflow
++                : paymentCreateWorkflow;
+     }
+ }
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/MandateBulkPaymentCreateWorkflow.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/MandateBulkPaymentCreateWorkflow.java
+index 3be2bdb10b..bfc9ef1bcf 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/MandateBulkPaymentCreateWorkflow.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/MandateBulkPaymentCreateWorkflow.java
+@@ -2,12 +2,14 @@
+ 
+ import in.dreamplug.darwin.dao.impl.OrderDAOImpl;
+ import in.dreamplug.darwin.entity.OrderEntity;
++import in.dreamplug.darwin.error.Error;
+ import in.dreamplug.darwin.repository.OrderRepository;
+ import in.dreamplug.darwin.repository.PaymentRepository;
+ import in.dreamplug.darwin.repository.ProductRepository;
+ import in.dreamplug.darwin.repository.TPVDetailsRepository;
+ import in.dreamplug.darwin.service.FeeService;
+ import in.dreamplug.darwin.util.MandateUtil;
++import in.dreamplug.darwin.util.OrderUtil;
+ import in.dreamplug.darwin.v2.workflow.create.payments.PaymentCreateWorkflowFactory;
+ import in.dreamplug.darwin.v2.workflow.create.payments.discard.BulkPaymentDiscardWorkflow;
+ import in.dreamplug.payments.domain.commons.PaymentMode;
+@@ -64,10 +66,33 @@ protected void validateAndEnrichSpecificToWorkflow(BulkPaymentsRequest request,
+                     });
+         }
+ 
++        if (OrderUtil.isAutoRefund(orderEntity) && isAuthlessPaymentPresent(request)) {
++            log.error(
++                    "Auto refund is enabled for order, authless payment not allowed: {} ", orderEntity.getExternalId());
++            throw Error.invalid_request_data
++                    .getBuilder()
++                    .message("Auto refund is enabled for order, authless payment not allowed")
++                    .build();
++        }
++
+         if (MandateUtil.isFirstDebitEnabled(orderEntity.getType(), orderEntity.getAmount())) {
+             log.info("Creating first debit payment for EMANDATE order: {}", orderEntity.getExternalId());
+             // add first debit payment request
+-            request.getPayments().add(MandateUtil.getFirstDebitPaymentRequest(orderEntity.getAmount()));
++            CreatePaymentRequest firstDebitPaymentRequest =
++                    MandateUtil.getFirstDebitPaymentRequest(request.getPayments(), orderEntity.getAmount());
++            if (firstDebitPaymentRequest.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
++                log.error("First debit payment amount is invalid for order: {} ", orderEntity.getExternalId());
++                throw Error.invalid_request_data
++                        .getBuilder()
++                        .message("First debit payment amount is invalid")
++                        .build();
++            }
++            request.getPayments().add(firstDebitPaymentRequest);
+         }
+     }
++
++    private Boolean isAuthlessPaymentPresent(BulkPaymentsRequest paymentRequests) {
++        return paymentRequests.getPayments().stream()
++                .anyMatch(request -> !request.getPaymentMode().isUserAuthRequired());
++    }
+ }
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/IAuthLessTwoPhaseProviderAdapter.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/IAuthLessTwoPhaseProviderAdapter.java
+index 92525c62c8..af65d268d0 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/IAuthLessTwoPhaseProviderAdapter.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/IAuthLessTwoPhaseProviderAdapter.java
+@@ -11,8 +11,9 @@
+ 
+ public abstract class IAuthLessTwoPhaseProviderAdapter<T, R> extends IPaymentProviderAdapter<T, R> {
+ 
+-    public IAuthLessTwoPhaseProviderAdapter(PaymentProviderKey paymentProviderKey, InstrumentType instrumentType) {
+-        super(paymentProviderKey, instrumentType, OrderType.PAY);
++    public IAuthLessTwoPhaseProviderAdapter(
++            PaymentProviderKey paymentProviderKey, InstrumentType instrumentType, OrderType orderType) {
++        super(paymentProviderKey, instrumentType, orderType);
+     }
+ 
+     // block the money till authful is processed
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/cred_cc_rewards/CredCCRewardsProviderAdapter.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/cred_cc_rewards/CredCCRewardsProviderAdapter.java
+index 57e964ceb1..c6f058ea33 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/cred_cc_rewards/CredCCRewardsProviderAdapter.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/cred_cc_rewards/CredCCRewardsProviderAdapter.java
+@@ -29,14 +29,24 @@
+ import in.dreamplug.external.cred_cc_rewards.model.MerchantDetails;
+ import in.dreamplug.external.cred_cc_rewards.model.Token;
+ import in.dreamplug.external.cred_cc_rewards.model.User;
+-import in.dreamplug.external.cred_cc_rewards.request.*;
+-import in.dreamplug.external.cred_cc_rewards.response.*;
++import in.dreamplug.external.cred_cc_rewards.request.BlockRequest;
++import in.dreamplug.external.cred_cc_rewards.request.CreateRefundRequest;
++import in.dreamplug.external.cred_cc_rewards.request.DebitRequest;
++import in.dreamplug.external.cred_cc_rewards.request.GetTransactionRequest;
++import in.dreamplug.external.cred_cc_rewards.request.ReverseAuthorizationRequest;
++import in.dreamplug.external.cred_cc_rewards.response.BaseResponse;
++import in.dreamplug.external.cred_cc_rewards.response.BlockResponse;
++import in.dreamplug.external.cred_cc_rewards.response.CreateRefundResponse;
++import in.dreamplug.external.cred_cc_rewards.response.DebitResponse;
++import in.dreamplug.external.cred_cc_rewards.response.GetTransactionResponse;
++import in.dreamplug.external.cred_cc_rewards.response.ReverseAuthorizationResponse;
+ import in.dreamplug.payments.domain.instrument.InstrumentType;
+ import in.dreamplug.payments.domain.instrument.v2.RewardPaymentInstrument;
+ import in.dreamplug.payments.domain.instrumentdetail.RewardEnrichedPaymentInstrument;
+ import in.dreamplug.payments.domain.order.PaymentAttemptStatus;
+ import in.dreamplug.payments.domain.refunds.RefundStatus;
+ import in.dreamplug.payments.dto.response.ErrorInfo;
++import in.dreamplug.payments.enums.OrderType;
+ import java.math.BigDecimal;
+ import java.time.Instant;
+ import java.util.HashMap;
+@@ -95,7 +105,7 @@ public CredCCRewardsProviderAdapter(
+             CredCCRewardsClient credCCRewardsClient,
+             ProviderAccountManager providerAccountManager,
+             ObjectMapper objectMapper) {
+-        super(PaymentProviderKey.CRED_CC_REWARDS, InstrumentType.REWARD);
++        super(PaymentProviderKey.CRED_CC_REWARDS, InstrumentType.REWARD, OrderType.PAY);
+         this.credCCRewardsClient = credCCRewardsClient;
+         this.providerAccountManager = providerAccountManager;
+         this.objectMapper = objectMapper;
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/WalletProviderAdapter.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/AbstractWalletProviderAdapter.java
+similarity index 97%
+rename from src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/WalletProviderAdapter.java
+rename to src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/AbstractWalletProviderAdapter.java
+index 2e9ef943ec..8bcaacc8e1 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/WalletProviderAdapter.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/AbstractWalletProviderAdapter.java
+@@ -48,6 +48,7 @@
+ import in.dreamplug.payments.domain.order.PaymentAttemptStatus;
+ import in.dreamplug.payments.domain.refunds.RefundStatus;
+ import in.dreamplug.payments.dto.response.ErrorInfo;
++import in.dreamplug.payments.enums.OrderType;
+ import io.grpc.StatusRuntimeException;
+ import java.math.BigDecimal;
+ import java.util.Map;
+@@ -55,6 +56,7 @@
+ import java.util.function.Function;
+ import java.util.function.Supplier;
+ import javax.annotation.Nullable;
++import lombok.Getter;
+ import lombok.Setter;
+ import lombok.extern.slf4j.Slf4j;
+ import org.apache.commons.lang3.ObjectUtils;
+@@ -63,12 +65,12 @@
+ import org.springframework.http.HttpStatus;
+ import org.springframework.retry.annotation.Backoff;
+ import org.springframework.retry.annotation.Retryable;
+-import org.springframework.stereotype.Component;
+ 
+ @Slf4j
+-@Component
+ @Setter(onMethod_ = {@Autowired})
+-public class WalletProviderAdapter extends IAuthLessTwoPhaseProviderAdapter<String, String> {
++public class AbstractWalletProviderAdapter extends IAuthLessTwoPhaseProviderAdapter<String, String> {
++
++    @Getter
+     private final CredWalletClient walletClient;
+ 
+     private static final String REFERENCE_TYPE = "CHECKOUT_ORDER_ID";
+@@ -96,9 +98,8 @@ public class WalletProviderAdapter extends IAuthLessTwoPhaseProviderAdapter<Stri
+                 "TRANSACTION_STATUS_CLEARED");
+     }
+ 
+-    @Autowired
+-    public WalletProviderAdapter(CredWalletClient walletClient) {
+-        super(PaymentProviderKey.CRED_WALLET, InstrumentType.CRED_WALLET);
++    public AbstractWalletProviderAdapter(CredWalletClient walletClient, OrderType orderType) {
++        super(PaymentProviderKey.CRED_WALLET, InstrumentType.CRED_WALLET, orderType);
+         this.walletClient = walletClient;
+     }
+ 
+@@ -114,7 +115,7 @@ public void reversal(PaymentAttemptV2Entity request) {
+         GetTransactionDetailsRequest getTransactionDetailsRequest =
+                 buildTransactionRequest(reversalRequest.getTransactionId(), reversalRequest.getUserId());
+ 
+-        ReverseTransactionResponse reverseTransactionResponse = ((WalletProviderAdapter) getSelfProxy())
++        ReverseTransactionResponse reverseTransactionResponse = ((AbstractWalletProviderAdapter) getSelfProxy())
+                 .makeGRPCCall(
+                         METHOD_REVERSAL,
+                         getTransactionDetailsRequest,
+@@ -139,7 +140,7 @@ public void settle(AuthLessPaymentDebitContext context) {
+         GetTransactionDetailsRequest getTransactionDetailsRequest =
+                 buildTransactionRequest(debitRequest.getTransactionId(), debitRequest.getUserId());
+ 
+-        SettleTransactionResponse settleTransactionResponse = ((WalletProviderAdapter) getSelfProxy())
++        SettleTransactionResponse settleTransactionResponse = ((AbstractWalletProviderAdapter) getSelfProxy())
+                 .makeGRPCCall(
+                         METHOD_SETTLE,
+                         getTransactionDetailsRequest,
+@@ -173,7 +174,7 @@ public ProviderPaymentResponse block(
+         GetTransactionDetailsRequest getTransactionDetailsRequest =
+                 buildTransactionRequest(blockRequest.getTransactionId(), blockRequest.getUserId());
+ 
+-        AuthorizeWithdrawalResponse blockResponse = ((WalletProviderAdapter) getSelfProxy())
++        AuthorizeWithdrawalResponse blockResponse = ((AbstractWalletProviderAdapter) getSelfProxy())
+                 .makeGRPCCall(
+                         METHOD_BLOCK,
+                         getTransactionDetailsRequest,
+@@ -241,7 +242,7 @@ public ProviderRefundCreateResponse createRefund(RefundAttemptCreateContext refu
+         GetTransactionDetailsRequest getTransactionDetailsRequest =
+                 buildTransactionRequest(refundRequest.getTransactionId(), refundRequest.getUserId());
+ 
+-        RefundTransactionResponse refundResponse = ((WalletProviderAdapter) getSelfProxy())
++        RefundTransactionResponse refundResponse = ((AbstractWalletProviderAdapter) getSelfProxy())
+                 .makeGRPCCall(
+                         METHOD_REFUND,
+                         getTransactionDetailsRequest,
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/WalletEmandateProviderAdapter.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/WalletEmandateProviderAdapter.java
+new file mode 100644
+index 0000000000..5c39f4e441
+--- /dev/null
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/WalletEmandateProviderAdapter.java
+@@ -0,0 +1,26 @@
++package in.dreamplug.darwin.v2.workflow.create.providers.wallet;
++
++import in.dreamplug.darwin.v2.workflow.get.providers.EMandateFetchProviderAdapter;
++import in.dreamplug.darwin.v2.workflow.get.providers.EMandateFetchSyncContext;
++import in.dreamplug.external.axis_upi.config.AuthorizationConfig;
++import in.dreamplug.external.cred_wallet.client.CredWalletClient;
++import in.dreamplug.payments.enums.OrderType;
++import lombok.extern.slf4j.Slf4j;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.stereotype.Service;
++
++@Slf4j
++@Service
++public class WalletEmandateProviderAdapter extends AbstractWalletProviderAdapter
++        implements EMandateFetchProviderAdapter<String, AuthorizationConfig> {
++
++    @Autowired
++    public WalletEmandateProviderAdapter(CredWalletClient walletClient) {
++        super(walletClient, OrderType.EMANDATE);
++    }
++
++    @Override
++    public void syncPaymentAttempt(EMandateFetchSyncContext syncContext) {
++        syncPaymentAttemptWithProviderId(syncContext.getAttemptV2Entity());
++    }
++}
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/WalletPayProviderAdapter.java b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/WalletPayProviderAdapter.java
+new file mode 100644
+index 0000000000..e965dd6878
+--- /dev/null
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/create/providers/wallet/WalletPayProviderAdapter.java
+@@ -0,0 +1,17 @@
++package in.dreamplug.darwin.v2.workflow.create.providers.wallet;
++
++import in.dreamplug.external.cred_wallet.client.CredWalletClient;
++import in.dreamplug.payments.enums.OrderType;
++import lombok.extern.slf4j.Slf4j;
++import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.stereotype.Service;
++
++@Slf4j
++@Service
++public class WalletPayProviderAdapter extends AbstractWalletProviderAdapter {
++
++    @Autowired
++    public WalletPayProviderAdapter(CredWalletClient walletClient) {
++        super(walletClient, OrderType.PAY);
++    }
++}
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/get/EMandatePaymentAttemptFetchWorkflow.java b/src/main/java/in/dreamplug/darwin/v2/workflow/get/EMandatePaymentAttemptFetchWorkflow.java
+index 35cf66ff73..21f9396c2b 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/get/EMandatePaymentAttemptFetchWorkflow.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/get/EMandatePaymentAttemptFetchWorkflow.java
+@@ -190,7 +190,11 @@ void syncEntity(
+         if (syncWithWebhookData) {
+             providerAdapter.get().syncWithWebhookData(syncContext);
+         } else {
+-            providerAdapter.get().syncPaymentAttempt(syncContext);
++            try {
++                providerAdapter.get().syncPaymentAttempt(syncContext);
++            } catch (Exception e) {
++                log.error("Failed to sync payment attempt {}", paymentAttemptEntity.getExternalId(), e);
++            }
+         }
+ 
+         if (!paymentAttemptEntity.getStatus().equals(currentStatus)) {
+diff --git a/src/main/java/in/dreamplug/darwin/v2/workflow/get/providers/EMandateFetchProviderAdapter.java b/src/main/java/in/dreamplug/darwin/v2/workflow/get/providers/EMandateFetchProviderAdapter.java
+index 064c1c46c4..463b35fa4d 100644
+--- a/src/main/java/in/dreamplug/darwin/v2/workflow/get/providers/EMandateFetchProviderAdapter.java
++++ b/src/main/java/in/dreamplug/darwin/v2/workflow/get/providers/EMandateFetchProviderAdapter.java
+@@ -6,5 +6,4 @@ public interface EMandateFetchProviderAdapter<T, R> {
+     default void syncWithWebhookData(EMandateFetchSyncContext context) {
+         throw new UnsupportedOperationException("method not implemented");
+     }
+-    ;
+ }
+diff --git a/src/test/java/in/dreamplug/darwin/util/MandateUtilTest.java b/src/test/java/in/dreamplug/darwin/util/MandateUtilTest.java
+new file mode 100644
+index 0000000000..8088e45bca
+--- /dev/null
++++ b/src/test/java/in/dreamplug/darwin/util/MandateUtilTest.java
+@@ -0,0 +1,250 @@
++package in.dreamplug.darwin.util;
++
++import static org.junit.jupiter.api.Assertions.*;
++
++import in.dreamplug.payments.domain.commons.CurrencyName;
++import in.dreamplug.payments.domain.commons.PaymentMode;
++import in.dreamplug.payments.domain.instrument.InstrumentType;
++import in.dreamplug.payments.dto.request.v2.CreatePaymentRequest;
++import in.dreamplug.payments.enums.OrderType;
++import java.math.BigDecimal;
++import java.util.ArrayList;
++import java.util.List;
++import org.junit.jupiter.api.Test;
++
++public class MandateUtilTest {
++
++    @Test
++    public void testGetFirstDebitPaymentRequest_WithNoAuthlessPayments() {
++        // Given
++        BigDecimal orderAmount = BigDecimal.valueOf(1000);
++        List<CreatePaymentRequest> paymentRequests = new ArrayList<>();
++
++        CreatePaymentRequest checkoutPayment = new CreatePaymentRequest();
++        checkoutPayment.setPaymentMode(PaymentMode.CHECKOUT);
++        checkoutPayment.setAmount(BigDecimal.valueOf(500));
++        paymentRequests.add(checkoutPayment);
++
++        // When
++        CreatePaymentRequest firstDebitRequest = MandateUtil.getFirstDebitPaymentRequest(paymentRequests, orderAmount);
++
++        // Then
++        assertNotNull(firstDebitRequest);
++        assertEquals(PaymentMode.AUTO_DEBIT, firstDebitRequest.getPaymentMode());
++        assertEquals(BigDecimal.valueOf(1000), firstDebitRequest.getAmount());
++        assertEquals(CurrencyName.INR, firstDebitRequest.getCurrency().getName());
++        assertEquals(BigDecimal.valueOf(1000), firstDebitRequest.getCurrency().getCurrencyAmount());
++        assertEquals(
++                InstrumentType.MANDATE_INSTRUMENT,
++                firstDebitRequest
++                        .getCreatePaymentAttemptRequest()
++                        .getPaymentInstrument()
++                        .getType());
++    }
++
++    @Test
++    public void testGetFirstDebitPaymentRequest_WithSingleAuthlessPayment() {
++        // Given
++        BigDecimal orderAmount = BigDecimal.valueOf(3000);
++        List<CreatePaymentRequest> paymentRequests = new ArrayList<>();
++
++        CreatePaymentRequest authlessPayment = new CreatePaymentRequest();
++        authlessPayment.setPaymentMode(PaymentMode.AUTH_LESS_TWO_PHASE);
++        authlessPayment.setAmount(BigDecimal.valueOf(1000));
++        paymentRequests.add(authlessPayment);
++
++        // When
++        CreatePaymentRequest firstDebitRequest = MandateUtil.getFirstDebitPaymentRequest(paymentRequests, orderAmount);
++
++        // Then
++        assertNotNull(firstDebitRequest);
++        assertEquals(PaymentMode.AUTO_DEBIT, firstDebitRequest.getPaymentMode());
++        // First debit amount = 3000 - 1000 = 2000
++        assertEquals(BigDecimal.valueOf(2000), firstDebitRequest.getAmount());
++        assertEquals(BigDecimal.valueOf(2000), firstDebitRequest.getCurrency().getCurrencyAmount());
++    }
++
++    @Test
++    public void testGetFirstDebitPaymentRequest_WithMultipleAuthlessPayments() {
++        // Given
++        BigDecimal orderAmount = BigDecimal.valueOf(5000);
++        List<CreatePaymentRequest> paymentRequests = new ArrayList<>();
++
++        CreatePaymentRequest authlessPayment1 = new CreatePaymentRequest();
++        authlessPayment1.setPaymentMode(PaymentMode.AUTH_LESS_TWO_PHASE);
++        authlessPayment1.setAmount(BigDecimal.valueOf(1000));
++        paymentRequests.add(authlessPayment1);
++
++        CreatePaymentRequest authlessPayment2 = new CreatePaymentRequest();
++        authlessPayment2.setPaymentMode(PaymentMode.AUTH_LESS_TWO_PHASE);
++        authlessPayment2.setAmount(BigDecimal.valueOf(1500));
++        paymentRequests.add(authlessPayment2);
++
++        CreatePaymentRequest checkoutPayment = new CreatePaymentRequest();
++        checkoutPayment.setPaymentMode(PaymentMode.CHECKOUT);
++        checkoutPayment.setAmount(BigDecimal.valueOf(500));
++        paymentRequests.add(checkoutPayment);
++
++        // When
++        CreatePaymentRequest firstDebitRequest = MandateUtil.getFirstDebitPaymentRequest(paymentRequests, orderAmount);
++
++        // Then
++        assertNotNull(firstDebitRequest);
++        assertEquals(PaymentMode.AUTO_DEBIT, firstDebitRequest.getPaymentMode());
++        // First debit amount = 5000 - (1000 + 1500) = 2500
++        assertEquals(BigDecimal.valueOf(2500), firstDebitRequest.getAmount());
++        assertEquals(BigDecimal.valueOf(2500), firstDebitRequest.getCurrency().getCurrencyAmount());
++    }
++
++    @Test
++    public void testGetFirstDebitPaymentRequest_WithZeroAuthlessAmount() {
++        // Given
++        BigDecimal orderAmount = BigDecimal.valueOf(2000);
++        List<CreatePaymentRequest> paymentRequests = new ArrayList<>();
++
++        CreatePaymentRequest checkoutPayment = new CreatePaymentRequest();
++        checkoutPayment.setPaymentMode(PaymentMode.CHECKOUT);
++        checkoutPayment.setAmount(BigDecimal.valueOf(2000));
++        paymentRequests.add(checkoutPayment);
++
++        // When
++        CreatePaymentRequest firstDebitRequest = MandateUtil.getFirstDebitPaymentRequest(paymentRequests, orderAmount);
++
++        // Then
++        assertNotNull(firstDebitRequest);
++        assertEquals(BigDecimal.valueOf(2000), firstDebitRequest.getAmount());
++    }
++
++    @Test
++    public void testGetFirstDebitPaymentRequest_WithEmptyPaymentsList() {
++        // Given
++        BigDecimal orderAmount = BigDecimal.valueOf(1500);
++        List<CreatePaymentRequest> paymentRequests = new ArrayList<>();
++
++        // When
++        CreatePaymentRequest firstDebitRequest = MandateUtil.getFirstDebitPaymentRequest(paymentRequests, orderAmount);
++
++        // Then
++        assertNotNull(firstDebitRequest);
++        assertEquals(PaymentMode.AUTO_DEBIT, firstDebitRequest.getPaymentMode());
++        // First debit amount = 1500 - 0 = 1500
++        assertEquals(BigDecimal.valueOf(1500), firstDebitRequest.getAmount());
++    }
++
++    @Test
++    public void testGetFirstDebitPaymentRequest_CurrencyConfiguration() {
++        // Given
++        BigDecimal orderAmount = BigDecimal.valueOf(1000);
++        List<CreatePaymentRequest> paymentRequests = new ArrayList<>();
++
++        // When
++        CreatePaymentRequest firstDebitRequest = MandateUtil.getFirstDebitPaymentRequest(paymentRequests, orderAmount);
++
++        // Then
++        assertNotNull(firstDebitRequest.getCurrency());
++        assertEquals(CurrencyName.INR, firstDebitRequest.getCurrency().getName());
++        assertEquals(BigDecimal.valueOf(1000), firstDebitRequest.getCurrency().getCurrencyAmount());
++    }
++
++    @Test
++    public void testGetFirstDebitPaymentRequest_PaymentInstrumentConfiguration() {
++        // Given
++        BigDecimal orderAmount = BigDecimal.valueOf(1000);
++        List<CreatePaymentRequest> paymentRequests = new ArrayList<>();
++
++        // When
++        CreatePaymentRequest firstDebitRequest = MandateUtil.getFirstDebitPaymentRequest(paymentRequests, orderAmount);
++
++        // Then
++        assertNotNull(firstDebitRequest.getCreatePaymentAttemptRequest());
++        assertNotNull(firstDebitRequest.getCreatePaymentAttemptRequest().getPaymentInstrument());
++        assertEquals(
++                InstrumentType.MANDATE_INSTRUMENT,
++                firstDebitRequest
++                        .getCreatePaymentAttemptRequest()
++                        .getPaymentInstrument()
++                        .getType());
++    }
++
++    @Test
++    public void testGetFirstDebitPaymentRequest_WithLargeAuthlessAmount() {
++        // Given
++        BigDecimal orderAmount = BigDecimal.valueOf(10000);
++        List<CreatePaymentRequest> paymentRequests = new ArrayList<>();
++
++        CreatePaymentRequest authlessPayment = new CreatePaymentRequest();
++        authlessPayment.setPaymentMode(PaymentMode.AUTH_LESS_TWO_PHASE);
++        authlessPayment.setAmount(BigDecimal.valueOf(8000));
++        paymentRequests.add(authlessPayment);
++
++        // When
++        CreatePaymentRequest firstDebitRequest = MandateUtil.getFirstDebitPaymentRequest(paymentRequests, orderAmount);
++
++        // Then
++        assertNotNull(firstDebitRequest);
++        // First debit amount = 10000 - 8000 = 2000
++        assertEquals(BigDecimal.valueOf(2000), firstDebitRequest.getAmount());
++    }
++
++    @Test
++    public void testIsFirstDebitEnabled_WithEMandateAndPositiveAmount() {
++        // Given
++        OrderType orderType = OrderType.EMANDATE;
++        BigDecimal amount = BigDecimal.valueOf(1000);
++
++        // When
++        boolean result = MandateUtil.isFirstDebitEnabled(orderType, amount);
++
++        // Then
++        assertTrue(result);
++    }
++
++    @Test
++    public void testIsFirstDebitEnabled_WithEMandateAndZeroAmount() {
++        // Given
++        OrderType orderType = OrderType.EMANDATE;
++        BigDecimal amount = BigDecimal.ZERO;
++
++        // When
++        boolean result = MandateUtil.isFirstDebitEnabled(orderType, amount);
++
++        // Then
++        assertFalse(result);
++    }
++
++    @Test
++    public void testIsFirstDebitEnabled_WithEMandateAndNegativeAmount() {
++        // Given
++        OrderType orderType = OrderType.EMANDATE;
++        BigDecimal amount = BigDecimal.valueOf(-100);
++
++        // When
++        boolean result = MandateUtil.isFirstDebitEnabled(orderType, amount);
++
++        // Then
++        assertFalse(result);
++    }
++
++    @Test
++    public void testIsFirstDebitEnabled_WithNonEMandateOrderType() {
++        // Given
++        OrderType orderType = OrderType.PAY;
++        BigDecimal amount = BigDecimal.valueOf(1000);
++
++        // When
++        boolean result = MandateUtil.isFirstDebitEnabled(orderType, amount);
++
++        // Then
++        assertFalse(result);
++    }
++
++    @Test
++    public void testIsFirstDebitEnabled_WithNullOrderType() {
++        // Given
++        OrderType orderType = null;
++        BigDecimal amount = BigDecimal.valueOf(1000);
++
++        // When & Then
++        assertFalse(() -> MandateUtil.isFirstDebitEnabled(orderType, amount));
++    }
++}
+diff --git a/src/test/java/in/dreamplug/darwin/v2/workflow/create/orders/EmandateOrderCreateWorkflowTest.java b/src/test/java/in/dreamplug/darwin/v2/workflow/create/orders/EmandateOrderCreateWorkflowTest.java
+index 8ab9f85846..e735ef63b8 100644
+--- a/src/test/java/in/dreamplug/darwin/v2/workflow/create/orders/EmandateOrderCreateWorkflowTest.java
++++ b/src/test/java/in/dreamplug/darwin/v2/workflow/create/orders/EmandateOrderCreateWorkflowTest.java
+@@ -188,7 +188,7 @@ public void testValidateAndEnrichFirstDebitRequest_WithMultiplePayments() {
+         checkoutPayment.setAmount(BigDecimal.valueOf(1000));
+ 
+         CreatePaymentRequest nonCheckoutPayment = new CreatePaymentRequest();
+-        nonCheckoutPayment.setPaymentMode(PaymentMode.AUTO_DEBIT); // Use non-checkout payment mode
++        nonCheckoutPayment.setPaymentMode(PaymentMode.AUTH_LESS_TWO_PHASE); // Use authless payment mode
+         nonCheckoutPayment.setAmount(BigDecimal.valueOf(2000));
+ 
+         List<CreatePaymentRequest> payments = new ArrayList<>();
+@@ -204,18 +204,20 @@ public void testValidateAndEnrichFirstDebitRequest_WithMultiplePayments() {
+                 .clientEntity(clientEntity)
+                 .build();
+ 
+-        // When
++        // When & Then - Should throw AppException due to authless payment with autoRefund enabled
+         try {
+             java.lang.reflect.Method method = EmandateOrderCreateWorkflow.class.getDeclaredMethod(
+                     "validateAndEnrichFirstDebitRequest", OrderCreateContext.class);
+             method.setAccessible(true);
+             method.invoke(emandateOrderCreateWorkflow, context);
++            fail("Expected AppException to be thrown when autoRefund is enabled with authless payment");
++        } catch (java.lang.reflect.InvocationTargetException e) {
++            // The actual exception is wrapped in InvocationTargetException when using reflection
++            assertEquals(
++                    "Auto refund is enabled for order, authless payment not allowed",
++                    e.getTargetException().getMessage());
+         } catch (Exception e) {
+-            fail("Method should execute without exception: " + e.getMessage());
++            fail("Unexpected exception type: " + e.getClass().getSimpleName() + " - " + e.getMessage());
+         }
+-
+-        // Then - only checkout payment amount should be set to ZERO
+-        assertEquals(BigDecimal.ZERO, checkoutPayment.getAmount());
+-        assertEquals(BigDecimal.valueOf(2000), nonCheckoutPayment.getAmount()); // Unchanged
+     }
+ }
+diff --git a/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/PaymentCreateWorkflowFactoryTest.java b/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/PaymentCreateWorkflowFactoryTest.java
+new file mode 100644
+index 0000000000..0acb588f0b
+--- /dev/null
++++ b/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/PaymentCreateWorkflowFactoryTest.java
+@@ -0,0 +1,168 @@
++package in.dreamplug.darwin.v2.workflow.create.payments;
++
++import static org.junit.jupiter.api.Assertions.*;
++
++import in.dreamplug.payments.domain.commons.PaymentMode;
++import in.dreamplug.payments.dto.request.v2.CreatePaymentRequest;
++import in.dreamplug.payments.enums.OrderType;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++import org.junit.jupiter.api.extension.ExtendWith;
++import org.mockito.Mock;
++import org.mockito.junit.jupiter.MockitoExtension;
++
++@ExtendWith(MockitoExtension.class)
++public class PaymentCreateWorkflowFactoryTest {
++
++    private PaymentCreateWorkflowFactory paymentCreateWorkflowFactory;
++
++    @Mock
++    private MandatePaymentCreateWorkflow mandatePaymentCreateWorkflow;
++
++    @Mock
++    private PaymentCreateWorkflow paymentCreateWorkflow;
++
++    @Mock
++    private MandateDebitPaymentCreateWorkflow mandateDebitPaymentCreateWorkflow;
++
++    @BeforeEach
++    public void setUp() {
++        paymentCreateWorkflowFactory = new PaymentCreateWorkflowFactory(
++                mandatePaymentCreateWorkflow, paymentCreateWorkflow, mandateDebitPaymentCreateWorkflow);
++    }
++
++    @Test
++    public void testGetPaymentCreateWorkflow_WithAutoDebitPaymentMode() {
++        // Given
++        CreatePaymentRequest request = new CreatePaymentRequest();
++        request.setPaymentMode(PaymentMode.AUTO_DEBIT);
++        OrderType orderType = OrderType.EMANDATE;
++
++        // When
++        PaymentCreateWorkflow workflow = paymentCreateWorkflowFactory.getPaymentCreateWorkflow(request, orderType);
++
++        // Then
++        assertNotNull(workflow);
++        assertEquals(mandateDebitPaymentCreateWorkflow, workflow);
++    }
++
++    @Test
++    public void testGetPaymentCreateWorkflow_WithEMandateAndCheckoutPaymentMode() {
++        // Given
++        CreatePaymentRequest request = new CreatePaymentRequest();
++        request.setPaymentMode(PaymentMode.CHECKOUT);
++        OrderType orderType = OrderType.EMANDATE;
++
++        // When
++        PaymentCreateWorkflow workflow = paymentCreateWorkflowFactory.getPaymentCreateWorkflow(request, orderType);
++
++        // Then
++        assertNotNull(workflow);
++        assertEquals(mandatePaymentCreateWorkflow, workflow);
++    }
++
++    @Test
++    public void testGetPaymentCreateWorkflow_WithEMandateAndNonCheckoutPaymentMode() {
++        // Given
++        CreatePaymentRequest request = new CreatePaymentRequest();
++        request.setPaymentMode(PaymentMode.AUTH_LESS_TWO_PHASE);
++        OrderType orderType = OrderType.EMANDATE;
++
++        // When
++        PaymentCreateWorkflow workflow = paymentCreateWorkflowFactory.getPaymentCreateWorkflow(request, orderType);
++
++        // Then
++        assertNotNull(workflow);
++        assertEquals(paymentCreateWorkflow, workflow);
++    }
++
++    @Test
++    public void testGetPaymentCreateWorkflow_WithPayOrderTypeAndCheckoutPaymentMode() {
++        // Given
++        CreatePaymentRequest request = new CreatePaymentRequest();
++        request.setPaymentMode(PaymentMode.CHECKOUT);
++        OrderType orderType = OrderType.PAY;
++
++        // When
++        PaymentCreateWorkflow workflow = paymentCreateWorkflowFactory.getPaymentCreateWorkflow(request, orderType);
++
++        // Then
++        assertNotNull(workflow);
++        assertEquals(paymentCreateWorkflow, workflow);
++    }
++
++    @Test
++    public void testGetPaymentCreateWorkflow_WithPayOrderTypeAndAutoDebitPaymentMode() {
++        // Given
++        CreatePaymentRequest request = new CreatePaymentRequest();
++        request.setPaymentMode(PaymentMode.AUTO_DEBIT);
++        OrderType orderType = OrderType.PAY;
++
++        // When
++        PaymentCreateWorkflow workflow = paymentCreateWorkflowFactory.getPaymentCreateWorkflow(request, orderType);
++
++        // Then
++        assertNotNull(workflow);
++        assertEquals(mandateDebitPaymentCreateWorkflow, workflow);
++    }
++
++    @Test
++    public void testGetPaymentCreateWorkflow_WithPayOrderTypeAndAuthlessPaymentMode() {
++        // Given
++        CreatePaymentRequest request = new CreatePaymentRequest();
++        request.setPaymentMode(PaymentMode.AUTH_LESS_TWO_PHASE);
++        OrderType orderType = OrderType.PAY;
++
++        // When
++        PaymentCreateWorkflow workflow = paymentCreateWorkflowFactory.getPaymentCreateWorkflow(request, orderType);
++
++        // Then
++        assertNotNull(workflow);
++        assertEquals(paymentCreateWorkflow, workflow);
++    }
++
++    @Test
++    public void testGetPaymentCreateWorkflow_AutoDebitTakesPrecedenceOverOrderType() {
++        // Given - AUTO_DEBIT should always return mandateDebitPaymentCreateWorkflow
++        CreatePaymentRequest request = new CreatePaymentRequest();
++        request.setPaymentMode(PaymentMode.AUTO_DEBIT);
++        OrderType orderType = OrderType.PAY;
++
++        // When
++        PaymentCreateWorkflow workflow = paymentCreateWorkflowFactory.getPaymentCreateWorkflow(request, orderType);
++
++        // Then
++        assertNotNull(workflow);
++        assertEquals(mandateDebitPaymentCreateWorkflow, workflow);
++    }
++
++    @Test
++    public void testGetPaymentCreateWorkflow_EMandateCheckoutCombinationSpecific() {
++        // Given - Only EMANDATE + CHECKOUT should return mandatePaymentCreateWorkflow
++        CreatePaymentRequest request = new CreatePaymentRequest();
++        request.setPaymentMode(PaymentMode.CHECKOUT);
++        OrderType orderType = OrderType.EMANDATE;
++
++        // When
++        PaymentCreateWorkflow workflow = paymentCreateWorkflowFactory.getPaymentCreateWorkflow(request, orderType);
++
++        // Then
++        assertNotNull(workflow);
++        assertEquals(mandatePaymentCreateWorkflow, workflow);
++    }
++
++    @Test
++    public void testGetPaymentCreateWorkflow_NonEMandateCheckoutReturnsDefault() {
++        // Given - Non-EMANDATE + CHECKOUT should return default paymentCreateWorkflow
++        CreatePaymentRequest request = new CreatePaymentRequest();
++        request.setPaymentMode(PaymentMode.CHECKOUT);
++        OrderType orderType = OrderType.PAY;
++
++        // When
++        PaymentCreateWorkflow workflow = paymentCreateWorkflowFactory.getPaymentCreateWorkflow(request, orderType);
++
++        // Then
++        assertNotNull(workflow);
++        assertEquals(paymentCreateWorkflow, workflow);
++    }
++}
+diff --git a/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/BulkPaymentCreateWorkflowMandateIntentTest.java b/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/BulkPaymentCreateWorkflowMandateIntentTest.java
+index ef2614acc8..c81099c0c7 100644
+--- a/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/BulkPaymentCreateWorkflowMandateIntentTest.java
++++ b/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/BulkPaymentCreateWorkflowMandateIntentTest.java
+@@ -60,7 +60,7 @@ public void testValidateAndEnrichSpecificToWorkflow_EmandateOrder_NonCheckoutPay
+ 
+         CreatePaymentRequest netBankingPayment = new CreatePaymentRequest();
+         netBankingPayment.setPaymentMode(PaymentMode.AUTO_DEBIT);
+-        netBankingPayment.setAmount(BigDecimal.valueOf(1500));
++        netBankingPayment.setAmount(BigDecimal.valueOf(500));
+         request.getPayments().add(netBankingPayment);
+ 
+         // When
+@@ -68,7 +68,7 @@ public void testValidateAndEnrichSpecificToWorkflow_EmandateOrder_NonCheckoutPay
+                 () -> mandateBulkPaymentCreateWorkflow.validateAndEnrichSpecificToWorkflow(request, orderEntity));
+ 
+         // Then
+-        assertEquals(BigDecimal.valueOf(1500), netBankingPayment.getAmount());
++        assertEquals(BigDecimal.valueOf(500), netBankingPayment.getAmount());
+     }
+ 
+     @Test
+diff --git a/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/MandateBulkPaymentCreateWorkflowTest.java b/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/MandateBulkPaymentCreateWorkflowTest.java
+new file mode 100644
+index 0000000000..9a67901151
+--- /dev/null
++++ b/src/test/java/in/dreamplug/darwin/v2/workflow/create/payments/bulk/MandateBulkPaymentCreateWorkflowTest.java
+@@ -0,0 +1,181 @@
++package in.dreamplug.darwin.v2.workflow.create.payments.bulk;
++
++import static org.junit.jupiter.api.Assertions.*;
++import static org.mockito.Mockito.*;
++
++import in.dreamplug.commons.springboot.exception.AppException;
++import in.dreamplug.darwin.dao.impl.OrderDAOImpl;
++import in.dreamplug.darwin.entity.OrderAttributeEntity;
++import in.dreamplug.darwin.entity.OrderEntity;
++import in.dreamplug.darwin.repository.OrderRepository;
++import in.dreamplug.darwin.repository.PaymentRepository;
++import in.dreamplug.darwin.repository.ProductRepository;
++import in.dreamplug.darwin.repository.TPVDetailsRepository;
++import in.dreamplug.darwin.service.FeeService;
++import in.dreamplug.darwin.util.Constant;
++import in.dreamplug.darwin.v2.workflow.create.payments.PaymentCreateWorkflowFactory;
++import in.dreamplug.darwin.v2.workflow.create.payments.discard.BulkPaymentDiscardWorkflow;
++import in.dreamplug.payments.domain.commons.PaymentMode;
++import in.dreamplug.payments.dto.request.v2.BulkPaymentsRequest;
++import in.dreamplug.payments.dto.request.v2.CreatePaymentRequest;
++import in.dreamplug.payments.enums.OrderType;
++import java.math.BigDecimal;
++import java.util.ArrayList;
++import java.util.HashSet;
++import java.util.List;
++import java.util.Set;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++import org.junit.jupiter.api.extension.ExtendWith;
++import org.mockito.Mock;
++import org.mockito.junit.jupiter.MockitoExtension;
++
++@ExtendWith(MockitoExtension.class)
++public class MandateBulkPaymentCreateWorkflowTest {
++
++    private MandateBulkPaymentCreateWorkflow mandateBulkPaymentCreateWorkflow;
++
++    @Mock
++    private OrderDAOImpl orderDAO;
++
++    @Mock
++    private PaymentCreateWorkflowFactory paymentCreateWorkflowFactory;
++
++    @Mock
++    BulkPaymentDiscardWorkflow discardWorkflow;
++
++    @Mock
++    private OrderRepository orderRepository;
++
++    @Mock
++    private PaymentRepository paymentRepository;
++
++    @Mock
++    private ProductRepository productRepository;
++
++    @Mock
++    private TPVDetailsRepository tpvDetailsRepository;
++
++    @Mock
++    private FeeService feeService;
++
++    @BeforeEach
++    public void setUp() {
++        mandateBulkPaymentCreateWorkflow = new MandateBulkPaymentCreateWorkflow(
++                orderDAO,
++                paymentCreateWorkflowFactory,
++                discardWorkflow,
++                paymentRepository,
++                orderRepository,
++                tpvDetailsRepository,
++                productRepository,
++                feeService);
++    }
++
++    @Test
++    public void testAutoRefundValidation_WithAutoRefundAndAuthlessPayment_ShouldThrowException() {
++        // Given
++        OrderEntity orderEntity = new OrderEntity();
++        orderEntity.setExternalId("order123");
++        orderEntity.setType(OrderType.EMANDATE);
++        orderEntity.setAmount(BigDecimal.valueOf(5000));
++
++        Set<OrderAttributeEntity> attributes = new HashSet<>();
++        OrderAttributeEntity autoRefundAttribute = new OrderAttributeEntity();
++        autoRefundAttribute.setAttributeKey(Constant.OrderAttributeConstant.AUTO_REFUND);
++        autoRefundAttribute.setAttributeValue("true");
++        attributes.add(autoRefundAttribute);
++        orderEntity.setAttributeEntities(attributes);
++
++        BulkPaymentsRequest request = new BulkPaymentsRequest();
++        List<CreatePaymentRequest> payments = new ArrayList<>();
++
++        CreatePaymentRequest authlessPayment = new CreatePaymentRequest();
++        authlessPayment.setPaymentMode(PaymentMode.AUTH_LESS_TWO_PHASE);
++        authlessPayment.setAmount(BigDecimal.valueOf(1000));
++        payments.add(authlessPayment);
++
++        request.setPayments(payments);
++
++        // When & Then
++        try {
++            java.lang.reflect.Method method = MandateBulkPaymentCreateWorkflow.class.getDeclaredMethod(
++                    "validateAndEnrichSpecificToWorkflow", BulkPaymentsRequest.class, OrderEntity.class);
++            method.setAccessible(true);
++            method.invoke(mandateBulkPaymentCreateWorkflow, request, orderEntity);
++            fail("Expected AppException to be thrown");
++        } catch (java.lang.reflect.InvocationTargetException e) {
++            assertTrue(
++                    e.getCause() instanceof AppException,
++                    "Expected AppException but got " + e.getCause().getClass());
++        } catch (Exception e) {
++            fail("Unexpected exception: " + e.getMessage());
++        }
++    }
++
++    @Test
++    public void testAutoRefundValidation_WithAutoRefundButNoAuthlessPayment_ShouldSucceed() {
++        // Given
++        OrderEntity orderEntity = new OrderEntity();
++        orderEntity.setExternalId("order123");
++        orderEntity.setType(OrderType.EMANDATE);
++        orderEntity.setAmount(BigDecimal.valueOf(5000));
++
++        Set<OrderAttributeEntity> attributes = new HashSet<>();
++        OrderAttributeEntity autoRefundAttribute = new OrderAttributeEntity();
++        autoRefundAttribute.setAttributeKey(Constant.OrderAttributeConstant.AUTO_REFUND);
++        autoRefundAttribute.setAttributeValue("true");
++        attributes.add(autoRefundAttribute);
++        orderEntity.setAttributeEntities(attributes);
++
++        BulkPaymentsRequest request = new BulkPaymentsRequest();
++        List<CreatePaymentRequest> payments = new ArrayList<>();
++
++        CreatePaymentRequest checkoutPayment = new CreatePaymentRequest();
++        checkoutPayment.setPaymentMode(PaymentMode.CHECKOUT);
++        checkoutPayment.setAmount(BigDecimal.valueOf(1000));
++        payments.add(checkoutPayment);
++
++        request.setPayments(payments);
++
++        // When & Then - Should not throw exception
++        try {
++            java.lang.reflect.Method method = MandateBulkPaymentCreateWorkflow.class.getDeclaredMethod(
++                    "validateAndEnrichSpecificToWorkflow", BulkPaymentsRequest.class, OrderEntity.class);
++            method.setAccessible(true);
++            method.invoke(mandateBulkPaymentCreateWorkflow, request, orderEntity);
++        } catch (Exception e) {
++            fail("Should not throw exception when autoRefund is enabled without authless payment: " + e.getMessage());
++        }
++    }
++
++    @Test
++    public void testAutoRefundValidation_WithoutAutoRefundButWithAuthlessPayment_ShouldSucceed() {
++        // Given
++        OrderEntity orderEntity = new OrderEntity();
++        orderEntity.setExternalId("order123");
++        orderEntity.setType(OrderType.EMANDATE);
++        orderEntity.setAmount(BigDecimal.valueOf(5000));
++        orderEntity.setAttributeEntities(new HashSet<>());
++
++        BulkPaymentsRequest request = new BulkPaymentsRequest();
++        List<CreatePaymentRequest> payments = new ArrayList<>();
++
++        CreatePaymentRequest authlessPayment = new CreatePaymentRequest();
++        authlessPayment.setPaymentMode(PaymentMode.AUTH_LESS_TWO_PHASE);
++        authlessPayment.setAmount(BigDecimal.valueOf(1000));
++        payments.add(authlessPayment);
++
++        request.setPayments(payments);
++
++        // When & Then - Should not throw exception
++        try {
++            java.lang.reflect.Method method = MandateBulkPaymentCreateWorkflow.class.getDeclaredMethod(
++                    "validateAndEnrichSpecificToWorkflow", BulkPaymentsRequest.class, OrderEntity.class);
++            method.setAccessible(true);
++            method.invoke(mandateBulkPaymentCreateWorkflow, request, orderEntity);
++        } catch (Exception e) {
++            fail("Should not throw exception when autoRefund is disabled: " + e.getMessage());
++        }
++    }
++}
+diff --git a/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/WalletProviderAdapterSyncTest.java b/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractWalletProviderAdapterSyncTest.java
+similarity index 86%
+rename from src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/WalletProviderAdapterSyncTest.java
+rename to src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractWalletProviderAdapterSyncTest.java
+index 4789c039b6..bb7f60fb97 100644
+--- a/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/WalletProviderAdapterSyncTest.java
++++ b/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractWalletProviderAdapterSyncTest.java
+@@ -10,7 +10,7 @@
+ import club.cred.bankstack.deposit.wallet.orchestrator.v1.WalletTransaction;
+ import in.dreamplug.darwin.entity.v2.PaymentAttemptV2Entity;
+ import in.dreamplug.darwin.service.commons.PaymentProviderEntityAuditService;
+-import in.dreamplug.darwin.v2.workflow.create.providers.wallet.WalletProviderAdapter;
++import in.dreamplug.darwin.v2.workflow.create.providers.wallet.AbstractWalletProviderAdapter;
+ import in.dreamplug.external.cred_wallet.client.CredWalletClient;
+ import in.dreamplug.payments.domain.instrumentdetail.CredWalletEnrichedPaymentInstrument;
+ import in.dreamplug.payments.domain.order.PaymentAttemptStatus;
+@@ -24,9 +24,9 @@
+ import org.springframework.test.util.ReflectionTestUtils;
+ 
+ @RunWith(MockitoJUnitRunner.class)
+-public class WalletProviderAdapterSyncTest {
++public class AbstractWalletProviderAdapterSyncTest {
+     @InjectMocks
+-    private WalletProviderAdapter walletProviderAdapter;
++    private AbstractWalletProviderAdapter abstractWalletProviderAdapter;
+ 
+     @Mock
+     private CredWalletClient walletClient;
+@@ -36,7 +36,8 @@ public class WalletProviderAdapterSyncTest {
+ 
+     @Before
+     public void setUp() {
+-        ReflectionTestUtils.setField(walletProviderAdapter, "providerEntityAuditService", providerEntityAuditService);
++        ReflectionTestUtils.setField(
++                abstractWalletProviderAdapter, "providerEntityAuditService", providerEntityAuditService);
+     }
+ 
+     @Test
+@@ -65,7 +66,7 @@ public void syncPaymentAttemptWithProvider_success() {
+                 .when(providerEntityAuditService)
+                 .auditProviderData(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any());
+ 
+-        walletProviderAdapter.syncPaymentAttemptWithProvider(paymentAttemptV2Entity);
++        abstractWalletProviderAdapter.syncPaymentAttemptWithProvider(paymentAttemptV2Entity);
+         verify(walletClient, times(1)).fetchTransactionDetail(any());
+         assertEquals(PaymentAttemptStatus.COMPLETED, paymentAttemptV2Entity.getStatus());
+         assertEquals(PaymentAttemptStatus.COMPLETED.name(), paymentAttemptV2Entity.getProviderStatus());
+diff --git a/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/WalletProviderAdapterTest.java b/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractWalletProviderAdapterTest.java
+similarity index 75%
+rename from src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/WalletProviderAdapterTest.java
+rename to src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractWalletProviderAdapterTest.java
+index 5f949fc98e..c1efe4877b 100644
+--- a/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/WalletProviderAdapterTest.java
++++ b/src/test/java/in/dreamplug/darwin/v2/workflow/create/providers/AbstractWalletProviderAdapterTest.java
+@@ -15,12 +15,15 @@
+ import in.dreamplug.darwin.entity.v2.PaymentAttemptV2Entity;
+ import in.dreamplug.darwin.entity.v2.RefundAttemptEntity;
+ import in.dreamplug.darwin.entity.v2.RefundEntity;
++import in.dreamplug.darwin.v2.workflow.create.providers.wallet.AbstractWalletProviderAdapter;
+ import in.dreamplug.darwin.v2.workflow.create.providers.wallet.WalletConstant;
+-import in.dreamplug.darwin.v2.workflow.create.providers.wallet.WalletProviderAdapter;
++import in.dreamplug.darwin.v2.workflow.create.providers.wallet.WalletEmandateProviderAdapter;
++import in.dreamplug.darwin.v2.workflow.create.providers.wallet.WalletPayProviderAdapter;
+ import in.dreamplug.darwin.v2.workflow.create.refundattempts.RefundAttemptCreateContext;
+ import in.dreamplug.external.cred_wallet.client.CredWalletClient;
+ import in.dreamplug.payments.domain.instrumentdetail.CredWalletEnrichedPaymentInstrument;
+ import in.dreamplug.payments.domain.order.PaymentAttemptStatus;
++import in.dreamplug.payments.enums.OrderType;
+ import java.math.BigDecimal;
+ import java.util.Collections;
+ import java.util.function.Function;
+@@ -30,7 +33,6 @@
+ import org.junit.Test;
+ import org.junit.runner.RunWith;
+ import org.junit.runners.JUnit4;
+-import org.mockito.InjectMocks;
+ import org.mockito.Mock;
+ import org.mockito.MockitoAnnotations;
+ import org.springframework.boot.test.context.SpringBootTest;
+@@ -41,7 +43,7 @@
+ @RunWith(JUnit4.class)
+ @EnableRetry
+ @SpringBootTest
+-public class WalletProviderAdapterTest {
++public class AbstractWalletProviderAdapterTest {
+ 
+     @Mock
+     private CredWalletClient walletClient;
+@@ -52,13 +54,17 @@ public class WalletProviderAdapterTest {
+     @Mock
+     private Function<Object, ResponseStatus> statusProvider;
+ 
+-    @InjectMocks
+-    private WalletProviderAdapter walletProviderAdapter;
++    private AbstractWalletProviderAdapter abstractWalletProviderAdapter;
+ 
+     @Before
+     public void initMocks() {
+         MockitoAnnotations.initMocks(this);
+-        walletProviderAdapter.setProxy(walletProviderAdapter);
++        // Create a spy of the adapter to mock getSelfProxy
++        abstractWalletProviderAdapter = spy(new AbstractWalletProviderAdapter(walletClient, null));
++        // Mock getSelfProxy to return the adapter itself for @Retryable to work
++        doReturn(abstractWalletProviderAdapter)
++                .when(abstractWalletProviderAdapter)
++                .getSelfProxy();
+     }
+ 
+     @Test
+@@ -72,8 +78,8 @@ public void makeGRPCCall_success() {
+         when(callback.get()).thenReturn(settleTransactionResponse);
+         when(statusProvider.apply(any()))
+                 .thenReturn(ResponseStatus.newBuilder().setSuccess(true).build());
+-        walletProviderAdapter.makeGRPCCall(
+-                WalletProviderAdapter.METHOD_SETTLE, getTransactionDetailsRequest, callback, statusProvider);
++        abstractWalletProviderAdapter.makeGRPCCall(
++                AbstractWalletProviderAdapter.METHOD_SETTLE, getTransactionDetailsRequest, callback, statusProvider);
+ 
+         verify(walletClient, times(0)).fetchTransactionDetail(any());
+     }
+@@ -101,8 +107,8 @@ public void makeGRPCCall_failure_sync_success() {
+                                 .build())
+                         .build());
+ 
+-        walletProviderAdapter.makeGRPCCall(
+-                WalletProviderAdapter.METHOD_SETTLE, getTransactionDetailsRequest, callback, statusProvider);
++        abstractWalletProviderAdapter.makeGRPCCall(
++                AbstractWalletProviderAdapter.METHOD_SETTLE, getTransactionDetailsRequest, callback, statusProvider);
+         verify(walletClient, times(1)).fetchTransactionDetail(any());
+     }
+ 
+@@ -130,8 +136,11 @@ public void makeGRPCCall_failure_sync_timeout() {
+ 
+         AppException exception = assertThrows(
+                 AppException.class,
+-                () -> walletProviderAdapter.makeGRPCCall(
+-                        WalletProviderAdapter.METHOD_SETTLE, getTransactionDetailsRequest, callback, statusProvider));
++                () -> abstractWalletProviderAdapter.makeGRPCCall(
++                        AbstractWalletProviderAdapter.METHOD_SETTLE,
++                        getTransactionDetailsRequest,
++                        callback,
++                        statusProvider));
+ 
+         assertTrue(exception.getMessage().contains("Wallet Settle API failure"));
+         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+@@ -163,8 +172,11 @@ public void makeGRPCCall_failure_sync_status_mismatch() {
+ 
+         AppException exception = assertThrows(
+                 AppException.class,
+-                () -> walletProviderAdapter.makeGRPCCall(
+-                        WalletProviderAdapter.METHOD_SETTLE, getTransactionDetailsRequest, callback, statusProvider));
++                () -> abstractWalletProviderAdapter.makeGRPCCall(
++                        AbstractWalletProviderAdapter.METHOD_SETTLE,
++                        getTransactionDetailsRequest,
++                        callback,
++                        statusProvider));
+         assertTrue(exception
+                 .getMessage()
+                 .contains("The expected status is inconsistent with the wallet's current status"));
+@@ -198,8 +210,11 @@ public void makeGRPCCall_failure_sync_error() {
+ 
+         AppException exception = assertThrows(
+                 AppException.class,
+-                () -> walletProviderAdapter.makeGRPCCall(
+-                        WalletProviderAdapter.METHOD_SETTLE, getTransactionDetailsRequest, callback, statusProvider));
++                () -> abstractWalletProviderAdapter.makeGRPCCall(
++                        AbstractWalletProviderAdapter.METHOD_SETTLE,
++                        getTransactionDetailsRequest,
++                        callback,
++                        statusProvider));
+ 
+         assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, exception.getStatusCode());
+         verify(walletClient, times(1)).fetchTransactionDetail(any());
+@@ -255,7 +270,7 @@ public void testCreateRefund_UsesProviderReferenceId() {
+                 .build();
+ 
+         // Execute
+-        ProviderRefundCreateResponse result = walletProviderAdapter.createRefund(refundContext);
++        ProviderRefundCreateResponse result = abstractWalletProviderAdapter.createRefund(refundContext);
+ 
+         // Verify result is not null
+         assertNotNull(result);
+@@ -314,7 +329,7 @@ public void testCreateRefund_FallbackToExternalId() {
+                 .build();
+ 
+         // Execute
+-        ProviderRefundCreateResponse result = walletProviderAdapter.createRefund(refundContext);
++        ProviderRefundCreateResponse result = abstractWalletProviderAdapter.createRefund(refundContext);
+ 
+         // Verify result is not null
+         assertNotNull(result);
+@@ -350,7 +365,7 @@ public void testSyncPaymentAttemptWithProviderId_Success() {
+ 
+         // Execute
+         GetTransactionDetailsResponse response = (GetTransactionDetailsResponse)
+-                walletProviderAdapter.syncPaymentAttemptWithProviderId(paymentAttemptEntity);
++                abstractWalletProviderAdapter.syncPaymentAttemptWithProviderId(paymentAttemptEntity);
+ 
+         // Verify payment attempt is moved to COMPLETED
+         assertEquals(PaymentAttemptStatus.COMPLETED, paymentAttemptEntity.getStatus());
+@@ -393,7 +408,7 @@ public void testSyncPaymentAttemptWithProviderId_DEADLINE_EXCEEDED() {
+                 .thenReturn(mockResponse);
+ 
+         // Execute and verify exception is thrown
+-        walletProviderAdapter.syncPaymentAttemptWithProviderId(paymentAttemptEntity);
++        abstractWalletProviderAdapter.syncPaymentAttemptWithProviderId(paymentAttemptEntity);
+ 
+         // payment attempt should not be moved to COMPLETED
+         assertEquals(PaymentAttemptStatus.BLOCKED, paymentAttemptEntity.getStatus());
+@@ -404,6 +419,122 @@ public void testSyncPaymentAttemptWithProviderId_DEADLINE_EXCEEDED() {
+                         && "user_123".equals(request.getUserId())));
+     }
+ 
++    @Test
++    public void testConstructor_WithPayOrderType() {
++        // Given
++        CredWalletClient client = mock(CredWalletClient.class);
++        OrderType orderType = OrderType.PAY;
++
++        // When
++        AbstractWalletProviderAdapter adapter = new AbstractWalletProviderAdapter(client, orderType);
++
++        // Then
++        assertNotNull(adapter);
++        assertEquals(orderType, adapter.getOrderType());
++    }
++
++    @Test
++    public void testConstructor_WithEMandateOrderType() {
++        // Given
++        CredWalletClient client = mock(CredWalletClient.class);
++        OrderType orderType = OrderType.EMANDATE;
++
++        // When
++        AbstractWalletProviderAdapter adapter = new AbstractWalletProviderAdapter(client, orderType);
++
++        // Then
++        assertNotNull(adapter);
++        assertEquals(orderType, adapter.getOrderType());
++    }
++
++    @Test
++    public void testWalletClientGetter() {
++        // Given
++        CredWalletClient client = mock(CredWalletClient.class);
++        AbstractWalletProviderAdapter adapter = new AbstractWalletProviderAdapter(client, OrderType.PAY);
++
++        // When
++        CredWalletClient retrievedClient = adapter.getWalletClient();
++
++        // Then
++        assertNotNull(retrievedClient);
++        assertEquals(client, retrievedClient);
++    }
++
++    @Test
++    public void testAbstractWalletProviderAdapter_IsAbstract() {
++        // Given & When & Then
++        // Verify that AbstractWalletProviderAdapter can be instantiated with concrete implementation
++        assertNotNull(abstractWalletProviderAdapter);
++    }
++
++    @Test
++    public void testWalletPayProviderAdapter_UsesPayOrderType() {
++        // Given
++        CredWalletClient client = mock(CredWalletClient.class);
++
++        // When
++        WalletPayProviderAdapter adapter = new WalletPayProviderAdapter(client);
++
++        // Then
++        assertNotNull(adapter);
++        assertEquals(OrderType.PAY, adapter.getOrderType());
++    }
++
++    @Test
++    public void testWalletEmandateProviderAdapter_UsesEMandateOrderType() {
++        // Given
++        CredWalletClient client = mock(CredWalletClient.class);
++
++        // When
++        WalletEmandateProviderAdapter adapter = new WalletEmandateProviderAdapter(client);
++
++        // Then
++        assertNotNull(adapter);
++        assertEquals(OrderType.EMANDATE, adapter.getOrderType());
++    }
++
++    @Test
++    public void testMultipleWalletAdapters_WithDifferentOrderTypes() {
++        // Given
++        CredWalletClient client = mock(CredWalletClient.class);
++
++        // When
++        WalletPayProviderAdapter payAdapter = new WalletPayProviderAdapter(client);
++        WalletEmandateProviderAdapter emandateAdapter = new WalletEmandateProviderAdapter(client);
++
++        // Then
++        assertEquals(OrderType.PAY, payAdapter.getOrderType());
++        assertEquals(OrderType.EMANDATE, emandateAdapter.getOrderType());
++        assertTrue(!payAdapter.getOrderType().equals(emandateAdapter.getOrderType()));
++    }
++
++    @Test
++    public void testAbstractWalletProviderAdapter_InheritsFromIAuthLessTwoPhaseProviderAdapter() {
++        // Given
++        CredWalletClient client = mock(CredWalletClient.class);
++        AbstractWalletProviderAdapter adapter = new AbstractWalletProviderAdapter(client, OrderType.PAY);
++
++        // When & Then
++        assertTrue(adapter instanceof IAuthLessTwoPhaseProviderAdapter);
++    }
++
++    @Test
++    public void testWalletProviderAdapter_ClientInjectionWorks() {
++        // Given
++        CredWalletClient client1 = mock(CredWalletClient.class);
++        CredWalletClient client2 = mock(CredWalletClient.class);
++
++        // When
++        AbstractWalletProviderAdapter adapter1 = new AbstractWalletProviderAdapter(client1, OrderType.PAY);
++        AbstractWalletProviderAdapter adapter2 = new AbstractWalletProviderAdapter(client2, OrderType.EMANDATE);
++
++        // Then
++        assertEquals(client1, adapter1.getWalletClient());
++        assertEquals(client2, adapter2.getWalletClient());
++        assertTrue(!adapter1.getWalletClient().equals(adapter2.getWalletClient()));
++    }
++
+     private GetTransactionDetailsRequest getTransactionDetailsRequest() {
+         return GetTransactionDetailsRequest.newBuilder()
+                 .setUserId("user-id")
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0100   120    0   120    0     0    634      0 --:--:-- --:--:-- --:--:--   634

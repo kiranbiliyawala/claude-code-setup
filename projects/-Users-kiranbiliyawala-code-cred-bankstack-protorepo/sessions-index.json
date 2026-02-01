@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "sessionId": "2d8913a9-c0f0-459a-9967-dbba364c9f70",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala-code-cred-bankstack-protorepo/2d8913a9-c0f0-459a-9967-dbba364c9f70.jsonl",
+      "fileMtime": 1768997974847,
+      "firstPrompt": "help me understand all entities & apis in payments folder one by one",
+      "summary": "Payments proto folder entities overview",
+      "messageCount": 6,
+      "created": "2026-01-05T08:49:01.858Z",
+      "modified": "2026-01-05T08:50:35.297Z",
+      "gitBranch": "applied_fees_in_getter",
+      "projectPath": "/Users/kiranbiliyawala/code/cred/bankstack/protorepo",
+      "isSidechain": false
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "mcp__codelens__list_codelens_projects",
+      "Bash(gh repo view:*)",
+      "Bash(gh api:*)"
+    ],
+    "deny": []
+  },
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": [
+    "firecrawl"
+  ]
+}

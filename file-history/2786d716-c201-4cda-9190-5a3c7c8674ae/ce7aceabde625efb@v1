@@ -1,0 +1,558 @@
+# Error Handling Pattern
+
+## Overview
+
+finhq-verse uses a standardized error handling approach:
+
+1. **ApplicationException** - Single exception type for all errors
+2. **ErrorDescriptor** - Interface for defining error codes
+3. **GlobalExceptionHandler** - Converts exceptions to API responses
+
+---
+
+## ApplicationException
+
+**Location:** `finhq-commons-java/finhq-errors/src/main/java/io/finhq/commons/errors/ApplicationException.java`
+
+```java
+public class ApplicationException extends RuntimeException {
+
+    private final ErrorDescriptor errorCode;
+    private final List<Error> errors = new ArrayList<>();
+    private final Map<String, Object> details = new HashMap<>();
+
+    public ApplicationException(ErrorDescriptor errorCode) {
+        super(errorCode.getDefaultMessage());
+        this.errorCode = errorCode;
+    }
+
+    public ApplicationException(ErrorDescriptor errorCode, String message) {
+        super(message);
+        this.errorCode = errorCode;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // FLUENT BUILDERS
+    // ═══════════════════════════════════════════════════════════════════
+
+    public ApplicationException withDetail(String key, Object value) {
+        this.details.put(key, value);
+        return this;
+    }
+
+    public ApplicationException withDetails(Map<String, Object> details) {
+        this.details.putAll(details);
+        return this;
+    }
+
+    public ApplicationException withError(Error error) {
+        this.errors.add(error);
+        return this;
+    }
+
+    public ApplicationException withErrors(List<Error> errors) {
+        this.errors.addAll(errors);
+        return this;
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // MATCHERS
+    // ═══════════════════════════════════════════════════════════════════
+
+    public boolean matchesErrorCode(ErrorDescriptor code) {
+        return this.errorCode.getCode().equals(code.getCode());
+    }
+
+    public boolean matchesErrorTag(ErrorTag tag) {
+        return Arrays.asList(errorCode.getTags()).contains(tag);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // API CONVERSION
+    // ═══════════════════════════════════════════════════════════════════
+
+    public Error mapToApiError() {
+        Error error = new Error();
+        error.setCode(errorCode.getCode());
+        error.setMessage(getMessage());
+        error.setDetails(details.isEmpty() ? null : details);
+        return error;
+    }
+}
+```
+
+---
+
+## ErrorDescriptor Interface
+
+```java
+public interface ErrorDescriptor {
+
+    /**
+     * Unique error code (e.g., "NOT_FOUND", "INVALID_REQUEST").
+     */
+    String getCode();
+
+    /**
+     * Default human-readable message.
+     */
+    String getDefaultMessage();
+
+    /**
+     * HTTP status code to return.
+     */
+    HttpStatusCode getHttpStatusCode();
+
+    /**
+     * Log level for this error.
+     */
+    Level getLogLevel();
+
+    /**
+     * Tags for categorization.
+     */
+    ErrorTag[] getTags();
+}
+```
+
+---
+
+## GenericErrorCode
+
+**Location:** `finhq-commons-java/finhq-errors/src/main/java/io/finhq/commons/errors/GenericErrorCode.java`
+
+```java
+public enum GenericErrorCode implements ErrorDescriptor {
+
+    BAD_REQUEST(
+        "BAD_REQUEST",
+        "The request is invalid",
+        HttpStatusCode.BAD_REQUEST,
+        Level.INFO
+    ),
+
+    NOT_FOUND(
+        "NOT_FOUND",
+        "Resource not found",
+        HttpStatusCode.NOT_FOUND,
+        Level.INFO
+    ),
+
+    CONFLICT(
+        "CONFLICT",
+        "Resource already exists",
+        HttpStatusCode.CONFLICT,
+        Level.INFO
+    ),
+
+    UNAUTHORIZED(
+        "UNAUTHORIZED",
+        "Authentication required",
+        HttpStatusCode.UNAUTHORIZED,
+        Level.INFO
+    ),
+
+    ACCESS_DENIED(
+        "ACCESS_DENIED",
+        "Access denied",
+        HttpStatusCode.FORBIDDEN,
+        Level.INFO
+    ),
+
+    RATE_LIMIT_EXCEEDED(
+        "RATE_LIMIT_EXCEEDED",
+        "Too many requests",
+        HttpStatusCode.TOO_MANY_REQUESTS,
+        Level.WARN
+    ),
+
+    UNEXPECTED(
+        "UNEXPECTED",
+        "An unexpected error occurred",
+        HttpStatusCode.INTERNAL_SERVER_ERROR,
+        Level.ERROR
+    );
+
+    // ... constructor and getters
+}
+```
+
+---
+
+## Service-Specific Error Codes
+
+Each service defines its own error codes:
+
+```java
+public enum BookkeepingErrorCode implements ErrorDescriptor {
+
+    ACCOUNT_NOT_FOUND(
+        "ACCOUNT_NOT_FOUND",
+        "Account not found",
+        HttpStatusCode.NOT_FOUND,
+        Level.INFO,
+        ErrorTag.ENTITY
+    ),
+
+    ACCOUNT_NOT_POSTABLE(
+        "ACCOUNT_NOT_POSTABLE",
+        "Account is not postable",
+        HttpStatusCode.BAD_REQUEST,
+        Level.INFO,
+        ErrorTag.VALIDATION
+    ),
+
+    INSUFFICIENT_BALANCE(
+        "INSUFFICIENT_BALANCE",
+        "Insufficient account balance",
+        HttpStatusCode.BAD_REQUEST,
+        Level.INFO,
+        ErrorTag.VALIDATION
+    ),
+
+    TRANSACTION_ALREADY_POSTED(
+        "TRANSACTION_ALREADY_POSTED",
+        "Transaction has already been posted",
+        HttpStatusCode.CONFLICT,
+        Level.INFO,
+        ErrorTag.CONFLICT
+    ),
+
+    UNBALANCED_TRANSACTION(
+        "UNBALANCED_TRANSACTION",
+        "Transaction legs do not balance",
+        HttpStatusCode.BAD_REQUEST,
+        Level.INFO,
+        ErrorTag.VALIDATION
+    );
+
+    // ... constructor and getters
+}
+```
+
+---
+
+## Throwing Exceptions
+
+### Basic Usage
+
+```java
+// Simple error
+throw new ApplicationException(GenericErrorCode.NOT_FOUND);
+
+// With custom message
+throw new ApplicationException(GenericErrorCode.BAD_REQUEST, "Invalid date format");
+
+// With details
+throw new ApplicationException(GenericErrorCode.NOT_FOUND)
+    .withDetail("entityType", "Account")
+    .withDetail("id", accountId);
+
+// With multiple details
+throw new ApplicationException(BookkeepingErrorCode.UNBALANCED_TRANSACTION)
+    .withDetail("debitTotal", debitTotal)
+    .withDetail("creditTotal", creditTotal)
+    .withDetail("difference", Math.abs(debitTotal - creditTotal));
+```
+
+### Common Patterns
+
+```java
+// Entity not found
+public Account getAccount(String id) {
+    return accountRepository.findByExternalId(scope, id)
+        .orElseThrow(() -> new ApplicationException(BookkeepingErrorCode.ACCOUNT_NOT_FOUND)
+            .withDetail("id", id));
+}
+
+// Validation error
+public void validateTransaction(Transaction tx) {
+    if (!tx.isBalanced()) {
+        throw new ApplicationException(BookkeepingErrorCode.UNBALANCED_TRANSACTION)
+            .withDetail("transactionId", tx.getExternalId());
+    }
+}
+
+// Conflict error
+public void createAccount(CreateAccountRequest request) {
+    if (accountRepository.existsByName(scope, request.getName())) {
+        throw new ApplicationException(GenericErrorCode.CONFLICT)
+            .withDetail("field", "name")
+            .withDetail("value", request.getName());
+    }
+}
+```
+
+---
+
+## GlobalExceptionHandler
+
+**Location:** `finhq-commons-spring/finhq-spring/src/main/java/io/finhq/commons/spring/exceptions/GlobalExceptionHandler.java`
+
+```java
+@RestControllerAdvice
+public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
+    // ═══════════════════════════════════════════════════════════════════
+    // APPLICATION EXCEPTION
+    // ═══════════════════════════════════════════════════════════════════
+
+    @ExceptionHandler(ApplicationException.class)
+    public ResponseEntity<Error> handleApplicationException(ApplicationException ex) {
+        // Log at appropriate level
+        logAtLevel(ex.getErrorCode().getLogLevel(), ex);
+
+        Error error = ex.mapToApiError();
+        HttpStatus status = HttpStatus.valueOf(
+            ex.getErrorCode().getHttpStatusCode().getValue());
+
+        return ResponseEntity.status(status).body(error);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // VALIDATION EXCEPTIONS
+    // ═══════════════════════════════════════════════════════════════════
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Error> handleValidation(MethodArgumentNotValidException ex) {
+        log.info("Validation failed: {}", ex.getMessage());
+
+        List<Map<String, String>> fieldErrors = ex.getBindingResult()
+            .getFieldErrors()
+            .stream()
+            .map(e -> Map.of(
+                "field", e.getField(),
+                "message", e.getDefaultMessage()
+            ))
+            .toList();
+
+        Error error = new Error();
+        error.setCode("VALIDATION_ERROR");
+        error.setMessage("Request validation failed");
+        error.setDetails(Map.of("errors", fieldErrors));
+
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Error> handleConstraintViolation(ConstraintViolationException ex) {
+        log.info("Constraint violation: {}", ex.getMessage());
+
+        Error error = new Error();
+        error.setCode("VALIDATION_ERROR");
+        error.setMessage("Constraint violation");
+
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // NOT FOUND
+    // ═══════════════════════════════════════════════════════════════════
+
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<Error> handleNoHandler(NoHandlerFoundException ex) {
+        log.info("No handler found: {} {}", ex.getHttpMethod(), ex.getRequestURL());
+
+        Error error = new Error();
+        error.setCode("NOT_FOUND");
+        error.setMessage("Endpoint not found");
+
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // DATABASE ERRORS
+    // ═══════════════════════════════════════════════════════════════════
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<Error> handleDataIntegrity(DataIntegrityViolationException ex) {
+        log.warn("Data integrity violation: {}", ex.getMessage());
+
+        Error error = new Error();
+        error.setCode("DATA_ERROR");
+        error.setMessage("Data integrity error");  // Don't expose details
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+
+    // ═══════════════════════════════════════════════════════════════════
+    // CATCH-ALL
+    // ═══════════════════════════════════════════════════════════════════
+
+    @ExceptionHandler(Throwable.class)
+    public ResponseEntity<Error> handleAll(Throwable ex) {
+        log.error("Unexpected error", ex);
+
+        Error error = new Error();
+        error.setCode("UNEXPECTED");
+        error.setMessage("An unexpected error occurred");
+
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
+}
+```
+
+---
+
+## API Error Response Format
+
+All errors return this structure:
+
+```json
+{
+  "code": "NOT_FOUND",
+  "message": "Account not found",
+  "details": {
+    "id": "01H123456789ABCDEFGHJKMNPQ",
+    "entityType": "Account"
+  }
+}
+```
+
+---
+
+## Error Tags
+
+Used for categorization and filtering:
+
+```java
+public enum ErrorTag {
+    ENTITY,      // Entity-related errors
+    VALIDATION,  // Input validation errors
+    CONFLICT,    // Conflict/duplicate errors
+    SECURITY,    // Auth/authz errors
+    SYSTEM       // System/infrastructure errors
+}
+```
+
+Usage:
+```java
+// Check error category
+if (ex.matchesErrorTag(ErrorTag.VALIDATION)) {
+    // Handle validation errors
+}
+```
+
+---
+
+## Log Levels by Error Type
+
+| Error Type | Log Level | Example |
+|------------|-----------|---------|
+| Validation errors | INFO | Bad request, invalid input |
+| Not found | INFO | Resource doesn't exist |
+| Conflicts | INFO | Duplicate resource |
+| Auth errors | WARN | Unauthorized, forbidden |
+| Rate limiting | WARN | Too many requests |
+| System errors | ERROR | Unexpected exceptions |
+
+---
+
+## Catching and Rethrowing
+
+```java
+public void processPayment(PaymentRequest request) {
+    try {
+        externalService.charge(request);
+    } catch (ExternalServiceException e) {
+        throw new ApplicationException(PaymentErrorCode.PAYMENT_FAILED)
+            .withDetail("reason", e.getMessage())
+            .withDetail("externalCode", e.getCode());
+    }
+}
+```
+
+---
+
+## Checking Error Types
+
+```java
+try {
+    accountService.createAccount(request);
+} catch (ApplicationException e) {
+    if (e.matchesErrorCode(GenericErrorCode.CONFLICT)) {
+        // Handle duplicate
+    } else if (e.matchesErrorTag(ErrorTag.VALIDATION)) {
+        // Handle validation error
+    } else {
+        throw e;  // Rethrow others
+    }
+}
+```
+
+---
+
+## Creating Custom Error Codes
+
+1. Create enum implementing `ErrorDescriptor`:
+
+```java
+public enum MyServiceErrorCode implements ErrorDescriptor {
+
+    MY_CUSTOM_ERROR(
+        "MY_CUSTOM_ERROR",
+        "Something went wrong",
+        HttpStatusCode.BAD_REQUEST,
+        Level.INFO,
+        ErrorTag.VALIDATION
+    );
+
+    private final String code;
+    private final String defaultMessage;
+    private final HttpStatusCode httpStatusCode;
+    private final Level logLevel;
+    private final ErrorTag[] tags;
+
+    MyServiceErrorCode(String code, String defaultMessage,
+                       HttpStatusCode httpStatusCode, Level logLevel,
+                       ErrorTag... tags) {
+        this.code = code;
+        this.defaultMessage = defaultMessage;
+        this.httpStatusCode = httpStatusCode;
+        this.logLevel = logLevel;
+        this.tags = tags;
+    }
+
+    @Override
+    public String getCode() { return code; }
+
+    @Override
+    public String getDefaultMessage() { return defaultMessage; }
+
+    @Override
+    public HttpStatusCode getHttpStatusCode() { return httpStatusCode; }
+
+    @Override
+    public Level getLogLevel() { return logLevel; }
+
+    @Override
+    public ErrorTag[] getTags() { return tags; }
+}
+```
+
+2. Use in service:
+
+```java
+throw new ApplicationException(MyServiceErrorCode.MY_CUSTOM_ERROR)
+    .withDetail("info", "additional context");
+```
+
+---
+
+## Key Takeaways
+
+1. **Use ApplicationException** - Single exception type for all errors
+2. **Define service-specific error codes** - Each service has its own enum
+3. **Add details** - Use `.withDetail()` for debugging context
+4. **Choose right HTTP status** - 4xx for client errors, 5xx for server errors
+5. **Set log level appropriately** - INFO for expected, ERROR for unexpected
+6. **Never expose internal errors** - Generic message for system errors
+
+---
+
+## Next Steps
+
+- [Creating an Entity](../examples/01-creating-entity.md) - Put it all together
+- [Foundation Service](../services/01-foundation.md) - See patterns in action

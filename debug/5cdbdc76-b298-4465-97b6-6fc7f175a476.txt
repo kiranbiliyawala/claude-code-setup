@@ -1,0 +1,609 @@
+2026-01-21T06:03:28.405Z [DEBUG] Watching for changes in setting files /Users/kiranbiliyawala/.claude...
+2026-01-21T06:03:28.438Z [DEBUG] [init] configureGlobalMTLS starting
+2026-01-21T06:03:28.438Z [DEBUG] [init] configureGlobalMTLS complete
+2026-01-21T06:03:28.438Z [DEBUG] [init] configureGlobalAgents starting
+2026-01-21T06:03:28.438Z [DEBUG] [init] configureGlobalAgents complete
+2026-01-21T06:03:28.441Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-01-21T06:03:28.441Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-01-21T06:03:28.441Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-01-21T06:03:28.444Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-01-21T06:03:28.458Z [DEBUG] Loading plugin github from source: "./external_plugins/github"
+2026-01-21T06:03:28.462Z [DEBUG] [Claude in Chrome] Found chrome profiles: Default
+2026-01-21T06:03:28.465Z [DEBUG] [Claude in Chrome] Found arc profiles: Default, Profile 1
+2026-01-21T06:03:28.465Z [DEBUG] [Claude in Chrome] Found vivaldi profiles: Default
+2026-01-21T06:03:28.465Z [DEBUG] [Claude in Chrome] Extension not found in any browser
+2026-01-21T06:03:28.470Z [DEBUG] Using git SHA for github@claude-plugins-official: e30768372b41
+2026-01-21T06:03:28.470Z [DEBUG] Plugin github@claude-plugins-official version e30768372b41 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/e30768372b41
+2026-01-21T06:03:28.470Z [DEBUG] Copied local plugin github to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/e30768372b41
+2026-01-21T06:03:28.471Z [DEBUG] Loading plugin pr-review-toolkit from source: "./plugins/pr-review-toolkit"
+2026-01-21T06:03:28.481Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: e30768372b41
+2026-01-21T06:03:28.481Z [DEBUG] Plugin pr-review-toolkit@claude-plugins-official version e30768372b41 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/e30768372b41
+2026-01-21T06:03:28.481Z [DEBUG] Copied local plugin pr-review-toolkit to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/e30768372b41
+2026-01-21T06:03:28.482Z [DEBUG] Loading plugin canvas from source: "./canvas"
+2026-01-21T06:03:28.482Z [DEBUG] Using provided version for canvas@claude-canvas: 0.1.0
+2026-01-21T06:03:28.482Z [DEBUG] Plugin canvas@claude-canvas version 0.1.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-21T06:03:28.482Z [DEBUG] Copied local plugin canvas to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-21T06:03:28.482Z [DEBUG] Plugin canvas has no entry.skills defined
+2026-01-21T06:03:28.483Z [DEBUG] Loading plugin code-simplifier from source: "./plugins/code-simplifier"
+2026-01-21T06:03:28.483Z [DEBUG] Using manifest version for code-simplifier@claude-plugins-official: 1.0.0
+2026-01-21T06:03:28.484Z [DEBUG] Plugin code-simplifier@claude-plugins-official version 1.0.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-01-21T06:03:28.484Z [DEBUG] Copied local plugin code-simplifier to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-01-21T06:03:28.484Z [DEBUG] Found 4 plugins (4 enabled, 0 disabled)
+2026-01-21T06:03:28.484Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-21T06:03:28.494Z [DEBUG] [STARTUP] MCP configs loaded in 50ms
+2026-01-21T06:03:28.495Z [DEBUG] [STARTUP] Running setup()...
+2026-01-21T06:03:28.498Z [DEBUG] Stats cache is up to date
+2026-01-21T06:03:28.501Z [DEBUG] Loading skills from: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/kiranbiliyawala/.claude/skills, project=[]
+2026-01-21T06:03:28.504Z [DEBUG] Loaded 4 installed plugins from /Users/kiranbiliyawala/.claude/plugins/installed_plugins.json
+2026-01-21T06:03:28.511Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at SHA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4560:22120)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async uS0.<anonymous> (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5445:709)
+    at async uS0.parseAsync (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4594:4156)
+    at async eT7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5478:1640)
+    at async rT7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5422:1647)
+    at async BP7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5479:5943)
+2026-01-21T06:03:28.511Z [ERROR] Error: Error: ENOENT: no such file or directory, scandir '/Library/Application Support/ClaudeCode/.claude/skills'
+    at Module.readdirSync (node:fs:1581:26)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1766
+    at jI (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:34380)
+    at Object.readdirSync (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1736)
+    at FZ1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1523:369)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1523:4274
+    at B (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6808)
+    at lz7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4154:4354)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4154:6941
+    at B (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6808)
+2026-01-21T06:03:28.511Z [ERROR] Error: Error: ENOENT: no such file or directory, scandir '/Users/kiranbiliyawala/.claude/skills'
+    at Module.readdirSync (node:fs:1581:26)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1766
+    at jI (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:34380)
+    at Object.readdirSync (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1736)
+    at FZ1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1523:369)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1523:4317
+    at B (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6808)
+    at lz7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4154:4354)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4154:6941
+    at B (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6808)
+2026-01-21T06:03:28.511Z [DEBUG] Error log sink initialized
+2026-01-21T06:03:28.517Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude/todos/5cdbdc76-b298-4465-97b6-6fc7f175a476-agent-5cdbdc76-b298-4465-97b6-6fc7f175a476.json.tmp.615.1768975408517
+2026-01-21T06:03:28.517Z [DEBUG] Temp file written successfully, size: 2 bytes
+2026-01-21T06:03:28.517Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude/todos/5cdbdc76-b298-4465-97b6-6fc7f175a476-agent-5cdbdc76-b298-4465-97b6-6fc7f175a476.json.tmp.615.1768975408517 to /Users/kiranbiliyawala/.claude/todos/5cdbdc76-b298-4465-97b6-6fc7f175a476-agent-5cdbdc76-b298-4465-97b6-6fc7f175a476.json
+2026-01-21T06:03:28.517Z [DEBUG] File /Users/kiranbiliyawala/.claude/todos/5cdbdc76-b298-4465-97b6-6fc7f175a476-agent-5cdbdc76-b298-4465-97b6-6fc7f175a476.json written atomically
+2026-01-21T06:03:28.521Z [DEBUG] getPluginSkills: Processing 4 enabled plugins
+2026-01-21T06:03:28.521Z [DEBUG] Checking plugin github: skillsPath=none, skillsPaths=0 paths
+2026-01-21T06:03:28.521Z [DEBUG] Checking plugin pr-review-toolkit: skillsPath=none, skillsPaths=0 paths
+2026-01-21T06:03:28.521Z [DEBUG] Checking plugin canvas: skillsPath=exists, skillsPaths=0 paths
+2026-01-21T06:03:28.521Z [DEBUG] Attempting to load skills from plugin canvas default skillsPath: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0/skills
+2026-01-21T06:03:28.528Z [DEBUG] Registered 0 hooks from 4 plugins
+2026-01-21T06:03:28.530Z [DEBUG] [STARTUP] setup() completed in 35ms
+2026-01-21T06:03:28.530Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-01-21T06:03:28.530Z [DEBUG] Loaded 4 skills from plugin canvas default directory
+2026-01-21T06:03:28.530Z [DEBUG] Checking plugin code-simplifier: skillsPath=none, skillsPaths=0 paths
+2026-01-21T06:03:28.530Z [DEBUG] Total plugin skills loaded: 4
+2026-01-21T06:03:28.531Z [DEBUG] Loaded 1 commands from plugin pr-review-toolkit default directory
+2026-01-21T06:03:28.536Z [DEBUG] Loaded 1 commands from plugin canvas default directory
+2026-01-21T06:03:28.536Z [DEBUG] Total plugin commands loaded: 2
+2026-01-21T06:03:28.537Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, legacy commands: 0)
+2026-01-21T06:03:28.537Z [DEBUG] getSkills returning: 0 skill dir commands, 4 plugin skills, 0 bundled skills
+2026-01-21T06:03:28.544Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+2026-01-21T06:03:28.544Z [DEBUG] Total LSP servers loaded: 0
+2026-01-21T06:03:28.544Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2026-01-21T06:03:28.544Z [DEBUG] LSP manager initialized with 0 servers
+2026-01-21T06:03:28.544Z [DEBUG] LSP server manager initialized successfully
+2026-01-21T06:03:28.544Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-01-21T06:03:28.567Z [DEBUG] Loaded 6 agents from plugin pr-review-toolkit default directory
+2026-01-21T06:03:28.567Z [DEBUG] Loaded 1 agents from plugin code-simplifier default directory
+2026-01-21T06:03:28.567Z [DEBUG] Total plugin agents loaded: 7
+2026-01-21T06:03:28.568Z [DEBUG] [STARTUP] Commands and agents loaded in 38ms
+2026-01-21T06:03:28.568Z [DEBUG] [STARTUP] Running showSetupScreens()...
+2026-01-21T06:03:28.568Z [DEBUG] [render] initYoga starting
+2026-01-21T06:03:28.576Z [DEBUG] [render] initYoga complete
+2026-01-21T06:03:28.580Z [DEBUG] [keybindings] KeybindingSetup initialized with 45 bindings, 0 warnings
+2026-01-21T06:03:28.589Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-01-21T06:03:28.590Z [DEBUG] [STARTUP] showSetupScreens() completed in 22ms
+2026-01-21T06:03:28.594Z [DEBUG] MCP server "gemini-collab": Starting connection with timeout of 30000ms
+2026-01-21T06:03:28.596Z [DEBUG] MCP server "plugin:github:github": Initializing HTTP transport to https://api.githubcopilot.com/mcp/
+2026-01-21T06:03:28.596Z [DEBUG] MCP server "plugin:github:github": Node version: v23.9.0, Platform: darwin
+2026-01-21T06:03:28.596Z [DEBUG] MCP server "plugin:github:github": Environment: {"NODE_OPTIONS":"not set","UV_THREADPOOL_SIZE":"default","HTTP_PROXY":"not set","HTTPS_PROXY":"not set","NO_PROXY":"not set"}
+2026-01-21T06:03:28.599Z [DEBUG] All plugins already exist, skipping migration
+2026-01-21T06:03:28.599Z [DEBUG] Initialized versioned plugins system with 4 plugins
+2026-01-21T06:03:28.599Z [DEBUG] MCP server "plugin:github:github": Proxy options: default
+2026-01-21T06:03:28.599Z [DEBUG] MCP server "plugin:github:github": HTTP transport options: {"url":"https://api.githubcopilot.com/mcp/","headers":{"User-Agent":"claude-code/2.1.14","Authorization":"[REDACTED]"},"hasAuthProvider":true,"timeoutMs":60000}
+2026-01-21T06:03:28.599Z [DEBUG] MCP server "plugin:github:github": HTTP transport created successfully
+2026-01-21T06:03:28.599Z [DEBUG] MCP server "plugin:github:github": Client created, setting up request handler
+2026-01-21T06:03:28.599Z [DEBUG] MCP server "plugin:github:github": Starting connection with timeout of 30000ms
+2026-01-21T06:03:28.599Z [DEBUG] MCP server "plugin:github:github": Testing basic HTTP connectivity to https://api.githubcopilot.com/mcp/
+2026-01-21T06:03:28.599Z [DEBUG] MCP server "plugin:github:github": Parsed URL: host=api.githubcopilot.com, port=default, protocol=https:
+2026-01-21T06:03:28.603Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.615.1768975408603
+2026-01-21T06:03:28.603Z [DEBUG] Preserving file permissions: 100644
+2026-01-21T06:03:28.603Z [DEBUG] Temp file written successfully, size: 30824 bytes
+2026-01-21T06:03:28.603Z [DEBUG] Applied original permissions to temp file
+2026-01-21T06:03:28.603Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.615.1768975408603 to /Users/kiranbiliyawala/.claude.json
+2026-01-21T06:03:28.603Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-21T06:03:28.606Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2026-01-21T06:03:28.606Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:03:28.606Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2026-01-21T06:03:28.626Z [DEBUG] MCP server "plugin:github:github": No token data found
+2026-01-21T06:03:28.627Z [DEBUG] [render] initYoga starting
+2026-01-21T06:03:28.628Z [DEBUG] [render] initYoga complete
+2026-01-21T06:03:28.634Z [DEBUG] [keybindings] Skipping file watcher - user customization disabled
+2026-01-21T06:03:28.635Z [DEBUG] Git remote URL: null
+2026-01-21T06:03:28.635Z [DEBUG] No git remote URL found
+2026-01-21T06:03:28.635Z [DEBUG] Not in a GitHub repository, skipping path mapping update
+2026-01-21T06:03:28.639Z [DEBUG] [keybindings] KeybindingSetup initialized with 45 bindings, 0 warnings
+2026-01-21T06:03:28.677Z [DEBUG] [keybindings] Skipping file watcher - user customization disabled
+2026-01-21T06:03:28.677Z [DEBUG] [REPL:mount] REPL mounted, disabled=false
+2026-01-21T06:03:28.679Z [DEBUG] Official marketplace auto-install skipped: already_attempted
+2026-01-21T06:03:28.679Z [DEBUG] performStartupChecks called
+2026-01-21T06:03:28.679Z [DEBUG] Trust not accepted for current directory - skipping plugin installations
+2026-01-21T06:03:28.680Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-21T06:03:28.681Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-21T06:03:28.681Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-21T06:03:28.681Z [DEBUG] Loaded plugins - Enabled: 4, Disabled: 0, Commands: 2, Agents: 7, Errors: 0
+2026-01-21T06:03:28.682Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at SHA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4560:22120)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async V (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3523:14951)
+2026-01-21T06:03:28.682Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at SHA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4560:22120)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async K (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3523:15467)
+2026-01-21T06:03:28.683Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-01-21T06:03:28.683Z [DEBUG] [claudeai-mcp] Gate returned: false
+2026-01-21T06:03:28.683Z [DEBUG] [claudeai-mcp] Disabled via gate
+2026-01-21T06:03:28.692Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.615.1768975408692
+2026-01-21T06:03:28.692Z [DEBUG] Preserving file permissions: 100644
+2026-01-21T06:03:28.692Z [DEBUG] Temp file written successfully, size: 31431 bytes
+2026-01-21T06:03:28.692Z [DEBUG] Applied original permissions to temp file
+2026-01-21T06:03:28.692Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.615.1768975408692 to /Users/kiranbiliyawala/.claude.json
+2026-01-21T06:03:28.692Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-21T06:03:28.785Z [DEBUG] High write ratio: blit=135, write=902 (87.0% writes), screen=19x135
+2026-01-21T06:03:28.988Z [DEBUG] MCP server "gemini-collab": Successfully connected to stdio server in 397ms
+2026-01-21T06:03:28.988Z [DEBUG] MCP server "gemini-collab": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"claude-gemini-mcp","version":"1.0.0"}}
+2026-01-21T06:03:28.989Z [DEBUG] MCP server "gemini-collab": STDIO connection dropped after 0s uptime
+2026-01-21T06:03:28.989Z [DEBUG] MCP server "gemini-collab": Connection error: [
+  {
+    "code": "invalid_union",
+    "errors": [
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "id",
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"id\", \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "result"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        }
+      ]
+    ],
+    "path": [],
+    "message": "Invalid input"
+  }
+]
+2026-01-21T06:03:29.835Z [DEBUG] MCP server "plugin:github:github": HTTP Connection failed after 1239ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+ (code: 400, errno: none)
+2026-01-21T06:03:29.835Z [ERROR] MCP server "plugin:github:github" Error: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-21T06:03:29.836Z [DEBUG] MCP server "plugin:github:github": Connection failed after 1239ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-21T06:03:29.836Z [ERROR] MCP server "plugin:github:github" Connection failed: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-21T06:03:29.840Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-21T06:03:29.848Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-21T06:03:29.848Z [DEBUG] Skill prompt: showing "canvas:calendar" (userFacingName="calendar")
+2026-01-21T06:03:29.848Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-21T06:03:29.849Z [DEBUG] Skill prompt: showing "canvas:document" (userFacingName="document")
+2026-01-21T06:03:29.849Z [DEBUG] Skill prompt: showing "canvas:flight" (userFacingName="flight")
+2026-01-21T06:03:29.849Z [DEBUG] Skills and commands included in Skill tool: pr-review-toolkit:review-pr, canvas, calendar, canvas, document, flight
+2026-01-21T06:03:29.849Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-21T06:03:29.849Z [DEBUG] Skill prompt: showing "canvas:calendar" (userFacingName="calendar")
+2026-01-21T06:03:29.849Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-21T06:03:29.849Z [DEBUG] Skill prompt: showing "canvas:document" (userFacingName="document")
+2026-01-21T06:03:29.849Z [DEBUG] Skill prompt: showing "canvas:flight" (userFacingName="flight")
+2026-01-21T06:03:29.850Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-21T06:03:29.850Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-21T06:03:29.851Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-21T06:03:29.866Z [DEBUG] High write ratio: blit=135, write=958 (87.6% writes), screen=19x135
+2026-01-21T06:03:29.905Z [DEBUG] High write ratio: blit=135, write=958 (87.6% writes), screen=19x135
+2026-01-21T06:03:32.045Z [DEBUG] Successfully refreshed marketplace: claude-plugins-official
+2026-01-21T06:03:32.351Z [DEBUG] Successfully refreshed marketplace: claude-code-plugins
+2026-01-21T06:03:32.351Z [DEBUG] Plugin autoupdate: checking installed plugins
+2026-01-21T06:03:32.360Z [DEBUG] Using manifest version for code-simplifier@claude-plugins-official: 1.0.0
+2026-01-21T06:03:32.368Z [DEBUG] Using git SHA for github@claude-plugins-official: e30768372b41
+2026-01-21T06:03:32.373Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: e30768372b41
+2026-01-21T06:03:34.034Z [ERROR] Error: Error: 1P event logging: 20 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:03:34.034Z [ERROR] Error: Error: {"stack":"Error: Failed to export 20 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 20 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:03:35.419Z [DEBUG] High write ratio: blit=135, write=960 (87.7% writes), screen=20x135
+2026-01-21T06:03:40.392Z [DEBUG] High write ratio: blit=135, write=965 (87.7% writes), screen=21x135
+2026-01-21T06:03:40.434Z [DEBUG] High write ratio: blit=161, write=939 (85.4% writes), screen=21x135
+2026-01-21T06:03:40.535Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:03:40.535Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 1 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:03:48.393Z [DEBUG] High write ratio: blit=135, write=982 (87.9% writes), screen=21x135
+2026-01-21T06:03:48.434Z [DEBUG] High write ratio: blit=135, write=982 (87.9% writes), screen=21x135
+2026-01-21T06:03:56.394Z [DEBUG] High write ratio: blit=135, write=976 (87.8% writes), screen=22x135
+2026-01-21T06:05:56.504Z [DEBUG] High write ratio: blit=135, write=1790 (93.0% writes), screen=29x135
+2026-01-21T06:05:56.510Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-21T06:05:56.510Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-21T06:05:56.510Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-21T06:05:56.510Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-21T06:05:56.530Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-01-21T06:05:56.530Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:05:56.530Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-21T06:05:56.535Z [DEBUG] Started caffeinate to prevent sleep
+2026-01-21T06:05:56.542Z [DEBUG] FileHistory: Added snapshot for 8e943f83-cf65-48b4-b85d-6af25bdcb3b4, tracking 0 files
+2026-01-21T06:05:56.551Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-01-21T06:05:56.552Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-21T06:05:56.552Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-21T06:05:56.553Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-21T06:05:56.553Z [DEBUG] Total plugin output styles loaded: 0
+2026-01-21T06:05:56.561Z [DEBUG] High write ratio: blit=0, write=1809 (100.0% writes), screen=29x135
+2026-01-21T06:05:56.563Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-21T06:05:56.570Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-21T06:05:56.570Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-21T06:05:56.570Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-21T06:05:57.824Z [DEBUG] Stream started - received first chunk
+2026-01-21T06:06:00.558Z [DEBUG] Stream started - received first chunk
+2026-01-21T06:06:00.956Z [DEBUG] High write ratio: blit=270, write=1786 (86.9% writes), screen=29x135
+2026-01-21T06:06:02.081Z [ERROR] Error: Error: 1P event logging: 21 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:06:02.082Z [ERROR] Error: Error: {"stack":"Error: Failed to export 21 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 21 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:06:03.147Z [DEBUG] executePreToolHooks called for tool: Read
+2026-01-21T06:06:03.152Z [DEBUG] Getting matching hook commands for PreToolUse with query: Read
+2026-01-21T06:06:03.152Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:06:03.152Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2026-01-21T06:06:03.167Z [DEBUG] Permission suggestions for Read: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Read",
+        "ruleContent": "//Users/kiranbiliyawala/Downloads/**"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "session"
+  }
+]
+2026-01-21T06:06:03.178Z [DEBUG] executePermissionRequestHooks called for tool: Read
+2026-01-21T06:06:03.181Z [DEBUG] Stopped caffeinate, allowing sleep
+2026-01-21T06:06:03.186Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Read
+2026-01-21T06:06:03.186Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:06:03.186Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2026-01-21T06:06:08.692Z [ERROR] Error: Error: 1P event logging: 6 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:06:08.692Z [ERROR] Error: Error: {"stack":"Error: Failed to export 6 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 6 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:06:09.186Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-01-21T06:06:09.186Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:06:09.186Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-01-21T06:06:14.664Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:06:14.665Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 1 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:06:37.619Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:06:37.619Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 1 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:06:47.845Z [DEBUG] High write ratio: blit=405, write=1821 (81.8% writes), screen=38x135
+2026-01-21T06:06:50.769Z [DEBUG] Started caffeinate to prevent sleep
+2026-01-21T06:06:50.770Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-21T06:06:50.770Z [DEBUG] Getting matching hook commands for PostToolUse with query: Read
+2026-01-21T06:06:50.770Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:06:50.770Z [DEBUG] Matched 0 unique hooks for query "Read" (0 before deduplication)
+2026-01-21T06:06:50.778Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-21T06:06:50.778Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-21T06:06:50.778Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-21T06:06:50.778Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-21T06:06:50.794Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-21T06:06:50.801Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-21T06:06:50.801Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-21T06:06:50.801Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-21T06:06:52.903Z [ERROR] Error: Error: 1P event logging: 18 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:06:52.903Z [ERROR] Error: Error: {"stack":"Error: Failed to export 18 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 18 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:06:55.442Z [DEBUG] Stream started - received first chunk
+2026-01-21T06:07:12.738Z [DEBUG] Applying permission update: Setting mode to 'acceptEdits'
+2026-01-21T06:07:13.683Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.615.1768975633683
+2026-01-21T06:07:13.683Z [DEBUG] Preserving file permissions: 100644
+2026-01-21T06:07:13.683Z [DEBUG] Temp file written successfully, size: 31431 bytes
+2026-01-21T06:07:13.683Z [DEBUG] Applied original permissions to temp file
+2026-01-21T06:07:13.683Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.615.1768975633683 to /Users/kiranbiliyawala/.claude.json
+2026-01-21T06:07:13.684Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-21T06:07:13.684Z [DEBUG] Applying permission update: Setting mode to 'plan'
+2026-01-21T06:07:14.067Z [DEBUG] executePreToolHooks called for tool: TodoWrite
+2026-01-21T06:07:14.071Z [DEBUG] Getting matching hook commands for PreToolUse with query: TodoWrite
+2026-01-21T06:07:14.071Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:07:14.071Z [DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+2026-01-21T06:07:14.083Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude/todos/5cdbdc76-b298-4465-97b6-6fc7f175a476-agent-5cdbdc76-b298-4465-97b6-6fc7f175a476.json.tmp.615.1768975634083
+2026-01-21T06:07:14.083Z [DEBUG] Preserving file permissions: 100644
+2026-01-21T06:07:14.084Z [DEBUG] Temp file written successfully, size: 5128 bytes
+2026-01-21T06:07:14.084Z [DEBUG] Applied original permissions to temp file
+2026-01-21T06:07:14.084Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude/todos/5cdbdc76-b298-4465-97b6-6fc7f175a476-agent-5cdbdc76-b298-4465-97b6-6fc7f175a476.json.tmp.615.1768975634083 to /Users/kiranbiliyawala/.claude/todos/5cdbdc76-b298-4465-97b6-6fc7f175a476-agent-5cdbdc76-b298-4465-97b6-6fc7f175a476.json
+2026-01-21T06:07:14.084Z [DEBUG] File /Users/kiranbiliyawala/.claude/todos/5cdbdc76-b298-4465-97b6-6fc7f175a476-agent-5cdbdc76-b298-4465-97b6-6fc7f175a476.json written atomically
+2026-01-21T06:07:14.093Z [DEBUG] Getting matching hook commands for PostToolUse with query: TodoWrite
+2026-01-21T06:07:14.093Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:07:14.093Z [DEBUG] Matched 0 unique hooks for query "TodoWrite" (0 before deduplication)
+2026-01-21T06:07:14.097Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-21T06:07:14.097Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-21T06:07:14.097Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-21T06:07:14.097Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-21T06:07:14.110Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-21T06:07:14.119Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-21T06:07:14.119Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-21T06:07:14.119Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-21T06:07:14.120Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.615.1768975634120
+2026-01-21T06:07:14.120Z [DEBUG] Preserving file permissions: 100644
+2026-01-21T06:07:14.120Z [DEBUG] Temp file written successfully, size: 31477 bytes
+2026-01-21T06:07:14.120Z [DEBUG] Applied original permissions to temp file
+2026-01-21T06:07:14.120Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.615.1768975634120 to /Users/kiranbiliyawala/.claude.json
+2026-01-21T06:07:14.121Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-21T06:07:17.774Z [DEBUG] Stream started - received first chunk
+2026-01-21T06:07:18.447Z [ERROR] Error: Error: 1P event logging: 17 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:07:18.447Z [ERROR] Error: Error: {"stack":"Error: Failed to export 17 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 17 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:07:20.589Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.615.1768975640589
+2026-01-21T06:07:20.589Z [DEBUG] Preserving file permissions: 100644
+2026-01-21T06:07:20.589Z [DEBUG] Temp file written successfully, size: 31506 bytes
+2026-01-21T06:07:20.589Z [DEBUG] Applied original permissions to temp file
+2026-01-21T06:07:20.589Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.615.1768975640589 to /Users/kiranbiliyawala/.claude.json
+2026-01-21T06:07:20.589Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-21T06:07:20.626Z [DEBUG] High write ratio: blit=1890, write=2855 (60.2% writes), screen=66x135
+2026-01-21T06:07:23.847Z [DEBUG] High write ratio: blit=2025, write=2848 (58.4% writes), screen=66x135
+2026-01-21T06:07:24.571Z [DEBUG] High write ratio: blit=1890, write=2861 (60.2% writes), screen=66x135
+2026-01-21T06:07:25.102Z [DEBUG] High write ratio: blit=2025, write=3024 (59.9% writes), screen=69x135
+2026-01-21T06:07:25.907Z [DEBUG] High write ratio: blit=2295, write=2861 (55.5% writes), screen=69x135
+2026-01-21T06:07:26.005Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:07:26.005Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 1 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:07:39.501Z [DEBUG] High write ratio: blit=2160, write=2893 (57.3% writes), screen=71x135
+2026-01-21T06:07:39.503Z [DEBUG] executePreToolHooks called for tool: Write
+2026-01-21T06:07:39.508Z [DEBUG] Getting matching hook commands for PreToolUse with query: Write
+2026-01-21T06:07:39.508Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:07:39.508Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2026-01-21T06:07:39.524Z [DEBUG] FileHistory: Tracked file modification for /Users/kiranbiliyawala/.claude/plans/concurrent-juggling-babbage.md
+2026-01-21T06:07:39.529Z [DEBUG] [lspRecommendation] Looking for LSP plugins for .md
+2026-01-21T06:07:39.542Z [DEBUG] High write ratio: blit=2295, write=2874 (55.6% writes), screen=71x135
+2026-01-21T06:07:39.542Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude/plans/concurrent-juggling-babbage.md.tmp.615.1768975659542
+2026-01-21T06:07:39.543Z [DEBUG] Temp file written successfully, size: 3696 bytes
+2026-01-21T06:07:39.543Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude/plans/concurrent-juggling-babbage.md.tmp.615.1768975659542 to /Users/kiranbiliyawala/.claude/plans/concurrent-juggling-babbage.md
+2026-01-21T06:07:39.543Z [DEBUG] File /Users/kiranbiliyawala/.claude/plans/concurrent-juggling-babbage.md written atomically
+2026-01-21T06:07:39.548Z [DEBUG] Getting matching hook commands for PostToolUse with query: Write
+2026-01-21T06:07:39.548Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:07:39.548Z [DEBUG] Matched 0 unique hooks for query "Write" (0 before deduplication)
+2026-01-21T06:07:39.559Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-21T06:07:39.559Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-21T06:07:39.559Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-21T06:07:39.559Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-21T06:07:39.570Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-21T06:07:39.577Z [DEBUG] High write ratio: blit=2160, write=3272 (60.2% writes), screen=81x135
+2026-01-21T06:07:39.580Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-21T06:07:39.580Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-21T06:07:39.580Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-21T06:07:39.619Z [DEBUG] High write ratio: blit=2597, write=3143 (54.8% writes), screen=81x135
+2026-01-21T06:07:40.349Z [DEBUG] High write ratio: blit=2597, write=3143 (54.8% writes), screen=81x135
+2026-01-21T06:07:43.126Z [DEBUG] Stream started - received first chunk
+2026-01-21T06:07:45.255Z [DEBUG] High write ratio: blit=2597, write=3145 (54.8% writes), screen=81x135
+2026-01-21T06:07:45.520Z [ERROR] Error: Error: 1P event logging: 16 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:07:45.520Z [ERROR] Error: Error: {"stack":"Error: Failed to export 16 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 16 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:07:45.732Z [DEBUG] executePreToolHooks called for tool: ExitPlanMode
+2026-01-21T06:07:45.743Z [DEBUG] High write ratio: blit=2462, write=3501 (58.7% writes), screen=88x135
+2026-01-21T06:07:45.747Z [DEBUG] Getting matching hook commands for PreToolUse with query: ExitPlanMode
+2026-01-21T06:07:45.747Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:07:45.747Z [DEBUG] Matched 0 unique hooks for query "ExitPlanMode" (0 before deduplication)
+2026-01-21T06:07:45.775Z [DEBUG] executePermissionRequestHooks called for tool: ExitPlanMode
+2026-01-21T06:07:45.777Z [DEBUG] Stopped caffeinate, allowing sleep
+2026-01-21T06:07:45.789Z [DEBUG] High write ratio: blit=3407, write=9281 (73.1% writes), screen=236x135
+2026-01-21T06:07:45.798Z [DEBUG] Getting matching hook commands for PermissionRequest with query: ExitPlanMode
+2026-01-21T06:07:45.798Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:07:45.798Z [DEBUG] Matched 0 unique hooks for query "ExitPlanMode" (0 before deduplication)
+2026-01-21T06:07:50.889Z [ERROR] Error: Error: 1P event logging: 5 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:07:50.889Z [ERROR] Error: Error: {"stack":"Error: Failed to export 5 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 5 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:07:51.779Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-01-21T06:07:51.780Z [DEBUG] Found 0 hook matchers in settings
+2026-01-21T06:07:51.780Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-01-21T06:07:57.048Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:07:57.048Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 1 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:08:19.734Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-01-21T06:08:19.734Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 1 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-01-21T06:08:28.560Z [DEBUG] BigQuery metrics export: trust not established, skipping

@@ -1,0 +1,409 @@
+# 05 - Key Files Reference
+
+> **Purpose:** Quick lookup for all critical files in the codebase
+> **Usage:** Use this as a reference when debugging or exploring specific areas
+> **Next:** [06-study-path.md](./06-study-path.md)
+
+---
+
+## Table of Contents
+1. [Entry Point & Configuration](#entry-point--configuration)
+2. [Controllers (API Layer)](#controllers-api-layer)
+3. [Workflows (Business Logic)](#workflows-business-logic)
+4. [State Machines](#state-machines)
+5. [Entities (Data Model)](#entities-data-model)
+6. [Repositories (Data Access)](#repositories-data-access)
+7. [Provider Adapters](#provider-adapters)
+8. [Caches](#caches)
+9. [Processors](#processors)
+10. [Configuration Classes](#configuration-classes)
+11. [External Clients](#external-clients)
+12. [DynamoDB](#dynamodb)
+13. [Kafka & SQS](#kafka--sqs)
+14. [Filters & Security](#filters--security)
+15. [Error Handling](#error-handling)
+
+---
+
+## Entry Point & Configuration
+
+| File | Path | Purpose |
+|------|------|---------|
+| **DarwinApplication.java** | `DarwinApplication.java` | Main Spring Boot entry point |
+| **application.properties** | `src/main/resources/application.properties` | Main config (1300+ lines) |
+| **build.gradle** | `build.gradle` | Dependencies and build config |
+
+### DarwinApplication.java Key Annotations
+```java
+@SpringBootApplication
+@EnableRetry              // Spring Retry support
+@EntityScan(basePackages = {"in.dreamplug"})
+@EnableAspectJAutoProxy(exposeProxy = true)  // AOP proxying
+@EnableScheduling         // Scheduled tasks
+@ComponentScan(basePackages = {"in.dreamplug"})
+```
+
+---
+
+## Controllers (API Layer)
+
+### Primary V2 Controllers
+
+| Controller | Path | Endpoints |
+|------------|------|-----------|
+| **OrderV2Controller** | `controller/v2/order/OrderV2Controller.java` | Create/Get orders |
+| **PaymentV2Controller** | `controller/v2/payment/PaymentV2Controller.java` | Bulk payment creation |
+| **PaymentAttemptV2Controller** | `controller/v2/paymentattempt/PaymentAttemptV2Controller.java` | Payment attempts |
+
+### Webhook Controllers
+
+| Controller | Path | Provider |
+|------------|------|----------|
+| **WebhookController** | `controller/WebhookController.java` | Generic |
+| **CashfreeWebhookController** | `controller/v2/CashfreeWebhookController.java` | Cashfree |
+| **RazorpayWebhookController** | `controller/v2/RazorpayWebhookController.java` | Razorpay |
+| **PayuWebhookController** | `controller/v2/PayuWebhookController.java` | PayU |
+| **CybersourceWebhookController** | `controller/v2/CybersourceWebhookController.java` | Cybersource |
+| **JuspayWebhookController** | `controller/v2/JuspayWebhookController.java` | Juspay |
+| **YBLWebhookController** | `controller/v2/YBLWebhookController.java` | Yes Bank UPI |
+| **ICICIWebhookController** | `controller/v2/ICICIWebhookController.java` | ICICI UPI |
+| **RBLUpiWebhookController** | `controller/v2/RBLUpiWebhookController.java` | RBL UPI |
+| **DigioWebhookController** | `controller/v2/DigioWebhookController.java` | Digio |
+
+### Admin Controllers
+
+| Controller | Path | Purpose |
+|------------|------|---------|
+| **AdminOrderController** | `controller/admin/AdminOrderController.java` | Order management |
+| **AdminPaymentAttemptController** | `controller/admin/AdminPaymentAttemptController.java` | Attempt management |
+| **AdminRefundController** | `controller/admin/AdminRefundController.java` | Refund management |
+
+---
+
+## Workflows (Business Logic)
+
+### Base Workflows
+
+| File | Path | Purpose |
+|------|------|---------|
+| **Workflow.java** | `v2/workflow/create/Workflow.java` | Base 7-step template |
+| **SequentialWorkflow.java** | `v2/workflow/create/SequentialWorkflow.java` | With distributed locking |
+
+### Order Workflows
+
+| File | Path | Purpose |
+|------|------|---------|
+| **OrderCreateWorkflow** | `v2/workflow/create/order/OrderCreateWorkflow.java` | Order creation |
+| **OrderFetchWorkflow** | `v2/workflow/fetch/OrderFetchWorkflow.java` | Order retrieval |
+
+### Payment Workflows
+
+| File | Path | Purpose |
+|------|------|---------|
+| **BulkPaymentCreateWorkflow** | `v2/workflow/create/payments/bulk/BulkPaymentCreateWorkflow.java` | Bulk payment creation |
+| **PaymentFetchWorkflow** | `v2/workflow/fetch/PaymentFetchWorkflow.java` | Payment retrieval |
+
+### Payment Attempt Workflows
+
+| File | Path | Purpose |
+|------|------|---------|
+| **PaymentAttemptCreateWorkflow** | `v2/workflow/create/paymentattempts/PaymentAttemptCreateWorkflow.java` | **CRITICAL** - Main payment flow |
+| **PaymentAttemptCreateContext** | `v2/workflow/create/paymentattempts/PaymentAttemptCreateContext.java` | Context object |
+| **PaymentAttemptFetchWorkflow** | `v2/workflow/fetch/PaymentAttemptFetchWorkflow.java` | Attempt retrieval |
+| **PaymentAttemptSyncWorkflow** | `v2/workflow/sync/PaymentAttemptSyncWorkflow.java` | Status sync |
+
+### Authentication Workflows
+
+| File | Path | Purpose |
+|------|------|---------|
+| **PaymentAttemptAuthenticateWorkflow** | `v2/workflow/authenticate/PaymentAttemptAuthenticateWorkflow.java` | OTP/3DS auth |
+| **ValidateAuthenticationWorkflow** | `v2/workflow/authenticate/ValidateAuthenticationWorkflow.java` | Auth validation |
+
+### Refund Workflows
+
+| File | Path | Purpose |
+|------|------|---------|
+| **RefundCreateWorkflow** | `v2/workflow/create/refund/RefundCreateWorkflow.java` | Refund creation |
+| **RefundAttemptCreateWorkflow** | `v2/workflow/create/refund/RefundAttemptCreateWorkflow.java` | Refund attempt |
+
+---
+
+## State Machines
+
+| File | Path | Purpose |
+|------|------|---------|
+| **PaymentStateMachine** | `statemachine/payment/PaymentStateMachine.java` | Payment state transitions |
+| **OrderStateMachine** | `statemachine/order/OrderStateMachine.java` | Order state transitions |
+| **RefundStateMachine** | `statemachine/RefundStateMachine.java` | Refund state transitions |
+
+### Event Classes
+
+| File | Path | Purpose |
+|------|------|---------|
+| **PaymentAttemptEventFactory** | `statemachine/payment/events/PaymentAttemptEventFactory.java` | Event factory |
+| **PaymentAttemptCreatedEvent** | `statemachine/payment/events/PaymentAttemptCreatedEvent.java` | Created event |
+| **PaymentAttemptCompletedEvent** | `statemachine/payment/events/PaymentAttemptCompletedEvent.java` | Completed event |
+| **PaymentAttemptFailedEvent** | `statemachine/payment/events/PaymentAttemptFailedEvent.java` | Failed event |
+
+---
+
+## Entities (Data Model)
+
+### Base Entities
+
+| File | Path | Purpose |
+|------|------|---------|
+| **BaseEntity** | `entity/commons/BaseEntity.java` | Base with id, timestamps, audit |
+| **BaseExternalEntity** | `entity/provider/BaseExternalEntity.java` | + external_id, version |
+
+### Core Entities
+
+| File | Path | Table |
+|------|------|-------|
+| **OrderEntity** | `entity/OrderEntity.java` | `orders` |
+| **PaymentV2Entity** | `entity/v2/PaymentV2Entity.java` | `payments` |
+| **PaymentAttemptV2Entity** | `entity/v2/PaymentAttemptV2Entity.java` | `payment_attempts` |
+| **RefundEntity** | `entity/v2/RefundEntity.java` | `refunds` |
+| **RefundAttemptEntity** | `entity/v2/RefundAttemptEntity.java` | `refund_attempts` |
+| **FeeEntity** | `entity/v2/FeeEntity.java` | `fees` |
+
+### Configuration Entities
+
+| File | Path | Table |
+|------|------|-------|
+| **ClientEntity** | `entity/ClientEntity.java` | `clients` |
+| **CustomerEntity** | `entity/CustomerEntity.java` | `customers` |
+| **PaymentProviderEntity** | `entity/PaymentProviderEntity.java` | `payment_providers` |
+| **ProviderAccountEntity** | `entity/ProviderAccountEntity.java` | `provider_accounts` |
+| **MasterConfigurationEntity** | `entity/MasterConfigurationEntity.java` | `master_configurations` |
+
+### Attribute Entities
+
+| File | Path | Purpose |
+|------|------|---------|
+| **OrderAttributeEntity** | `entity/OrderAttributeEntity.java` | Order metadata |
+| **PaymentAttemptAttributeEntity** | `entity/PaymentAttemptAttributeEntity.java` | Attempt metadata |
+
+---
+
+## Repositories (Data Access)
+
+### JPA Repositories
+
+| File | Path | Entity |
+|------|------|--------|
+| **OrderRepository** | `repository/OrderRepository.java` | OrderEntity |
+| **PaymentRepository** | `repository/PaymentRepository.java` | PaymentV2Entity |
+| **PaymentAttemptRepository** | `repository/PaymentAttemptRepository.java` | PaymentAttemptV2Entity |
+| **RefundRepository** | `repository/RefundRepository.java` | RefundEntity |
+| **ClientRepository** | `repository/ClientRepository.java` | ClientEntity |
+| **CustomerRepository** | `repository/CustomerRepository.java` | CustomerEntity |
+| **PaymentProviderRepository** | `repository/PaymentProviderRepository.java` | PaymentProviderEntity |
+| **ProviderAccountRepository** | `repository/ProviderAccountRepository.java` | ProviderAccountEntity |
+
+### Custom DAOs
+
+| File | Path | Purpose |
+|------|------|---------|
+| **PaymentAttemptDAOV2Impl** | `repository/dao/PaymentAttemptDAOV2Impl.java` | Complex queries |
+| **RefundEntityReplicaDAOImpl** | `repository/read_only_repository/RefundEntityReplicaDAOImpl.java` | Replica reads |
+
+---
+
+## Provider Adapters
+
+### Base Classes
+
+| File | Path | Purpose |
+|------|------|---------|
+| **IPaymentProviderAdapter** | `v2/workflow/create/providers/IPaymentProviderAdapter.java` | Base adapter |
+| **I3DSPaymentProviderAdapter** | `v2/workflow/create/providers/I3DSPaymentProviderAdapter.java` | 3DS support |
+| **PaymentProviderFactory** | `v2/workflow/create/providers/PaymentProviderFactory.java` | Factory |
+
+### Provider Implementations
+
+| File | Path | Provider |
+|------|------|----------|
+| **CashfreeProviderAdapter** | `v2/workflow/create/providers/CashfreeProviderAdapter.java` | Cashfree base |
+| **CashfreeCardProviderAdapter** | `v2/workflow/create/providers/CashfreeCardProviderAdapter.java` | Cashfree cards |
+| **CashfreeUPIProviderAdapter** | `v2/workflow/create/providers/CashfreeUPIProviderAdapter.java` | Cashfree UPI |
+| **CybersourceProviderAdapter** | `v2/workflow/create/providers/cybersource/CybersourceProviderAdapter.java` | Cybersource |
+| **CybersourceRequestBuilder** | `v2/workflow/create/providers/cybersource/CybersourceRequestBuilder.java` | Request builder |
+| **PayuProviderAdapter** | `v2/workflow/create/providers/PayuProviderAdapter.java` | PayU |
+| **PineLabsEdgeProviderAdapter** | `v2/workflow/create/providers/PineLabsEdgeProviderAdapter.java` | Pine Labs |
+| **CredPointsProviderAdapter** | `v2/workflow/create/providers/CredPointsProviderAdapter.java` | CRED Points |
+
+### Provider Routing
+
+| File | Path | Purpose |
+|------|------|---------|
+| **ProviderDeciderRouter** | `planner/providerdecider/ProviderDeciderRouter.java` | Main router |
+| **ProviderDeciderV2** | `planner/providerdecider/ProviderDeciderV2.java` | Decision tree |
+| **ProviderDeciderViaLCM** | `planner/providerdecider/ProviderDeciderViaLCM.java` | LCM routing |
+
+---
+
+## Caches
+
+| File | Path | What It Caches |
+|------|------|----------------|
+| **ClientConfigurationCache** | `cache/ClientConfigurationCache.java` | Client settings |
+| **PaymentProviderCache** | `cache/PaymentProviderCache.java` | Provider configs |
+| **ProviderAccountCache** | `cache/ProviderAccountCache.java` | Provider accounts |
+| **DecisionTreeObjectCache** | `cache/DecisionTreeObjectCache.java` | Routing rules |
+| **CardBinCache** | `cache/CardBinCache.java` | Card BIN data |
+| **MerchantCache** | `cache/MerchantCache.java` | Merchant data |
+| **FeeCache** | `cache/FeeCache.java` | Fee configurations |
+| **MasterConfigurationCache** | `cache/MasterConfigurationCache.java` | Feature flags |
+| **PaymentErrorMessageMappingCache** | `cache/PaymentErrorMessageMappingCache.java` | Error messages |
+
+---
+
+## Processors
+
+### Instrument Processors
+
+| File | Path | Instrument |
+|------|------|------------|
+| **InstrumentTypeProcessorManager** | `processors/instrumenttype/InstrumentTypeProcessorManager.java` | Manager |
+| **CardInstrumentTypeProcessor** | `processors/instrumenttype/CardInstrumentTypeProcessor.java` | Cards |
+| **UPIPayInstrumentTypeProcessor** | `processors/instrumenttype/UPIPayInstrumentTypeProcessor.java` | UPI Pay |
+| **UPICollectInstrumentTypeProcessor** | `processors/instrumenttype/UPICollectInstrumentTypeProcessor.java` | UPI Collect |
+| **NetBankingInstrumentTypeProcessor** | `processors/instrumenttype/NetBankingInstrumentTypeProcessor.java` | NetBanking |
+
+### Auth Deciders
+
+| File | Path | Purpose |
+|------|------|---------|
+| **AuthTypeDeciderFactory** | `v2/workflow/create/paymentattempts/enrichment/AuthTypeDeciderFactory.java` | Auth type |
+| **SdkTypeDeciderFactory** | `v2/workflow/create/paymentattempts/enrichment/SdkTypeDeciderFactory.java` | SDK type |
+| **NativeProviderDecider** | `v2/workflow/create/paymentattempts/enrichment/NativeProviderDecider.java` | Native OTP |
+
+---
+
+## Configuration Classes
+
+### Database Configuration
+
+| File | Path | Purpose |
+|------|------|---------|
+| **MasterDataSourceConfiguration** | `configuration/database/MasterDataSourceConfiguration.java` | Master DB |
+| **ReplicaDataSourceConfiguration** | `configuration/database/ReplicaDataSourceConfiguration.java` | Replica DB |
+| **ReplicaRepository** | `configuration/database/annotation/ReplicaRepository.java` | Annotation |
+
+### Cache Configuration
+
+| File | Path | Purpose |
+|------|------|---------|
+| **CacheConfig** | `configuration/CacheConfig.java` | Caffeine setup |
+| **RedissonAutoConfiguration** | `configuration/RedissonAutoConfiguration.java` | Redis setup |
+
+### Other Configuration
+
+| File | Path | Purpose |
+|------|------|---------|
+| **EventBusConfiguration** | `configuration/EventBusConfiguration.java` | Guava EventBus |
+| **KafkaConfiguration** | `configuration/KafkaConfiguration.java` | Kafka setup |
+| **DynamoDBConfiguration** | `configuration/DynamoDBConfiguration.java` | DynamoDB setup |
+
+---
+
+## External Clients
+
+| File | Path | Service |
+|------|------|---------|
+| **ArsenalClient** | `client/arsenal/ArsenalClient.java` | Token vault |
+| **FalconClient** | `client/falcon/FalconClient.java` | Offers |
+| **LCMClient** | `client/lcm/LCMClient.java` | Terminal resolution |
+| **SyndicateClient** | `client/syndicate/SyndicateClient.java` | Authentication |
+| **NaradClient** | `client/narad/NaradClient.java` | Dynamic routing |
+| **InvokerClient** | `client/invoker/InvokerClient.java` | Task invocation |
+| **LeiaClient** | `client/leia/LeiaClient.java` | ID generation |
+| **VaultClient** | `client/vault/VaultClient.java` | Token vaulting |
+
+---
+
+## DynamoDB
+
+### DAOs
+
+| File | Path | Purpose |
+|------|------|---------|
+| **AbstractDynamoDBDAO** | `dynamo/dao/AbstractDynamoDBDAO.java` | Base DAO |
+| **PaymentAttemptWorkflowContextDAO** | `dynamo/dao/PaymentAttemptWorkflowContextDAO.java` | Workflow state |
+| **PaymentAttemptNativeOTPDetailDAO** | `dynamo/dao/PaymentAttemptNativeOTPDetailDAO.java` | OTP details |
+| **PaymentAttemptRedirectionDetailDAO** | `dynamo/dao/PaymentAttemptRedirectionDetailDAO.java` | 3DS redirects |
+
+### Entities
+
+| File | Path | Table |
+|------|------|-------|
+| **PaymentAttemptWorkflowContextEntity** | `dynamo/domain/PaymentAttemptWorkflowContextEntity.java` | `darwin_payment_attempt_workflow_context` |
+| **PaymentAttemptNativeOTPDetailEntity** | `dynamo/domain/PaymentAttemptNativeOTPDetailEntity.java` | `darwin_payment_attempt_native_otp_detail` |
+| **PaymentAttemptRedirectionDetailEntity** | `dynamo/domain/PaymentAttemptRedirectionDetailEntity.java` | `darwin_payment_attempt_redirection_detail` |
+| **PaymentAttemptMetadataAuditEntity** | `dynamo/domain/PaymentAttemptMetadataAuditEntity.java` | `darwin_payment_attempt_metadata_audit` |
+
+---
+
+## Kafka & SQS
+
+### Kafka
+
+| File | Path | Purpose |
+|------|------|---------|
+| **MessagingConfigs** | `kafka/MessagingConfigs.java` | Kafka config |
+| **PaymentAttemptAnalyticsEvent** | `kafka/dto/PaymentAttemptAnalyticsEvent.java` | Analytics event |
+| **CardPaymentAttemptAnalyticsEvent** | `kafka/dto/CardPaymentAttemptAnalyticsEvent.java` | Card analytics |
+
+### SQS
+
+| File | Path | Purpose |
+|------|------|---------|
+| **DarwinSQSMessageProcessor** | `sqs/DarwinSQSMessageProcessor.java` | Message processor |
+| **ForcePaymentFailureProcessor** | `sqs/ForcePaymentFailureProcessor.java` | Force failure |
+| **RefundRescheduleProcessor** | `sqs/RefundRescheduleProcessor.java` | Refund scheduling |
+| **OrderExpiryProcessor** | `sqs/OrderExpiryProcessor.java` | Order expiry |
+
+---
+
+## Filters & Security
+
+| File | Path | Purpose |
+|------|------|---------|
+| **ApplicationContextBuilderFilter** | `commons/spring/filters/ApplicationContextBuilderFilter.java` | Context building |
+| **PAMerchantAuthenticationFilter** | `commons/spring/filters/PAMerchantAuthenticationFilter.java` | Merchant auth |
+| **PAPartnerAuthorizationFilter** | `commons/spring/filters/PAPartnerAuthorizationFilter.java` | Partner auth |
+
+---
+
+## Error Handling
+
+| File | Path | Purpose |
+|------|------|---------|
+| **Error.java** | `error/Error.java` | Error enum |
+| **ProviderException** | `error/ProviderException.java` | Provider errors |
+| **AppException** | `error/AppException.java` | Application errors |
+| **GlobalExceptionHandler** | `error/GlobalExceptionHandler.java` | Exception handler |
+
+---
+
+## Quick Lookup by Topic
+
+### "Where is X handled?"
+
+| Topic | Key File |
+|-------|----------|
+| Payment creation | `PaymentAttemptCreateWorkflow.java` |
+| Provider selection | `ProviderDeciderRouter.java` |
+| 3DS authentication | `CybersourceProviderAdapter.java` |
+| State transitions | `PaymentStateMachine.java` |
+| Order status | `OrderStateMachine.java` |
+| Card BIN lookup | `CardInstrumentTypeProcessor.java` |
+| Client config | `ClientConfigurationCache.java` |
+| Webhooks | `*WebhookController.java` |
+| Database routing | `MasterDataSourceConfiguration.java` |
+| Distributed locks | `SequentialWorkflow.java` |
+
+---
+
+*Next: [06 - Study Path](./06-study-path.md)*

@@ -1,0 +1,20 @@
+[
+  {
+    "content": "Search for cc-los across the repository",
+    "status": "in_progress",
+    "priority": "high",
+    "id": "1"
+  },
+  {
+    "content": "Analyze project structure and key components",
+    "status": "pending",
+    "priority": "high",
+    "id": "2"
+  },
+  {
+    "content": "Check for documentation about cc-los",
+    "status": "pending",
+    "priority": "medium",
+    "id": "3"
+  }
+]

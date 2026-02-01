@@ -1,0 +1,27 @@
+[
+  {
+    "content": "Analyze existing tests and getSoapAsJson method implementation",
+    "status": "completed",
+    "activeForm": "Analyzing existing tests and getSoapAsJson method implementation"
+  },
+  {
+    "content": "Create comprehensive test cases for various SOAP XML structures",
+    "status": "in_progress",
+    "activeForm": "Creating comprehensive test cases for various SOAP XML structures"
+  },
+  {
+    "content": "Add edge case tests (empty elements, special characters, etc.)",
+    "status": "pending",
+    "activeForm": "Adding edge case tests (empty elements, special characters, etc.)"
+  },
+  {
+    "content": "Add security-related tests (XXE prevention, malformed XML)",
+    "status": "pending",
+    "activeForm": "Adding security-related tests (XXE prevention, malformed XML)"
+  },
+  {
+    "content": "Add performance tests for large XML documents",
+    "status": "pending",
+    "activeForm": "Adding performance tests for large XML documents"
+  }
+]

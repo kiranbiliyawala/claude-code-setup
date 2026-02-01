@@ -1,0 +1,86 @@
+# Genie PR Reviews - Archana Badagi
+
+## PR #682 - Handling UTR-22
+**Merged:** January 7, 2026 | **Size:** +2256/-436 | **Files:** 17
+
+### Summary
+Large feature implementation for handling 22-character UTR format from certain banks.
+
+### Key Changes
+
+**Configuration:**
+- Added `Utr22BankConfig` configuration class
+- Implemented `Utr22BankConfigCache` for caching bank configurations
+
+**Core Service Changes:**
+- Refactored `SettlementService` for UTR extraction and event publishing
+- Extended `ConfigService` for UTR-22 bank configuration handling
+- Modified `AxisBankPaymentProviderSettlementService` for UTR-22 handling
+
+**New Functionality:**
+- UTR length detection and bank-specific parsing
+- Configurable UTR-22 enabled banks
+- Proper event publishing with extracted UTR
+
+### Test Coverage
+Comprehensive test suite (1500+ lines):
+- `Utr22BankConfigCacheTest` (195 lines)
+- `ConfigServiceUtr22Test` (225 lines)
+- `SettlementServiceExtractUTRTest` (262 lines)
+- `SettlementServicePublishEventUtrTest` (211 lines)
+- `AxisBankPaymentProviderSettlementServiceUtr22Test` (607 lines)
+
+### Positive Aspects
+- Excellent test coverage for all scenarios
+- Configurable bank-specific handling
+- Proper cache implementation
+- Clean service layer separation
+
+### Areas for Improvement
+- Very large PR could be split into cache/config and business logic changes
+
+### Rating: 4/5
+---
+
+## PR #645 - Balance Check APIs
+**Status:** OPEN (Not Merged) | **Size:** +1458/-49 | **Files:** 13
+
+### Summary
+New feature adding balance check API capabilities for tenants and payment providers.
+
+### Key Changes
+
+**New Services:**
+- `ProviderBalanceClientService` - centralized service for all provider balance API calls
+- `TenantBalanceService` - tenant-level balance checking
+
+**New Endpoints:**
+- `POST /genie/v1/tenant/{tenantId}/providers/balance` - Provider-specific balance check
+- `GET /genie/v1/tenant/{tenantId}/balance` - Tenant balance check
+
+**New Models:**
+- `TenantBalanceCheckRequest`
+- `TenantBalanceCheckResponse`
+- `PaymentProviderBalance`
+- `ProviderAccount`
+
+**Test Coverage:**
+- `ProviderBalanceClientServiceTest` (293 lines)
+- `TenantBalanceServiceTest` (524 lines)
+
+### PR Documentation
+Good PR description with:
+- Key changes summary
+- Code reduction benefits (~300+ lines eliminated)
+- Endpoint documentation
+
+### Positive Aspects
+- Clean abstraction for provider balance APIs
+- Eliminates duplicated code
+- Good test coverage
+- Well-documented PR
+
+### Note
+This PR is still OPEN and has not been merged as of the review date.
+
+### Rating: 4/5 (based on code quality, pending merge)

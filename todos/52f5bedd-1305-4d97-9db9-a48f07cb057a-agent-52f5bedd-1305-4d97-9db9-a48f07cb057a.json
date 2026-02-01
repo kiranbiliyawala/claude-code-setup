@@ -1,0 +1,7 @@
+[
+  {
+    "content": "Fix JourneyUpdateEventListenerTest to work with existing SQSConsumer implementation",
+    "status": "in_progress",
+    "id": "1"
+  }
+]

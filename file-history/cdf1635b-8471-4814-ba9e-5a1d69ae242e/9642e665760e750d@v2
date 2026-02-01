@@ -1,0 +1,116 @@
+# CCBP Settlement Flow - Sequence Diagram
+
+## Proposed Solution 2 (Selected Approach)
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant CRED as CRED App<br/>(Agent/DTPL)
+    participant COU as COU System<br/>(Bill Fetch)
+    participant PA as PA System<br/>(DPSPL Darwin)
+    participant PA_Escrow as PA Escrow<br/>(Axis/Stanc)
+    participant OU_Escrow as OU Escrow<br/>(Axis/Stanc)
+    participant OD as Stanc OD<br/>(Overdraft)
+    participant NBBL as NBBL
+    participant Biller as Biller
+
+    %% Bill Fetch & Display
+    rect rgb(240, 248, 255)
+        Note over User, COU: Bill Fetch Phase
+        User->>CRED: Open bill payment
+        CRED->>COU: Fetch bill for user
+        COU-->>CRED: Return bill details
+        CRED-->>User: Display bill
+    end
+
+    %% Payment Initiation
+    rect rgb(255, 248, 220)
+        Note over User, PA: Payment Initiation Phase
+        User->>CRED: Initiate bill payment
+        CRED->>PA: Execute payment transaction
+        PA->>PA: Log transaction in Darwin
+        PA-->>CRED: Transaction registered
+    end
+
+    %% Account Routing (DTPL as TSP)
+    rect rgb(220, 255, 220)
+        Note over CRED, PA: Account Routing Phase (DTPL as TSP)
+        PA->>CRED: Trigger event (transaction context)
+        CRED->>CRED: Determine source PA escrow<br/>& destination OU escrow
+        CRED->>PA: Call Transfer API<br/>(source & destination accounts)
+        PA->>PA: Lock transfer entity<br/>Store destination info
+        PA-->>CRED: Transfer locked
+    end
+
+    %% Settlement Execution
+    rect rgb(255, 230, 230)
+        Note over PA, OU_Escrow: Settlement Phase
+
+        alt UPI Transactions
+            Note over PA, OU_Escrow: Settled 8 times per day
+            PA->>PA_Escrow: Initiate payout
+            PA_Escrow->>OU_Escrow: Transfer funds<br/>(Net settlement amount)
+        else Net Banking/DC Transactions
+            Note over PA, OU_Escrow: Settled at T+1
+            PA->>PA_Escrow: Initiate payout
+            PA_Escrow->>OU_Escrow: Transfer funds<br/>(Net settlement amount)
+        end
+    end
+
+    %% OD Management (for NB/DC)
+    rect rgb(230, 230, 255)
+        Note over OD, OU_Escrow: OD Management (NB/DC only)
+
+        Note right of OD: Before PA settlement (T+0)
+        OD->>OU_Escrow: Prefund (cover NBBL debit)
+
+        Note right of OD: After PA settlement (T+1)
+        OU_Escrow->>OD: Return funds after<br/>PA settlement received
+    end
+
+    %% NBBL Settlement to Biller
+    rect rgb(255, 240, 245)
+        Note over OU_Escrow, Biller: NBBL Settlement Phase
+        NBBL->>OU_Escrow: Debit settlement amount
+        NBBL->>Biller: Settle to biller
+    end
+```
+
+## Key Entities & Responsibilities
+
+| Entity | Role |
+|--------|------|
+| **CRED (DTPL)** | Agent Institution - Displays bills, collects payments, acts as TSP for account routing between PA & OU escrows |
+| **PA System (DPSPL)** | Logs transactions, collects into PA escrow, settles to OU escrow based on Agent instructions |
+| **COU System** | Fetches bills from BBPS, ensures settlement to NBBL |
+| **NBBL** | Debits OU escrow, settles to billers |
+
+## Settlement Cycles
+
+| Payment Method | Settlement Frequency | Notes |
+|----------------|---------------------|-------|
+| UPI | 8 times per day | Same-day settlement |
+| Net Banking | T+1 | OD prefunding required |
+| Debit Card | T+1 | OD prefunding required |
+
+## Net Settlement Formula
+
+```
+Settlement Amount = (Transaction Amount - PA MDR) - (OU Revenue - Switching Fee)
+
+Where:
+- PA MDR = Provider Fee + 10% of Provider Fee
+- OU Revenue = Interchange income from NBBL
+- Switching Fee = NBBL flat fee
+```
+
+## Sample Calculation
+
+| Item | Amount |
+|------|--------|
+| Transaction Amount (A) | ₹1,000 |
+| Provider Fee + GST | ₹9.44 |
+| PA MDR (1.1 × Provider Fee) | ₹10.384 |
+| OU Interchange Income | ₹2.25 |
+| NBBL Switching Fee | ₹0.25 |
+| **Net Settlement (PA → OU)** | **₹987.616** |

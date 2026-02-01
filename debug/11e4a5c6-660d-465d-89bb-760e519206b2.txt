@@ -1,0 +1,620 @@
+2026-01-28T09:43:37.503Z [DEBUG] Failed to check enabledPlatforms: TypeError: kT is not a function
+2026-01-28T09:43:37.537Z [DEBUG] Watching for changes in setting files /Users/kiranbiliyawala/.claude, /Users/kiranbiliyawala/code/cred/finhq/.claude...
+2026-01-28T09:43:37.571Z [DEBUG] [init] configureGlobalMTLS starting
+2026-01-28T09:43:37.571Z [DEBUG] [init] configureGlobalMTLS complete
+2026-01-28T09:43:37.571Z [DEBUG] [init] configureGlobalAgents starting
+2026-01-28T09:43:37.571Z [DEBUG] [init] configureGlobalAgents complete
+2026-01-28T09:43:37.577Z [DEBUG] Applying permission update: Adding 1 allow rule(s) to destination 'localSettings': ["WebFetch(domain:dreamplug.atlassian.net)"]
+2026-01-28T09:43:37.577Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-01-28T09:43:37.595Z [DEBUG] Loading plugin github from source: "./external_plugins/github"
+2026-01-28T09:43:37.599Z [DEBUG] [ToolSearch:optimistic] mode=standard, ENABLE_TOOL_SEARCH=undefined, result=false
+2026-01-28T09:43:37.599Z [DEBUG] [STARTUP] Running setup()...
+2026-01-28T09:43:37.599Z [DEBUG] Loading skills from: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/kiranbiliyawala/.claude/skills, project=[]
+2026-01-28T09:43:37.600Z [ERROR] TypeError: TypeError: Cannot read properties of undefined (reading 'safeParse')
+    at TQ6 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5228:25188)
+    at tr2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5229:1314)
+    at Yv (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5229:1754)
+    at oq (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5229:1683)
+    at Object.Qb8 [as isPlatformInEnabledList] (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:244:2532)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4744:21550
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:848
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4881:6409
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:848
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5148:913
+2026-01-28T09:43:37.600Z [ERROR] TypeError: TypeError: Cannot read properties of undefined (reading 'safeParse')
+    at TQ6 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5228:25188)
+    at tr2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5229:1314)
+    at Yv (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5229:1754)
+    at oq (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5229:1683)
+    at Object.Qb8 [as isPlatformInEnabledList] (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:244:2532)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4744:21550
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:848
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4881:6409
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:848
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5148:913
+2026-01-28T09:43:37.600Z [ERROR] Error: Error: ENOENT: no such file or directory, scandir '/Library/Application Support/ClaudeCode/.claude/skills'
+    at Module.readdirSync (node:fs:1581:26)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1909
+    at hX (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:35183)
+    at Object.readdirSync (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1879)
+    at sZ1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1827:369)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1827:4509
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6814)
+    at Un2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4881:4362)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4881:6995
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6814)
+2026-01-28T09:43:37.600Z [ERROR] Error: Error: ENOENT: no such file or directory, scandir '/Users/kiranbiliyawala/.claude/skills'
+    at Module.readdirSync (node:fs:1581:26)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1909
+    at hX (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:35183)
+    at Object.readdirSync (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1879)
+    at sZ1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1827:369)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1827:4552
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6814)
+    at Un2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4881:4362)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4881:6995
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6814)
+2026-01-28T09:43:37.600Z [DEBUG] Error log sink initialized
+2026-01-28T09:43:37.614Z [DEBUG] [STARTUP] setup() completed in 15ms
+2026-01-28T09:43:37.614Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-01-28T09:43:37.621Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, legacy commands: 0)
+2026-01-28T09:43:37.624Z [DEBUG] Using git SHA for github@claude-plugins-official: e30768372b41
+2026-01-28T09:43:37.624Z [DEBUG] Plugin github@claude-plugins-official version e30768372b41 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/e30768372b41
+2026-01-28T09:43:37.624Z [DEBUG] Copied local plugin github to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/e30768372b41
+2026-01-28T09:43:37.625Z [DEBUG] Loading plugin pr-review-toolkit from source: "./plugins/pr-review-toolkit"
+2026-01-28T09:43:37.627Z [DEBUG] [Claude in Chrome] Found chrome profiles: Default
+2026-01-28T09:43:37.630Z [DEBUG] [Claude in Chrome] Found arc profiles: Default, Profile 1
+2026-01-28T09:43:37.631Z [DEBUG] [Claude in Chrome] Found vivaldi profiles: Default
+2026-01-28T09:43:37.631Z [DEBUG] [Claude in Chrome] Extension not found in any browser
+2026-01-28T09:43:37.639Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: e30768372b41
+2026-01-28T09:43:37.639Z [DEBUG] Plugin pr-review-toolkit@claude-plugins-official version e30768372b41 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/e30768372b41
+2026-01-28T09:43:37.639Z [DEBUG] Copied local plugin pr-review-toolkit to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/e30768372b41
+2026-01-28T09:43:37.640Z [DEBUG] Loading plugin canvas from source: "./canvas"
+2026-01-28T09:43:37.640Z [DEBUG] Using provided version for canvas@claude-canvas: 0.1.0
+2026-01-28T09:43:37.641Z [DEBUG] Plugin canvas@claude-canvas version 0.1.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-28T09:43:37.641Z [DEBUG] Copied local plugin canvas to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-28T09:43:37.641Z [DEBUG] Plugin canvas has no entry.skills defined
+2026-01-28T09:43:37.642Z [DEBUG] Loading plugin code-simplifier from source: "./plugins/code-simplifier"
+2026-01-28T09:43:37.642Z [DEBUG] Using manifest version for code-simplifier@claude-plugins-official: 1.0.0
+2026-01-28T09:43:37.642Z [DEBUG] Plugin code-simplifier@claude-plugins-official version 1.0.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-01-28T09:43:37.642Z [DEBUG] Copied local plugin code-simplifier to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-01-28T09:43:37.643Z [DEBUG] Found 4 plugins (4 enabled, 0 disabled)
+2026-01-28T09:43:37.643Z [DEBUG] getPluginSkills: Processing 4 enabled plugins
+2026-01-28T09:43:37.643Z [DEBUG] Checking plugin github: skillsPath=none, skillsPaths=0 paths
+2026-01-28T09:43:37.643Z [DEBUG] Checking plugin pr-review-toolkit: skillsPath=none, skillsPaths=0 paths
+2026-01-28T09:43:37.643Z [DEBUG] Checking plugin canvas: skillsPath=exists, skillsPaths=0 paths
+2026-01-28T09:43:37.643Z [DEBUG] Attempting to load skills from plugin canvas default skillsPath: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0/skills
+2026-01-28T09:43:37.650Z [DEBUG] Registered 0 hooks from 4 plugins
+2026-01-28T09:43:37.650Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-28T09:43:37.650Z [DEBUG] Loaded 4 skills from plugin canvas default directory
+2026-01-28T09:43:37.650Z [DEBUG] Checking plugin code-simplifier: skillsPath=none, skillsPaths=0 paths
+2026-01-28T09:43:37.650Z [DEBUG] Total plugin skills loaded: 4
+2026-01-28T09:43:37.650Z [DEBUG] Loaded 1 commands from plugin pr-review-toolkit default directory
+2026-01-28T09:43:37.650Z [DEBUG] Loaded 1 commands from plugin canvas default directory
+2026-01-28T09:43:37.650Z [DEBUG] Total plugin commands loaded: 2
+2026-01-28T09:43:37.650Z [DEBUG] getSkills returning: 0 skill dir commands, 4 plugin skills, 1 bundled skills
+2026-01-28T09:43:37.651Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at LGA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1609:27769)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-28T09:43:37.747Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593417747
+2026-01-28T09:43:37.747Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T09:43:37.748Z [DEBUG] Temp file written successfully, size: 39623 bytes
+2026-01-28T09:43:37.748Z [DEBUG] Applied original permissions to temp file
+2026-01-28T09:43:37.748Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593417747 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T09:43:37.748Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T09:43:38.035Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418035
+2026-01-28T09:43:38.035Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T09:43:38.035Z [DEBUG] Temp file written successfully, size: 39656 bytes
+2026-01-28T09:43:38.035Z [DEBUG] Applied original permissions to temp file
+2026-01-28T09:43:38.035Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418035 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T09:43:38.036Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T09:43:38.225Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+2026-01-28T09:43:38.242Z [DEBUG] Loaded 6 agents from plugin pr-review-toolkit default directory
+2026-01-28T09:43:38.243Z [DEBUG] Loaded 1 agents from plugin code-simplifier default directory
+2026-01-28T09:43:38.243Z [DEBUG] Total plugin agents loaded: 7
+2026-01-28T09:43:38.243Z [DEBUG] [STARTUP] Commands and agents loaded in 629ms
+2026-01-28T09:43:38.243Z [DEBUG] [STARTUP] Running showSetupScreens()...
+2026-01-28T09:43:38.244Z [DEBUG] [render] initLayout starting
+2026-01-28T09:43:38.244Z [DEBUG] Layout engine: yoga
+2026-01-28T09:43:38.252Z [DEBUG] [render] initLayout complete
+2026-01-28T09:43:38.254Z [DEBUG] [render] first ink render: 1232ms since process start
+2026-01-28T09:43:38.257Z [DEBUG] [keybindings] KeybindingSetup initialized with 99 bindings, 0 warnings
+2026-01-28T09:43:38.267Z [DEBUG] [keybindings] Skipping file watcher - user customization disabled
+2026-01-28T09:43:38.283Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-01-28T09:43:38.285Z [DEBUG] [STARTUP] showSetupScreens() completed in 42ms
+2026-01-28T09:43:38.285Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-01-28T09:43:38.285Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-01-28T09:43:38.285Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-01-28T09:43:38.286Z [DEBUG] [STARTUP] MCP configs loaded in 709ms
+2026-01-28T09:43:38.289Z [DEBUG] MCP server "gemini-collab": Starting connection with timeout of 30000ms
+2026-01-28T09:43:38.296Z [DEBUG] MCP server "plugin:github:github": Initializing HTTP transport to https://api.githubcopilot.com/mcp/
+2026-01-28T09:43:38.296Z [DEBUG] MCP server "plugin:github:github": Node version: v23.9.0, Platform: darwin
+2026-01-28T09:43:38.296Z [DEBUG] MCP server "plugin:github:github": Environment: {"NODE_OPTIONS":"not set","UV_THREADPOOL_SIZE":"default","HTTP_PROXY":"not set","HTTPS_PROXY":"not set","NO_PROXY":"not set"}
+2026-01-28T09:43:38.301Z [DEBUG] All plugins already exist, skipping migration
+2026-01-28T09:43:38.302Z [DEBUG] [Reconnection] computeInitialTeamContext: No teammate context set (not a teammate)
+2026-01-28T09:43:38.303Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418303
+2026-01-28T09:43:38.303Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T09:43:38.303Z [DEBUG] Temp file written successfully, size: 39656 bytes
+2026-01-28T09:43:38.303Z [DEBUG] Applied original permissions to temp file
+2026-01-28T09:43:38.303Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418303 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T09:43:38.303Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T09:43:38.307Z [DEBUG] Loaded 4 installed plugins from /Users/kiranbiliyawala/.claude/plugins/installed_plugins.json
+2026-01-28T09:43:38.307Z [DEBUG] Initialized versioned plugins system with 4 plugins
+2026-01-28T09:43:38.310Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2026-01-28T09:43:38.310Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:43:38.310Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2026-01-28T09:43:38.310Z [DEBUG] MCP server "plugin:github:github": Proxy options: default
+2026-01-28T09:43:38.310Z [DEBUG] MCP server "plugin:github:github": HTTP transport options: {"url":"https://api.githubcopilot.com/mcp/","headers":{"User-Agent":"claude-code/2.1.22","Authorization":"[REDACTED]"},"hasAuthProvider":true,"timeoutMs":60000}
+2026-01-28T09:43:38.310Z [DEBUG] MCP server "plugin:github:github": HTTP transport created successfully
+2026-01-28T09:43:38.311Z [DEBUG] MCP server "plugin:github:github": Client created, setting up request handler
+2026-01-28T09:43:38.311Z [DEBUG] MCP server "plugin:github:github": Starting connection with timeout of 30000ms
+2026-01-28T09:43:38.311Z [DEBUG] MCP server "plugin:github:github": Testing basic HTTP connectivity to https://api.githubcopilot.com/mcp/
+2026-01-28T09:43:38.311Z [DEBUG] MCP server "plugin:github:github": Parsed URL: host=api.githubcopilot.com, port=default, protocol=https:
+2026-01-28T09:43:38.340Z [DEBUG] MCP server "plugin:github:github": No token data found
+2026-01-28T09:43:38.340Z [DEBUG] [render] initLayout starting
+2026-01-28T09:43:38.342Z [DEBUG] [render] initLayout complete
+2026-01-28T09:43:38.342Z [DEBUG] [render] first ink render: 1320ms since process start
+2026-01-28T09:43:38.358Z [DEBUG] Git remote URL: null
+2026-01-28T09:43:38.358Z [DEBUG] No git remote URL found
+2026-01-28T09:43:38.358Z [DEBUG] Not in a GitHub repository, skipping path mapping update
+2026-01-28T09:43:38.385Z [DEBUG] [keybindings] KeybindingSetup initialized with 99 bindings, 0 warnings
+2026-01-28T09:43:38.422Z [DEBUG] High write ratio: blit=0, write=1512 (100.0% writes), screen=18x245
+2026-01-28T09:43:38.430Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418430
+2026-01-28T09:43:38.430Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T09:43:38.430Z [DEBUG] Temp file written successfully, size: 39655 bytes
+2026-01-28T09:43:38.430Z [DEBUG] Applied original permissions to temp file
+2026-01-28T09:43:38.430Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418430 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T09:43:38.430Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T09:43:38.435Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418435
+2026-01-28T09:43:38.435Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T09:43:38.435Z [DEBUG] Temp file written successfully, size: 39655 bytes
+2026-01-28T09:43:38.435Z [DEBUG] Applied original permissions to temp file
+2026-01-28T09:43:38.435Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418435 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T09:43:38.435Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T09:43:38.438Z [DEBUG] [keybindings] Skipping file watcher - user customization disabled
+2026-01-28T09:43:38.438Z [DEBUG] [REPL:mount] REPL mounted, disabled=false
+2026-01-28T09:43:38.439Z [DEBUG] Official marketplace auto-install skipped: already_attempted
+2026-01-28T09:43:38.439Z [DEBUG] performStartupChecks called
+2026-01-28T09:43:38.439Z [DEBUG] Starting background plugin installations
+2026-01-28T09:43:38.439Z [DEBUG] performBackgroundPluginInstallations called
+2026-01-28T09:43:38.440Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-28T09:43:38.441Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-28T09:43:38.441Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-28T09:43:38.442Z [DEBUG] Found 4 enabled plugins
+2026-01-28T09:43:38.442Z [DEBUG] All plugins already exist, skipping migration
+2026-01-28T09:43:38.442Z [DEBUG] Found 4 installed plugins (V2 format)
+2026-01-28T09:43:38.442Z [DEBUG] Loaded plugins - Enabled: 4, Disabled: 0, Commands: 2, Agents: 7, Errors: 0
+2026-01-28T09:43:38.442Z [DEBUG] Found 0 missing plugins (not installed):
+2026-01-28T09:43:38.442Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2026-01-28T09:43:38.444Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at LGA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1609:27769)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runNextTicks (node:internal/process/task_queues:69:3)
+    at process.processImmediate (node:internal/timers:479:9)
+    at async _ (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4254:16162)
+2026-01-28T09:43:38.444Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at LGA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1609:27769)
+    at processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at runNextTicks (node:internal/process/task_queues:69:3)
+    at process.processImmediate (node:internal/timers:479:9)
+    at async Z (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4254:16678)
+2026-01-28T09:43:38.444Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-01-28T09:43:38.444Z [DEBUG] [claudeai-mcp] Gate returned: false
+2026-01-28T09:43:38.444Z [DEBUG] [claudeai-mcp] Disabled via gate
+2026-01-28T09:43:38.445Z [DEBUG] Total LSP servers loaded: 0
+2026-01-28T09:43:38.445Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2026-01-28T09:43:38.445Z [DEBUG] LSP manager initialized with 0 servers
+2026-01-28T09:43:38.445Z [DEBUG] LSP server manager initialized successfully
+2026-01-28T09:43:38.445Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-01-28T09:43:38.458Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418458
+2026-01-28T09:43:38.458Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T09:43:38.458Z [DEBUG] Temp file written successfully, size: 39655 bytes
+2026-01-28T09:43:38.458Z [DEBUG] Applied original permissions to temp file
+2026-01-28T09:43:38.458Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418458 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T09:43:38.458Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T09:43:38.463Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418463
+2026-01-28T09:43:38.463Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T09:43:38.463Z [DEBUG] Temp file written successfully, size: 39655 bytes
+2026-01-28T09:43:38.463Z [DEBUG] Applied original permissions to temp file
+2026-01-28T09:43:38.463Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593418463 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T09:43:38.464Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T09:43:38.852Z [DEBUG] MCP server "gemini-collab": Successfully connected to stdio server in 566ms
+2026-01-28T09:43:38.852Z [DEBUG] MCP server "gemini-collab": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"claude-gemini-mcp","version":"1.0.0"}}
+2026-01-28T09:43:38.853Z [DEBUG] MCP server "gemini-collab": STDIO connection dropped after 0s uptime
+2026-01-28T09:43:38.853Z [DEBUG] MCP server "gemini-collab": Connection error: [
+  {
+    "code": "invalid_union",
+    "errors": [
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "id",
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"id\", \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "result"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        }
+      ]
+    ],
+    "path": [],
+    "message": "Invalid input"
+  }
+]
+2026-01-28T09:43:39.754Z [DEBUG] MCP server "plugin:github:github": HTTP Connection failed after 1458ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+ (code: 400, errno: none)
+2026-01-28T09:43:39.755Z [ERROR] MCP server "plugin:github:github" Error: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-28T09:43:39.755Z [DEBUG] MCP server "plugin:github:github": Connection failed after 1459ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-28T09:43:39.756Z [ERROR] MCP server "plugin:github:github" Connection failed: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-28T09:43:39.762Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:43:39.762Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:43:39.762Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:43:39.762Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:43:39.762Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:43:39.762Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:43:39.763Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:43:39.763Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:43:39.763Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:43:40.198Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-28T09:43:40.211Z [DEBUG] Skills and commands included in Skill tool: pr-review-toolkit:review-pr, canvas, calendar, canvas, document, flight
+2026-01-28T09:43:40.211Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-28T09:43:40.211Z [DEBUG] Skill prompt: showing "canvas:calendar" (userFacingName="calendar")
+2026-01-28T09:43:40.211Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-28T09:43:40.211Z [DEBUG] Skill prompt: showing "canvas:document" (userFacingName="document")
+2026-01-28T09:43:40.211Z [DEBUG] Skill prompt: showing "canvas:flight" (userFacingName="flight")
+2026-01-28T09:43:40.212Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:43:40.212Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:43:40.212Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:43:52.686Z [ERROR] Error: Error: 1P event logging: 28 events failed to export (code=ECONNABORTED, timeout of 10000ms exceeded)
+    at $36.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:689:2315)
+    at async $36.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:689:1197)
+2026-01-28T09:43:52.687Z [ERROR] Error: Error: {"stack":"Error: Failed to export 28 events (code=ECONNABORTED, timeout of 10000ms exceeded)\n    at $36.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:689:1372)","message":"Failed to export 28 events (code=ECONNABORTED, timeout of 10000ms exceeded)","name":"Error"}
+    at YL6.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2003:34863)
+    at Pq6.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:684:7017)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:684:38042
+    at JK9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:684:38588)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:685:20245
+2026-01-28T09:44:00.082Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude/todos/11e4a5c6-660d-465d-89bb-760e519206b2-agent-11e4a5c6-660d-465d-89bb-760e519206b2.json.tmp.58586.1769593440082
+2026-01-28T09:44:00.083Z [DEBUG] Temp file written successfully, size: 2 bytes
+2026-01-28T09:44:00.083Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude/todos/11e4a5c6-660d-465d-89bb-760e519206b2-agent-11e4a5c6-660d-465d-89bb-760e519206b2.json.tmp.58586.1769593440082 to /Users/kiranbiliyawala/.claude/todos/11e4a5c6-660d-465d-89bb-760e519206b2-agent-11e4a5c6-660d-465d-89bb-760e519206b2.json
+2026-01-28T09:44:00.083Z [DEBUG] File /Users/kiranbiliyawala/.claude/todos/11e4a5c6-660d-465d-89bb-760e519206b2-agent-11e4a5c6-660d-465d-89bb-760e519206b2.json written atomically
+2026-01-28T09:44:00.092Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-28T09:44:00.092Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-28T09:44:00.092Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-28T09:44:00.092Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-28T09:44:00.111Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-01-28T09:44:00.111Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:44:00.111Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-28T09:44:00.117Z [DEBUG] Started caffeinate to prevent sleep
+2026-01-28T09:44:00.125Z [DEBUG] FileHistory: Added snapshot for 2c60451e-7e02-4ae0-9c8e-5612d982629a, tracking 0 files
+2026-01-28T09:44:00.137Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-01-28T09:44:00.138Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:44:00.138Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:44:00.139Z [DEBUG] Total plugin output styles loaded: 0
+2026-01-28T09:44:00.139Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:44:00.146Z [DEBUG] Summarizing all 30 messages (~4893 tokens)
+2026-01-28T09:44:00.146Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-01-28T09:44:00.147Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:44:00.147Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:44:00.147Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:44:00.151Z [DEBUG] Stats cache stale (2026-01-26), processing 2026-01-27 to 2026-01-27 in background
+2026-01-28T09:44:00.160Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593440160
+2026-01-28T09:44:00.160Z [DEBUG] Preserving file permissions: 100644
+2026-01-28T09:44:00.161Z [DEBUG] Temp file written successfully, size: 39686 bytes
+2026-01-28T09:44:00.161Z [DEBUG] Applied original permissions to temp file
+2026-01-28T09:44:00.161Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58586.1769593440160 to /Users/kiranbiliyawala/.claude.json
+2026-01-28T09:44:00.161Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-28T09:44:00.168Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-28T09:44:00.194Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:44:00.194Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:44:00.194Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:44:00.254Z [DEBUG] Stats cache saved successfully (lastComputedDate: 2026-01-27)
+2026-01-28T09:44:00.254Z [DEBUG] Stats cache updated with 5 new sessions
+2026-01-28T09:44:01.164Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:44:01.261Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:44:01.406Z [DEBUG] Generated summary for session 45e1037b-7e3e-4149-9456-86ffb112ea67: "Review Kiran Biliyawala Comments in Confluence NACH Payment Pages"
+2026-01-28T09:44:01.412Z [DEBUG] Summarizing all 62 messages (~15358 tokens)
+2026-01-28T09:44:01.412Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-01-28T09:44:01.413Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:44:01.413Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:44:01.413Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:44:02.334Z [ERROR] SyntaxError: SyntaxError: Unexpected token '`', "```json
+{
+"... is not valid JSON
+    at JSON.parse (<anonymous>)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:67:812
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6814)
+    at cZ7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1609:40380)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-28T09:44:02.468Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:44:02.527Z [DEBUG] Generated summary for session cdf1635b-8471-4814-ba9e-5a1d69ae242e: "CCBP Settlement Flow Sequence Diagram Creation"
+2026-01-28T09:44:02.532Z [DEBUG] Summarizing all 26 messages (~5449 tokens)
+2026-01-28T09:44:02.533Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-01-28T09:44:02.533Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:44:02.533Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:44:02.534Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:44:03.441Z [DEBUG] Successfully refreshed marketplace: claude-code-plugins
+2026-01-28T09:44:03.653Z [DEBUG] Successfully refreshed marketplace: claude-plugins-official
+2026-01-28T09:44:03.653Z [DEBUG] Plugin autoupdate: checking installed plugins
+2026-01-28T09:44:03.663Z [DEBUG] Using manifest version for code-simplifier@claude-plugins-official: 1.0.0
+2026-01-28T09:44:03.673Z [DEBUG] Using git SHA for github@claude-plugins-official: e30768372b41
+2026-01-28T09:44:03.677Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: e30768372b41
+2026-01-28T09:44:03.766Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:44:04.162Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:44:04.366Z [DEBUG] Generated summary for session da4c71c2-9a9e-4277-a417-d2ff0b80e4a6: "Java 25 Installation and Path Location"
+2026-01-28T09:44:04.372Z [DEBUG] Session index: added 2, updated 1, removed 0, summaries generated 3 (total: 8)
+2026-01-28T09:44:04.736Z [DEBUG] executePreToolHooks called for tool: WebSearch
+2026-01-28T09:44:04.745Z [DEBUG] Getting matching hook commands for PreToolUse with query: WebSearch
+2026-01-28T09:44:04.745Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:44:04.745Z [DEBUG] Matched 0 unique hooks for query "WebSearch" (0 before deduplication)
+2026-01-28T09:44:04.765Z [DEBUG] Stopped caffeinate, allowing sleep
+2026-01-28T09:44:04.775Z [DEBUG] executePermissionRequestHooks called for tool: WebSearch
+2026-01-28T09:44:04.787Z [DEBUG] Getting matching hook commands for PermissionRequest with query: WebSearch
+2026-01-28T09:44:04.787Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:44:04.787Z [DEBUG] Matched 0 unique hooks for query "WebSearch" (0 before deduplication)
+2026-01-28T09:44:10.770Z [DEBUG] Getting matching hook commands for Notification with query: permission_prompt
+2026-01-28T09:44:10.770Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:44:10.771Z [DEBUG] Matched 0 unique hooks for query "permission_prompt" (0 before deduplication)
+2026-01-28T09:47:52.801Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-28T09:47:52.806Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:47:52.806Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:47:52.809Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:47:52.841Z [DEBUG] Started caffeinate to prevent sleep
+2026-01-28T09:47:52.842Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-28T09:47:57.814Z [ERROR] Error in non-streaming fallback: 400 {"error":{"message":"{\"message\":\"tools.0: Input tag 'web_search_20250305' found using 'type' does not match any of the expected tags: 'bash_20250124', 'custom', 'text_editor_20250124', 'text_editor_20250429', 'text_editor_20250728'\"}No fallback model group found for original model_group=claude-opus-4-5-20251101. Fallbacks=[{'bedrock-anthropic-claude-3-5-sonnet': ['bedrock-anthropic-claude-3-5-sonnet-apac']}, {'bedrock-anthropic-claude-3-7-sonnet': ['bedrock-anthropic-claude-3-5-sonnet']}, {'claude-3.7-sonnet': ['claude-3.5-sonnet']}, {'claude-4-sonnet': ['claude-4-sonnet-direct', 'claude-4-sonnet-vertex', 'claude-3.7-sonnet']}, {'pioneer-claude-4-sonnet': ['claude-4-sonnet', 'claude-4-sonnet-vertex', 'claude-3.7-sonnet']}, {'claude-sonnet-4-20250514': ['claude-4-sonnet-direct', 'claude-4-sonnet-vertex', 'claude-3.7-sonnet']}, {'claude-4.5-haiku': ['claude-haiku-4-5-20251001-direct']}, {'claude-haiku-4-5-20251001': ['claude-haiku-4-5-20251001-direct']}, {'claude-sonnet-4-5-20250929': ['claude-sonnet-4-5-20250929-direct']}, {'claude-sonnet-4-20250514': ['claude-haiku-4-5-20251001-direct']}]. Received Model Group=claude-opus-4-5-20251101\nAvailable Model Group Fallbacks=None\nError doing the fallback: {\"message\":\"tools.0: Input tag 'web_search_20250305' found using 'type' does not match any of the expected tags: 'bash_20250124', 'custom', 'text_editor_20250124', 'text_editor_20250429', 'text_editor_20250728'\"}","type":"None","param":"None","code":"400"}}
+2026-01-28T09:47:57.815Z [ERROR] Error: Error: 400 {"error":{"message":"{\"message\":\"tools.0: Input tag 'web_search_20250305' found using 'type' does not match any of the expected tags: 'bash_20250124', 'custom', 'text_editor_20250124', 'text_editor_20250429', 'text_editor_20250728'\"}No fallback model group found for original model_group=claude-opus-4-5-20251101. Fallbacks=[{'bedrock-anthropic-claude-3-5-sonnet': ['bedrock-anthropic-claude-3-5-sonnet-apac']}, {'bedrock-anthropic-claude-3-7-sonnet': ['bedrock-anthropic-claude-3-5-sonnet']}, {'claude-3.7-sonnet': ['claude-3.5-sonnet']}, {'claude-4-sonnet': ['claude-4-sonnet-direct', 'claude-4-sonnet-vertex', 'claude-3.7-sonnet']}, {'pioneer-claude-4-sonnet': ['claude-4-sonnet', 'claude-4-sonnet-vertex', 'claude-3.7-sonnet']}, {'claude-sonnet-4-20250514': ['claude-4-sonnet-direct', 'claude-4-sonnet-vertex', 'claude-3.7-sonnet']}, {'claude-4.5-haiku': ['claude-haiku-4-5-20251001-direct']}, {'claude-haiku-4-5-20251001': ['claude-haiku-4-5-20251001-direct']}, {'claude-sonnet-4-5-20250929': ['claude-sonnet-4-5-20250929-direct']}, {'claude-sonnet-4-20250514': ['claude-haiku-4-5-20251001-direct']}]. Received Model Group=claude-opus-4-5-20251101\nAvailable Model Group Fallbacks=None\nError doing the fallback: {\"message\":\"tools.0: Input tag 'web_search_20250305' found using 'type' does not match any of the expected tags: 'bash_20250124', 'custom', 'text_editor_20250124', 'text_editor_20250429', 'text_editor_20250728'\"}","type":"None","param":"None","code":"400"}}
+    at e7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37583)
+    at bR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at bR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-28T09:47:57.827Z [DEBUG] Getting matching hook commands for PostToolUse with query: WebSearch
+2026-01-28T09:47:57.827Z [DEBUG] Found 3 hook matchers in settings
+2026-01-28T09:47:57.827Z [DEBUG] Matched 0 unique hooks for query "WebSearch" (0 before deduplication)
+2026-01-28T09:47:57.828Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-28T09:47:57.828Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-28T09:47:57.828Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-28T09:47:57.828Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-28T09:47:57.848Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-28T09:47:57.853Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:47:57.853Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:47:57.854Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:48:00.934Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:48:03.060Z [DEBUG] executePreToolHooks called for tool: WebFetch
+2026-01-28T09:48:03.064Z [DEBUG] Getting matching hook commands for PreToolUse with query: WebFetch
+2026-01-28T09:48:03.064Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:48:03.064Z [DEBUG] Matched 0 unique hooks for query "WebFetch" (0 before deduplication)
+2026-01-28T09:48:03.070Z [DEBUG] Permission suggestions for WebFetch: [
+  {
+    "type": "addRules",
+    "destination": "localSettings",
+    "rules": [
+      {
+        "toolName": "WebFetch",
+        "ruleContent": "domain:www.npmjs.com"
+      }
+    ],
+    "behavior": "allow"
+  }
+]
+2026-01-28T09:48:03.076Z [DEBUG] Stopped caffeinate, allowing sleep
+2026-01-28T09:48:03.078Z [DEBUG] executePermissionRequestHooks called for tool: WebFetch
+2026-01-28T09:48:03.078Z [DEBUG] Getting matching hook commands for PermissionRequest with query: WebFetch
+2026-01-28T09:48:03.078Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:48:03.078Z [DEBUG] Matched 0 unique hooks for query "WebFetch" (0 before deduplication)
+2026-01-28T09:48:05.635Z [DEBUG] Started caffeinate to prevent sleep
+2026-01-28T09:48:05.635Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-28T09:48:06.375Z [ERROR] AxiosError: AxiosError: Request failed with status code 403
+    at Bh (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:39:1138)
+    at BrotliDecompress.<anonymous> (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:44:9787)
+    at BrotliDecompress.emit (node:events:519:35)
+    at BrotliDecompress.emit (node:domain:489:12)
+    at endReadableNT (node:internal/streams/readable:1696:12)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21)
+    at iNA.request (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:46:2132)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async DYK (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2456:2772)
+    at async jYK (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2456:3798)
+    at async Object.call (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2459:483)
+    at async hE2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3114:12576)
+2026-01-28T09:48:06.379Z [DEBUG] Getting matching hook commands for PostToolUseFailure with query: WebFetch
+2026-01-28T09:48:06.379Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:48:06.379Z [DEBUG] Matched 0 unique hooks for query "WebFetch" (0 before deduplication)
+2026-01-28T09:48:06.379Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-28T09:48:06.379Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-28T09:48:06.379Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-28T09:48:06.379Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-28T09:48:06.390Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-28T09:48:06.393Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:48:06.393Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:48:06.393Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:48:10.389Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:48:11.484Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-01-28T09:48:11.489Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-01-28T09:48:11.489Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:48:11.489Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-28T09:48:11.495Z [DEBUG] tree-sitter: WASM files not found
+2026-01-28T09:48:11.502Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-01-28T09:48:11.502Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-01-28T09:48:11.502Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-01-28T09:48:11.502Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:48:11.502Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:48:11.502Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:48:11.502Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:48:11.502Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:48:11.502Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:48:11.503Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:48:11.503Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:48:11.503Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:48:12.564Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:48:12.974Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:48:13.668Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:48:13.700Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "npm view:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2026-01-28T09:48:13.709Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-01-28T09:48:13.713Z [DEBUG] Stopped caffeinate, allowing sleep
+2026-01-28T09:48:13.717Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-01-28T09:48:13.717Z [DEBUG] Found 0 hook matchers in settings
+2026-01-28T09:48:13.717Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-28T09:48:14.805Z [DEBUG] Started caffeinate to prevent sleep
+2026-01-28T09:48:14.806Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-28T09:48:14.823Z [DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+2026-01-28T09:48:14.824Z [DEBUG] Looking for shell config file: /Users/kiranbiliyawala/.zshrc
+2026-01-28T09:48:14.824Z [DEBUG] Snapshots directory: /Users/kiranbiliyawala/.claude/shell-snapshots
+2026-01-28T09:48:14.824Z [DEBUG] Creating snapshot at: /Users/kiranbiliyawala/.claude/shell-snapshots/snapshot-zsh-1769593694824-ju59bt.sh
+2026-01-28T09:48:14.824Z [DEBUG] Shell binary exists: true
+2026-01-28T09:48:14.824Z [DEBUG] Execution timeout: 10000ms
+2026-01-28T09:48:15.590Z [DEBUG] Shell snapshot created successfully (163245 bytes)
+2026-01-28T09:48:15.591Z [DEBUG] No session environment scripts found
+2026-01-28T09:48:16.102Z [DEBUG] Tool search disabled for model 'claude-haiku-4-5-20251001': model does not support tool_reference blocks. This feature is only available on Claude Sonnet 4+, Opus 4+, and newer models.
+2026-01-28T09:48:16.103Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:48:16.103Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:48:16.103Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:48:16.109Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-01-28T09:48:16.109Z [DEBUG] Found 3 hook matchers in settings
+2026-01-28T09:48:16.109Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-28T09:48:16.114Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-28T09:48:16.114Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-28T09:48:16.114Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-28T09:48:16.114Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-28T09:48:16.119Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-28T09:48:16.125Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-28T09:48:16.125Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-28T09:48:16.125Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-28T09:48:17.681Z [DEBUG] Stream started - received first chunk
+2026-01-28T09:48:19.436Z [ERROR] Error in non-streaming fallback: Request was aborted.
+2026-01-28T09:48:19.436Z [ERROR] Error: Error: Request was aborted.
+    at bR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:3940)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-28T09:48:19.446Z [DEBUG] Stopped caffeinate, allowing sleep

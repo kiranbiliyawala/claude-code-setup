@@ -1,0 +1,32 @@
+Payment service
+CVV disablement support at the provider level for Visa and Mastercard networks (PR)
+Fix for the digio sync flow with redirection parameters (PR)
+Settlement route integration for digio provider (PR)
+Enriching RRN for rzp mandate provider (PR)
+ICICI UPI provider prefix fix (PR)
+Mandate token enrichment on failed payment attempt (PR)
+Wallet stuck in CREATE state fix, handling FAILED state in order statemachine (PR)
+Digio refund integration (PR)
+Added token type support to LCM resolve terminal (PR)
+Cashback wallet utilsation in autopay registration flow (PR)
+Refund adjustment backfill API (PR)
+Billdesk 404 handling in refund flow (PR)
+Compliance: Guest checkout flow fix when both card and token details are present (PR)
+HB Darwin DT UI fix: Added cache in global config fetch (PR)
+Razorpay support for refund sync fallback on payment id (PR)
+Non-2xx handling for billdesk (PR)
+Inline autopay refund support (PR)
+MPO
+PPI authentication support (PR, PR)
+PPI debit call error mesg handling (PR)
+Loading capability manager
+Preference maker checker and reserved udf contract fix (RCA AIs) (PR)
+Token type support for resolve terminal flow (PR)
+Cashback wallet support for mandate with pay flow (PR)
+Mandate service
+UPI mandate revoke flow support (PR)
+UPI mandate pause webhook integration (PR)
+Duplicate axis webhook fix (PR)
+Genie
+• Handling UTR-22 (PR)
+• Balance check APIs (PR)

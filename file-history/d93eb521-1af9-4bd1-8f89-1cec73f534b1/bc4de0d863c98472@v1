@@ -1,0 +1,686 @@
+# 02 - Data Layer Deep-Dive
+
+> **Reading Time:** 60 minutes
+> **Prerequisites:** [01-overview.md](./01-overview.md)
+> **Next:** [03-provider-integration.md](./03-provider-integration.md)
+
+---
+
+## Table of Contents
+1. [Entity Hierarchy](#entity-hierarchy)
+2. [Master-Replica Architecture](#master-replica-architecture)
+3. [Repository Patterns](#repository-patterns)
+4. [JSON Columns & Converters](#json-columns--converters)
+5. [Caching Architecture](#caching-architecture)
+6. [DynamoDB Usage](#dynamodb-usage)
+7. [Optimistic Locking & Audit](#optimistic-locking--audit)
+
+---
+
+## Entity Hierarchy
+
+### Base Classes
+
+```
+BaseEntity
+    │
+    ├── id (Long, auto-generated)
+    ├── created_at (LocalDateTime)
+    ├── updated_at (LocalDateTime)
+    ├── created_by (String)
+    └── updated_by (String)
+            │
+            └── BaseExternalEntity
+                    │
+                    ├── external_id (UUID String)
+                    └── version (Integer, optimistic locking)
+```
+
+### BaseEntity
+**File:** `entity/commons/BaseEntity.java`
+
+```java
+@Getter @Setter
+@MappedSuperclass
+public class BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @CreationTimestamp
+    @Column(name = "created_at")
+    private LocalDateTime createAt = LocalDateTime.now();
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
+
+    @PrePersist
+    public void onCreate() {
+        createdBy = ApplicationContext.getApplicationName();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        updatedBy = ApplicationContext.getApplicationName();
+    }
+}
+```
+
+### BaseExternalEntity
+**File:** `entity/provider/BaseExternalEntity.java`
+
+```java
+@MappedSuperclass
+public class BaseExternalEntity extends BaseEntity {
+    @Column(name = "external_id", length = 36)
+    private String externalId;
+
+    @Version
+    @Column(name = "version")
+    private Integer version;
+
+    @PrePersist
+    public void onCreate() {
+        super.onCreate();
+        externalId = UUID.randomUUID().toString();
+    }
+}
+```
+
+### Entity Inheritance Diagram
+
+```
+BaseEntity
+    │
+    └── BaseExternalEntity
+            │
+            ├── OrderEntity
+            ├── PaymentV2Entity
+            ├── PaymentAttemptV2Entity
+            ├── RefundEntity
+            ├── RefundAttemptEntity
+            ├── FeeEntity
+            ├── ClientEntity
+            ├── CustomerEntity
+            ├── PaymentProviderEntity
+            └── ClientRefundRequestEntity
+```
+
+---
+
+## Core Entities
+
+### OrderEntity
+**File:** `entity/OrderEntity.java`
+
+```java
+@Entity @Table(name = "orders")
+public class OrderEntity extends BaseExternalEntity {
+    @Column(name = "client_reference_id")
+    private String clientReferenceId;
+
+    @Column(name = "amount")
+    private BigDecimal amount;
+
+    @Column(name = "intent_amount")
+    private BigDecimal intentAmount;
+
+    @Enumerated(EnumType.STRING)
+    private OrderType type;
+
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    @ManyToOne
+    @JoinColumn(name = "client_id")
+    private ClientEntity clientEntity;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "customer_id")
+    private CustomerEntity customerEntity;
+
+    @Convert(converter = ObjectMetadataMapConverter.class)
+    private Map<String, String> metaData;
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "order_id")
+    private Set<OrderAttributeEntity> attributeEntities;
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "orderEntity")
+    private OrderUdfEntity orderUdfEntity;
+}
+```
+
+### PaymentV2Entity
+**File:** `entity/v2/PaymentV2Entity.java`
+
+```java
+@Entity @Table(name = "payments")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class PaymentV2Entity extends BaseExternalEntity {
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private OrderEntity orderEntity;
+
+    private BigDecimal amount;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentStatus status;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentMode paymentMode;
+
+    @Enumerated(EnumType.STRING)
+    private CurrencyName currency;
+
+    private BigDecimal conversionRate;
+    private BigDecimal currencyValue;
+    private String clientReferenceId;
+
+    @Convert(converter = PaymentInstrumentConverter.class)
+    private PaymentInstrument instrumentDetail;
+
+    @Convert(converter = PaymentSpecificDetailConverter.class)
+    private PaymentSpecificDetail paymentSpecificDetail;
+}
+```
+
+### PaymentAttemptV2Entity
+**File:** `entity/v2/PaymentAttemptV2Entity.java`
+
+```java
+@Entity @Table(name = "payment_attempts")
+@Inheritance(strategy = InheritanceType.JOINED)
+public class PaymentAttemptV2Entity extends BaseExternalEntity {
+    // Duplicate column for direct queries without JOIN
+    @Column(name = "order_id")
+    private Long orderId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "order_id", updatable = false, insertable = false)
+    private OrderEntity orderEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "payment_id")
+    private PaymentV2Entity paymentEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "payment_provider_id")
+    private PaymentProviderEntity paymentProviderEntity;
+
+    @ManyToOne
+    @JoinColumn(name = "provider_account_id")
+    private ProviderAccountEntity providerAccountEntity;
+
+    private String providerReferenceId;
+    private String gatewayReferenceId;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentInstrumentGroup paymentMethod;
+
+    @Enumerated(EnumType.STRING)
+    private PaymentAttemptStatus status;
+
+    private String errorCode;
+    private String errorMessage;
+    private String providerStatus;
+
+    @Convert(converter = EnrichedPaymentInstrumentConverter.class)
+    private EnrichedPaymentInstrument instrumentDetail;
+
+    @Convert(converter = RoutesBreakupConverter.class)
+    private RoutesBreakup routesBreakup;
+
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JoinColumn(name = "payment_attempt_id")
+    private Set<PaymentAttemptAttributeEntity> attributeEntities;
+
+    @PrePersist
+    public void onCreate() {
+        super.onCreate();
+        if (StringUtils.isEmpty(externalId)) {
+            externalId = PaymentAttemptUUIdGenerator.generate();
+        }
+    }
+}
+```
+
+### Entity Relationships Diagram
+
+```
+ClientEntity (1) ────────────────> (M) OrderEntity
+                                        │
+CustomerEntity (1) ─────────────────────┤
+                                        │
+                                        │ (1)
+                                        │
+                                        ▼ (M)
+                                   PaymentV2Entity
+                                        │
+                                        │ (1)
+                                        │
+                                        ▼ (M)
+                               PaymentAttemptV2Entity
+                                        │
+        ┌───────────────────────────────┼───────────────────────────────┐
+        │                               │                               │
+        ▼                               ▼                               ▼
+PaymentProviderEntity          ProviderAccountEntity              RefundEntity
+                                                                        │
+                                                                        ▼ (M)
+                                                                 RefundAttemptEntity
+```
+
+---
+
+## Master-Replica Architecture
+
+### Configuration Files
+
+**Master:** `configuration/database/MasterDataSourceConfiguration.java`
+**Replica:** `configuration/database/ReplicaDataSourceConfiguration.java`
+**Annotation:** `configuration/database/annotation/ReplicaRepository.java`
+
+### How Routing Works
+
+```java
+// Master Configuration - EXCLUDES @ReplicaRepository
+@EnableJpaRepositories(
+    basePackages = {REPO_PATH, DAO_PATH},
+    excludeFilters = @ComponentScan.Filter(ReplicaRepository.class),
+    entityManagerFactoryRef = MASTER_ENTITY_MANAGER_FACTORY,
+    transactionManagerRef = MASTER_TRANSACTION_MANAGER
+)
+
+// Replica Configuration - INCLUDES ONLY @ReplicaRepository
+@EnableJpaRepositories(
+    basePackages = {REPO_PATH, DAO_PATH},
+    includeFilters = @ComponentScan.Filter(ReplicaRepository.class),
+    entityManagerFactoryRef = REPLICA_ENTITY_MANAGER_FACTORY,
+    transactionManagerRef = REPLICA_TRANSACTION_MANAGER
+)
+```
+
+### Usage Pattern
+
+```java
+// Default - writes to Master
+@Repository
+public interface PaymentRepository extends JpaRepository<PaymentV2Entity, Long> {
+    // Uses MasterEntityManager
+}
+
+// Explicit Replica - reads from Replica
+@Repository
+@ReplicaRepository
+public class RefundEntityReplicaDAOImpl extends AbstractReplicaDAOImpl<RefundEntity, Long> {
+    // Uses ReplicaEntityManager
+}
+```
+
+### HikariCP Pool Configuration
+
+| Pool | Setting | Purpose |
+|------|---------|---------|
+| **hikari_master** | `masterMinimumIdle`, `masterMaximumPoolSize` | Write operations |
+| **hikari_replica** | `replicaMinimumIdle`, `replicaMaximumPoolSize`, `readOnly=true` | Read operations |
+
+**Common Settings:**
+- `idleTimeout` - Close idle connections
+- `connectionTimeout` - Wait for connection
+- `maxLifetime` - Recycle connections
+- `leakDetectionThreshold` - Detect connection leaks
+
+### HikariCP Configuration Example
+
+```java
+HikariConfig hikariConfig = new HikariConfig();
+hikariConfig.setIdleTimeout(hikariIdleTimeout);
+hikariConfig.setConnectionTimeout(hikariConnectionTimeout);
+hikariConfig.setMinimumIdle(masterMinimumIdle);
+hikariConfig.setMaximumPoolSize(masterMaximumPoolSize);
+hikariConfig.setMaxLifetime(maxLifeTime);
+hikariConfig.setPoolName("hikari_master");
+hikariConfig.setLeakDetectionThreshold(leakDetectionThreshold);
+hikariConfig.setJdbcUrl(url);
+```
+
+---
+
+## Repository Patterns
+
+### JPA Repository Pattern
+
+```java
+@Repository
+public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
+
+    // FETCH JOIN to prevent N+1 queries
+    @Query("SELECT o FROM OrderEntity o "
+            + "JOIN FETCH o.customerEntity "
+            + "JOIN FETCH o.clientEntity "
+            + "LEFT JOIN FETCH o.orderUdfEntity "
+            + "WHERE o.externalId = :externalId")
+    Optional<OrderEntity> findByExternalId(@Param("externalId") String externalId);
+
+    // Property path navigation
+    Optional<OrderEntity> findByClientReferenceIdAndClientEntity_ExternalId(
+            String clientReferenceId, String externalId);
+
+    // List by tag
+    List<OrderEntity> findByTagId(String tagId);
+}
+```
+
+### DAO Pattern (Custom EntityManager)
+
+```java
+@Repository
+public class PaymentAttemptDAOV2Impl {
+    @PersistenceContext
+    private EntityManager entityManager;
+
+    public List<PaymentAttemptV2Entity> findByOrderIdWithFetchJoin(Long orderId) {
+        return entityManager.createQuery(
+            "SELECT pa FROM PaymentAttemptV2Entity pa "
+            + "JOIN FETCH pa.paymentEntity "
+            + "JOIN FETCH pa.paymentProviderEntity "
+            + "WHERE pa.orderId = :orderId",
+            PaymentAttemptV2Entity.class)
+            .setParameter("orderId", orderId)
+            .getResultList();
+    }
+}
+```
+
+### Key Repository Methods
+
+| Repository | Key Methods |
+|------------|-------------|
+| `OrderRepository` | `findByExternalId`, `findByClientReferenceIdAndClientEntity_ExternalId` |
+| `PaymentRepository` | `findByExternalId`, `findByOrderEntity_ExternalId` |
+| `PaymentAttemptRepository` | `findByExternalId`, `findByProviderReferenceId` |
+| `RefundRepository` | `findByOrderEntity_Id`, `findByClientRefundRequestEntity_Id` |
+
+---
+
+## JSON Columns & Converters
+
+### Converter Pattern
+
+```java
+@Column(name = "metadata")
+@Convert(converter = ObjectMetadataMapConverter.class)
+private Map<String, String> metaData;
+```
+
+### Available Converters
+
+| Column | Converter | Entity | Java Type |
+|--------|-----------|--------|-----------|
+| `metadata` | `ObjectMetadataMapConverter` | OrderEntity | `Map<String, String>` |
+| `instrument_detail` | `PaymentInstrumentConverter` | PaymentV2Entity | `PaymentInstrument` |
+| `instrument_detail` | `EnrichedPaymentInstrumentConverter` | PaymentAttemptV2Entity | `EnrichedPaymentInstrument` |
+| `payment_specific_detail` | `PaymentSpecificDetailConverter` | PaymentV2Entity | `PaymentSpecificDetail` |
+| `routes` | `RoutesBreakupConverter` | PaymentAttemptV2Entity | `RoutesBreakup` |
+| `additional_info` | `ClientRefundAdditionalInfoConverter` | ClientRefundRequestEntity | `ClientRefundAdditionalInfo` |
+
+---
+
+## Caching Architecture
+
+### Caffeine Caches
+
+| Cache Class | What It Caches | TTL | Max Size |
+|-------------|----------------|-----|----------|
+| `ClientConfigurationCache` | Client settings by ID/externalId/merchantId | 10-20 min | - |
+| `PaymentProviderCache` | Provider configurations | 15-25 min | - |
+| `ProviderAccountCache` | Provider account entities | 15-25 min | - |
+| `DecisionTreeObjectCache` | Decision tree JSON + workflow | 180-190 min | - |
+| `FeeCache` | Fee configurations by feeId | 1 day | 500 |
+| `CardBinCache` | Card BIN details by hash | Configurable | - |
+| `MasterConfigurationCache` | Feature flags, system settings | 10-20 min | - |
+| `PaymentErrorMessageMappingCache` | Error code to message | Long | - |
+| `NativeOTPSupportedProviderCache` | OTP-capable providers | - | - |
+
+### Cache Implementation Pattern
+
+```java
+@Component
+public class ClientConfigurationCache extends AbstractDPManagedCache {
+
+    @DPCache(cacheName = "client_configuration_cache")
+    private LoadingCache<Long, Map<ClientSettingKey, String>> idCache;
+
+    @Override
+    public void buildCache() {
+        idCache = DPCacheBuilder.getBuilder()
+            .refreshAfterWrite(
+                generateRandomCacheRefreshInterval(10), // 10-20 min jitter
+                TimeUnit.MINUTES)
+            .build(this::loadClientSettings);
+    }
+
+    private Map<ClientSettingKey, String> loadClientSettings(Long clientId) {
+        ClientEntity client = clientRepository.findById(clientId)
+            .orElseThrow(() -> Error.invalid_client_id.getBuilder().build());
+        return client.getSettings().stream()
+            .collect(Collectors.toMap(
+                ClientSettingsEntity::getSettingKey,
+                ClientSettingsEntity::getSettingValue));
+    }
+}
+```
+
+### Jittered TTLs (Thundering Herd Prevention)
+
+```java
+private Long generateRandomCacheRefreshInterval(int base) {
+    SecureRandom random = new SecureRandom();
+    return Long.valueOf(base + random.nextInt(10) + 1);
+}
+// base=10 → returns 11-20
+// base=15 → returns 16-25
+```
+
+---
+
+## DynamoDB Usage
+
+### What Goes Where
+
+| MySQL (Relational) | DynamoDB (NoSQL) |
+|--------------------|------------------|
+| Orders, Payments, Attempts | Workflow context (TTL-based) |
+| Refunds, Fees | Native OTP details |
+| Clients, Customers | Redirect tracking |
+| Provider configs | Metadata audit trails |
+
+### DynamoDB Tables
+
+| Table | Hash Key | Sort Key | TTL | Purpose |
+|-------|----------|----------|-----|---------|
+| `darwin_payment_attempt_workflow_context` | payment_attempt_external_id | workflow_step | 1 day | Workflow state |
+| `darwin_payment_attempt_native_otp_detail` | payment_attempt_external_id | - | 1 day | OTP auth |
+| `darwin_payment_attempt_redirection_detail` | payment_attempt_external_id | - | 1 day | 3DS redirects |
+| `darwin_payment_attempt_metadata_audit` | payment_attempt_external_id | - | - | Audit trail |
+
+### DynamoDB Entity Example
+
+```java
+@Data @Builder
+@DynamoDBTable(tableName = "darwin_payment_attempt_workflow_context")
+public class PaymentAttemptWorkflowContextEntity {
+
+    @DynamoDBHashKey(attributeName = "payment_attempt_external_id")
+    private String paymentAttemptExternalId;
+
+    @DynamoDBRangeKey
+    @DynamoDBAttribute(attributeName = "workflow_step")
+    private WorkflowStep workflowStep;
+
+    @Builder.Default
+    private long ttl = LocalDateTime.now()
+        .plusDays(1)
+        .toEpochSecond(ZoneOffset.UTC);
+
+    @DynamoDBAttribute(attributeName = "data")
+    private String data;
+
+    @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
+    @DynamoDBAttribute(attributeName = "event_at")
+    private LocalDateTime eventAt;
+}
+```
+
+### DynamoDB DAO Pattern
+
+```java
+@RequiredArgsConstructor
+public abstract class AbstractDynamoDBDAO<T> {
+    private final Class<T> tClass;
+    private final DynamoDBMapper dynamoDBMapper;
+
+    public void save(T entity) {
+        dynamoDBMapper.save(entity);
+    }
+
+    public void saveIfNotExists(T entity, List<String> uniqueKeys) {
+        DynamoDBSaveExpression saveExpression = new DynamoDBSaveExpression();
+        Map<String, ExpectedAttributeValue> expected = new HashMap<>();
+        uniqueKeys.forEach(key ->
+            expected.put(key, new ExpectedAttributeValue().withExists(false)));
+        saveExpression.setExpected(expected);
+        dynamoDBMapper.save(entity, saveExpression);
+    }
+
+    public T findByHashKey(Object hashKey) {
+        return dynamoDBMapper.load(tClass, hashKey);
+    }
+}
+```
+
+---
+
+## Optimistic Locking & Audit
+
+### @Version for Optimistic Locking
+
+```java
+@Version
+@Column(name = "version")
+private Integer version;
+```
+
+**Behavior:**
+- Hibernate auto-increments on each update
+- Throws `OptimisticLockException` on concurrent modification
+- Prevents lost updates in concurrent scenarios
+
+### Audit Columns
+
+```java
+@CreationTimestamp
+@Column(name = "created_at")
+private LocalDateTime createAt;
+
+@UpdateTimestamp
+@Column(name = "updated_at")
+private LocalDateTime updatedAt;
+
+@PrePersist
+public void onCreate() {
+    createdBy = ApplicationContext.getApplicationName();
+}
+
+@PreUpdate
+public void onUpdate() {
+    updatedBy = ApplicationContext.getApplicationName();
+}
+```
+
+### Soft Delete Pattern
+
+Some entities use soft delete:
+
+```java
+@Column(name = "is_deleted")
+private Boolean deleted = Boolean.FALSE;
+```
+
+Used in: `ClientEntity`, `CustomerEntity`
+
+---
+
+## Data Layer Architecture Diagram
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     Service Layer                            │
+├─────────────────────────────────────────────────────────────┤
+│  JPA Repositories    │  Custom DAOs    │  DynamoDB DAOs     │
+├─────────────────────────────────────────────────────────────┤
+│            Spring Data JPA + Hibernate ORM                   │
+├────────────────────────┬────────────────────────────────────┤
+│   Master DataSource    │      Replica DataSource            │
+│   (Writes)             │      (Reads - @ReplicaRepository)  │
+├────────────────────────┼────────────────────────────────────┤
+│  HikariCP Master Pool  │    HikariCP Replica Pool           │
+├────────────────────────┴────────────────────────────────────┤
+│              MySQL (payments_multi_tenancy)                  │
+└─────────────────────────────────────────────────────────────┘
+          │                                    │
+┌─────────▼─────────┐              ┌───────────▼───────────┐
+│     DynamoDB      │              │   Caffeine Caches     │
+│  (Workflow/Audit) │              │  (Client/Provider)    │
+└───────────────────┘              └───────────────────────┘
+```
+
+---
+
+## Key Files to Study
+
+### Entity Classes
+1. `entity/commons/BaseEntity.java`
+2. `entity/provider/BaseExternalEntity.java`
+3. `entity/OrderEntity.java`
+4. `entity/v2/PaymentAttemptV2Entity.java`
+
+### Database Configuration
+1. `configuration/database/MasterDataSourceConfiguration.java`
+2. `configuration/database/ReplicaDataSourceConfiguration.java`
+3. `configuration/database/annotation/ReplicaRepository.java`
+
+### Repositories
+1. `repository/OrderRepository.java`
+2. `repository/PaymentAttemptRepository.java`
+
+### Caches
+1. `cache/ClientConfigurationCache.java`
+2. `configuration/CacheConfig.java`
+
+### DynamoDB
+1. `dynamo/dao/AbstractDynamoDBDAO.java`
+2. `dynamo/domain/PaymentAttemptWorkflowContextEntity.java`
+
+---
+
+## Checkpoint
+
+After completing this section:
+- [ ] Understand entity hierarchy (BaseEntity → BaseExternalEntity)
+- [ ] Know how Master-Replica routing works
+- [ ] Understand caching patterns with jittered TTLs
+- [ ] Know when to use MySQL vs DynamoDB
+- [ ] Proceed to [03-provider-integration.md](./03-provider-integration.md)
+
+---
+
+*Next: [03 - Provider Integration](./03-provider-integration.md)*

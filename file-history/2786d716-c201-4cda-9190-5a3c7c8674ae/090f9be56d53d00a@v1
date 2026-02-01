@@ -1,0 +1,503 @@
+# Entity Pattern
+
+## Overview
+
+All domain entities in finhq-verse extend from a base entity hierarchy that provides:
+
+1. **Standard fields** - ID, external ID, timestamps, audit info
+2. **Tenant scoping** - Organization and namespace isolation
+3. **Optimistic locking** - Version field for concurrency
+4. **Audit trail** - Hibernate Envers integration
+
+---
+
+## Entity Hierarchy
+
+```
+AbstractEntity
+├── id: Long                    // DB primary key (auto-generated)
+├── externalId: String          // ULID for API (auto-generated)
+├── version: Integer            // Optimistic locking
+├── createdAt: LocalDateTime    // Immutable
+├── updatedAt: LocalDateTime    // Auto-updated
+├── modifiedAt: LocalDateTime   // Business modification time
+├── createdBy: String           // Default: "SYSTEM"
+├── updatedBy: String           // Default: "SYSTEM"
+│
+├── AbstractOrgScopedEntity
+│   └── orgId: String           // Organization external ID
+│
+└── AbstractNamespaceScopedEntity
+    └── namespaceId: String     // Namespace external ID
+```
+
+---
+
+## AbstractEntity
+
+**Location:** `finhq-commons-spring/finhq-entity/src/main/java/io/finhq/commons/spring/entity/entity/AbstractEntity.java`
+
+```java
+@MappedSuperclass
+@Audited
+@Getter
+@Setter
+@SuperBuilder
+@FieldNameConstants
+@ToString(of = {"id", "externalId", "version"})
+@EqualsAndHashCode(of = {"id", "externalId"})
+public class AbstractEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @NotNull
+    @Size(min = 20, max = 36)
+    @Column(name = "external_id", nullable = false, length = 36, updatable = false)
+    private String externalId;
+
+    @Version
+    @Column(name = "version", nullable = false)
+    private Integer version;
+
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt;
+
+    @Column(name = "modified_at")
+    private LocalDateTime modifiedAt;
+
+    @NotNull
+    @Size(min = 1, max = 36)
+    @Column(name = "created_by", nullable = false, length = 36, updatable = false)
+    @Builder.Default
+    private String createdBy = "SYSTEM";
+
+    @NotNull
+    @Size(min = 1, max = 36)
+    @Column(name = "updated_by", nullable = false, length = 36)
+    @Builder.Default
+    private String updatedBy = "SYSTEM";
+
+    protected AbstractEntity() {}
+
+    @PrePersist
+    protected void onCreate() {
+        LocalDateTime now = LocalDateTime.now();
+        createdAt = createdAt == null ? now : createdAt;
+        updatedAt = updatedAt == null ? now : updatedAt;
+        createdBy = createdBy == null ? "SYSTEM" : createdBy;
+        updatedBy = updatedBy == null ? "SYSTEM" : updatedBy;
+        externalId = externalId == null || externalId.isEmpty()
+            ? UlidHelper.generate() : externalId;
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+    public boolean isNew() {
+        return id == null;
+    }
+}
+```
+
+---
+
+## Field Explanations
+
+### id vs externalId
+
+| Field | Purpose | Format | Usage |
+|-------|---------|--------|-------|
+| `id` | Database primary key | `BIGINT AUTO_INCREMENT` | Internal only, never exposed |
+| `externalId` | API identifier | ULID (26 chars) | All API responses, references |
+
+**Why ULID?**
+- Time-sortable (unlike UUID)
+- URL-safe (no special characters)
+- Better database index performance
+- Smaller than UUID (26 vs 36 chars)
+
+### version
+
+Used for **optimistic locking**:
+
+```java
+@Version
+private Integer version;
+```
+
+When updating:
+1. Hibernate includes `version` in WHERE clause
+2. If version doesn't match, throws `OptimisticLockException`
+3. Prevents lost updates in concurrent scenarios
+
+### Timestamps
+
+| Field | When Set | Purpose |
+|-------|----------|---------|
+| `createdAt` | On insert (immutable) | Record creation time |
+| `updatedAt` | On every update | Last modification time |
+| `modifiedAt` | Manual | Business-meaningful changes only |
+
+---
+
+## Scoped Entities
+
+### AbstractOrgScopedEntity
+
+For entities that belong to an organization:
+
+```java
+@MappedSuperclass
+@Audited
+@Getter
+@Setter
+@SuperBuilder
+public class AbstractOrgScopedEntity extends AbstractEntity {
+
+    @NotNull
+    @Size(min = 20, max = 36)
+    @Column(name = "org_id", nullable = false, length = 36, updatable = false)
+    private String orgId;
+}
+```
+
+### AbstractNamespaceScopedEntity
+
+For entities scoped to both org and namespace:
+
+```java
+@MappedSuperclass
+@Audited
+@Getter
+@Setter
+@SuperBuilder
+public class AbstractNamespaceScopedEntity extends AbstractOrgScopedEntity {
+
+    @NotNull
+    @Size(min = 20, max = 36)
+    @Column(name = "namespace_id", nullable = false, length = 36, updatable = false)
+    private String namespaceId;
+}
+```
+
+---
+
+## Creating an Entity
+
+### Example: OrganizationEntity
+
+```java
+@Entity
+@Audited
+@Table(name = "organizations")
+@Getter
+@Setter
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class OrganizationEntity extends AbstractEntity implements Auditable {
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, length = 2)
+    private String country;
+
+    @Column(nullable = false)
+    private String timezone;
+
+    @Column(name = "support_email")
+    private String supportEmail;
+
+    @Column(name = "support_phone")
+    private String supportPhone;
+
+    // Required for JPA
+    protected OrganizationEntity() {
+        super();
+    }
+}
+```
+
+### Example: Namespace (Org-Scoped)
+
+```java
+@Entity
+@Audited
+@Table(name = "namespaces")
+@Getter
+@Setter
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class NamespaceEntity extends AbstractOrgScopedEntity implements Auditable {
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Status status;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column
+    private String description;
+
+    protected NamespaceEntity() {
+        super();
+    }
+}
+```
+
+### Example: Account (Namespace-Scoped)
+
+```java
+@Entity
+@Audited
+@Table(name = "bookkeeping_accounts")
+@Getter
+@Setter
+@SuperBuilder
+@EqualsAndHashCode(callSuper = true)
+public class BookkeepingAccountEntity
+        extends AbstractNamespaceScopedEntity
+        implements Auditable, ExternalReferenceable {
+
+    @Column(name = "external_reference", unique = true)
+    private String externalReference;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AccountStatus status;
+
+    @Column(nullable = false)
+    private String name;
+
+    @Column(nullable = false, length = 3)
+    private String currency;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "normal_balance", nullable = false)
+    private NormalBalance normalBalance;  // DEBIT or CREDIT
+
+    @Column(nullable = false)
+    private Boolean postable;
+
+    protected BookkeepingAccountEntity() {
+        super();
+    }
+
+    @Override
+    public String getExternalReference() {
+        return externalReference;
+    }
+}
+```
+
+---
+
+## Trait Interfaces
+
+### Auditable
+
+Marker interface for Hibernate Envers:
+
+```java
+public interface Auditable {
+    // Marker interface - entities with @Audited annotation
+}
+```
+
+### ExternalReferenceable
+
+For entities with alternative lookup keys:
+
+```java
+public interface ExternalReferenceable {
+    String getExternalReference();
+}
+```
+
+Enables:
+```java
+repository.findByExternalReference(scope, "ACCT-001");
+```
+
+### SoftDeletable
+
+For entities that should be soft-deleted:
+
+```java
+public interface SoftDeletable {
+    void markAsDeleted();
+    boolean isDeleted();
+}
+```
+
+---
+
+## Database Schema Pattern
+
+### Standard Columns
+
+```sql
+CREATE TABLE my_entities (
+    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
+    external_id     VARCHAR(36) NOT NULL UNIQUE,
+    org_id          VARCHAR(36) NOT NULL,      -- For scoped entities
+    namespace_id    VARCHAR(36) NOT NULL,      -- For namespace-scoped
+    version         INT NOT NULL DEFAULT 0,
+    created_at      DATETIME NOT NULL,
+    updated_at      DATETIME NOT NULL,
+    modified_at     DATETIME,
+    created_by      VARCHAR(36) NOT NULL DEFAULT 'SYSTEM',
+    updated_by      VARCHAR(36) NOT NULL DEFAULT 'SYSTEM',
+
+    -- Entity-specific columns
+    status          VARCHAR(20) NOT NULL,
+    name            VARCHAR(255) NOT NULL,
+    -- ...
+
+    -- Indexes
+    INDEX idx_org_namespace (org_id, namespace_id),
+    INDEX idx_external_id (external_id)
+);
+```
+
+### Audit Table
+
+```sql
+CREATE TABLE my_entities_aud (
+    id              BIGINT NOT NULL,
+    rev             INT NOT NULL,              -- Revision ID
+    revtype         TINYINT,                   -- 0=INSERT, 1=UPDATE, 2=DELETE
+
+    -- All columns from main table
+    external_id     VARCHAR(36),
+    org_id          VARCHAR(36),
+    -- ...
+
+    PRIMARY KEY (id, rev),
+    FOREIGN KEY (rev) REFERENCES revinfo(id)
+);
+```
+
+### Revision Info Table
+
+```sql
+CREATE TABLE revinfo (
+    id              INT AUTO_INCREMENT PRIMARY KEY,
+    timestamp       BIGINT NOT NULL,
+    username        VARCHAR(36)
+);
+```
+
+---
+
+## Hibernate Envers Auditing
+
+### How It Works
+
+1. Entity marked with `@Audited`
+2. On any change, Envers creates audit record
+3. Audit stored in `*_aud` table
+4. Revision metadata in `revinfo`
+
+### Querying Audit History
+
+```java
+// Via Repository
+T findRevision(RepositoryScope scope, String externalId, int revisionId);
+
+// Via AuditReader (low-level)
+AuditReader reader = AuditReaderFactory.get(entityManager);
+MyEntity atRevision = reader.find(MyEntity.class, id, revisionNumber);
+
+// Get all revisions
+List<Number> revisions = reader.getRevisions(MyEntity.class, id);
+```
+
+---
+
+## Lombok Annotations Used
+
+| Annotation | Purpose |
+|------------|---------|
+| `@Getter` / `@Setter` | Generate accessors |
+| `@SuperBuilder` | Builder with inheritance support |
+| `@EqualsAndHashCode(callSuper = true)` | Include parent fields |
+| `@ToString(of = {...})` | Controlled toString |
+| `@FieldNameConstants` | Type-safe field name references |
+| `@Builder.Default` | Default values in builder |
+
+---
+
+## Best Practices
+
+### 1. Always Use SuperBuilder
+
+```java
+@SuperBuilder  // NOT @Builder - needed for inheritance
+public class MyEntity extends AbstractEntity { }
+```
+
+### 2. Include Protected No-Args Constructor
+
+```java
+protected MyEntity() {
+    super();  // Call parent constructor
+}
+```
+
+### 3. Use Enums for Status Fields
+
+```java
+@Enumerated(EnumType.STRING)  // Store as string, not ordinal
+@Column(nullable = false)
+private Status status;
+```
+
+### 4. Always Annotate with @Audited
+
+```java
+@Entity
+@Audited  // Enable change tracking
+@Table(name = "my_entities")
+public class MyEntity extends AbstractEntity implements Auditable { }
+```
+
+### 5. Use Proper Column Lengths
+
+```java
+@Column(length = 3)     // For country codes
+private String country;
+
+@Column(length = 36)    // For ULIDs/external references
+private String externalId;
+```
+
+---
+
+## Key Takeaways
+
+1. **Extend the right base class** - AbstractEntity, AbstractOrgScopedEntity, or AbstractNamespaceScopedEntity
+2. **Never expose internal ID** - Always use externalId in APIs
+3. **Implement marker interfaces** - Auditable, ExternalReferenceable, SoftDeletable
+4. **Use @SuperBuilder** - Required for inheritance
+5. **Add protected no-args constructor** - Required for JPA
+6. **Use @Audited** - Enable change tracking
+
+---
+
+## Next Steps
+
+- [Error Handling](./05-error-handling.md) - ApplicationException pattern
+- [Creating an Entity](../examples/01-creating-entity.md) - Step-by-step guide

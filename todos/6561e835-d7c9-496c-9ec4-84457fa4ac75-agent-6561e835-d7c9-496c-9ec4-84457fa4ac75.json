@@ -1,0 +1,50 @@
+[
+  {
+    "content": "Find the app-form delete API implementation",
+    "status": "completed",
+    "priority": "high",
+    "id": "1"
+  },
+  {
+    "content": "Understand current event publishing patterns in the codebase",
+    "status": "completed",
+    "priority": "high",
+    "id": "2"
+  },
+  {
+    "content": "Add event publishing to the delete API",
+    "status": "completed",
+    "priority": "high",
+    "id": "3"
+  },
+  {
+    "content": "Add Eventi framework dependencies to cbs-app-form",
+    "status": "completed",
+    "priority": "high",
+    "id": "4"
+  },
+  {
+    "content": "Add event publishing configuration",
+    "status": "completed",
+    "priority": "high",
+    "id": "5"
+  },
+  {
+    "content": "Create event classes and publisher service",
+    "status": "completed",
+    "priority": "high",
+    "id": "6"
+  },
+  {
+    "content": "Integrate event publishing into delete API",
+    "status": "completed",
+    "priority": "high",
+    "id": "7"
+  },
+  {
+    "content": "Test the implementation",
+    "status": "in_progress",
+    "priority": "medium",
+    "id": "8"
+  }
+]

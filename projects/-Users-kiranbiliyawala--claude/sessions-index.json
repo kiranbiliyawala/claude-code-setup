@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "sessionId": "98db0139-ff7c-44fb-9aee-79766abd487f",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala--claude/98db0139-ff7c-44fb-9aee-79766abd487f.jsonl",
+      "fileMtime": 1769686237251,
+      "firstPrompt": "atlassian read page 4885840501",
+      "summary": "Model Fallback Error: Invalid Beta Flag Issue",
+      "messageCount": 2,
+      "created": "2026-01-29T10:53:49.770Z",
+      "modified": "2026-01-29T10:54:23.773Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala/.claude",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "bec08cf5-1b29-4f5d-a90a-a144d1bfdac3",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala--claude/bec08cf5-1b29-4f5d-a90a-a144d1bfdac3.jsonl",
+      "fileMtime": 1769686381074,
+      "firstPrompt": "fetch atlassian page 4885840501",
+      "summary": "Fetch Atlassian Page 4885840501",
+      "messageCount": 1,
+      "created": "2026-01-29T11:30:35.237Z",
+      "modified": "2026-01-29T11:30:40.568Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala/.claude",
+      "isSidechain": false
+    }
+  ],
+  "originalPath": "/Users/kiranbiliyawala/.claude"
+}

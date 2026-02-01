@@ -1,0 +1,21 @@
+{
+  "enabledPlugins": {
+    "canvas@claude-canvas": true,
+    "code-simplifier@claude-plugins-official": true,
+    "github@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true
+  },
+  "env": {
+    "ANTHROPIC_AUTH_TOKEN": "bloop",
+    "ANTHROPIC_BASE_URL": "http://localhost:42069",
+    "CLAUDE_CODE_DISABLE_EXPERIMENTAL_BETAS": "1",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+    "OTEL_EXPORTER_OTLP_ENDPOINT": "http://localhost:42069/ccmetrics",
+    "OTEL_EXPORTER_OTLP_PROTOCOL": "grpc"
+  },
+  "model": "opus",
+  "statusLine": {
+    "command": "python3 /Users/kiranbiliyawala/.claude/scripts/status.py",
+    "type": "command"
+  }
+}

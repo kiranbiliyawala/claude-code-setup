@@ -1,0 +1,1902 @@
+2026-02-01T16:52:59.218Z [DEBUG] [init] configureGlobalMTLS starting
+2026-02-01T16:52:59.218Z [DEBUG] [init] configureGlobalMTLS complete
+2026-02-01T16:52:59.218Z [DEBUG] [init] configureGlobalAgents starting
+2026-02-01T16:52:59.218Z [DEBUG] [init] configureGlobalAgents complete
+2026-02-01T16:52:59.224Z [DEBUG] Applying permission update: Adding 3 allow rule(s) to destination 'localSettings': ["mcp__codelens__list_codelens_projects","Bash(gh repo view:*)","Bash(gh api:*)"]
+2026-02-01T16:52:59.224Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-02-01T16:52:59.242Z [DEBUG] Loading plugin canvas from source: "./canvas"
+2026-02-01T16:52:59.242Z [DEBUG] Using provided version for canvas@claude-canvas: 0.1.0
+2026-02-01T16:52:59.242Z [DEBUG] [ToolSearch:optimistic] mode=standard, ENABLE_TOOL_SEARCH=undefined, result=false
+2026-02-01T16:52:59.242Z [DEBUG] [STARTUP] Running setup()...
+2026-02-01T16:52:59.243Z [DEBUG] Plugin canvas@claude-canvas version 0.1.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-02-01T16:52:59.244Z [DEBUG] Loading skills from: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/kiranbiliyawala/.claude/skills, project=[]
+2026-02-01T16:52:59.254Z [DEBUG] Error log sink initialized
+2026-02-01T16:52:59.264Z [DEBUG] Copied local plugin canvas to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-02-01T16:52:59.264Z [DEBUG] Plugin canvas has no entry.skills defined
+2026-02-01T16:52:59.265Z [DEBUG] [STARTUP] setup() completed in 23ms
+2026-02-01T16:52:59.265Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-02-01T16:52:59.272Z [DEBUG] Loading plugin code-simplifier from source: "./plugins/code-simplifier"
+2026-02-01T16:52:59.273Z [DEBUG] Using manifest version for code-simplifier@claude-plugins-official: 1.0.0
+2026-02-01T16:52:59.274Z [DEBUG] Plugin code-simplifier@claude-plugins-official version 1.0.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-02-01T16:52:59.319Z [DEBUG] Copied local plugin code-simplifier to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-02-01T16:52:59.320Z [DEBUG] Loading plugin github from source: "./external_plugins/github"
+2026-02-01T16:52:59.603Z [DEBUG] [Claude in Chrome] Found chrome profiles: Default
+2026-02-01T16:52:59.623Z [DEBUG] [Claude in Chrome] Found arc profiles: Default, Profile 1
+2026-02-01T16:52:59.625Z [DEBUG] [Claude in Chrome] Found vivaldi profiles: Default
+2026-02-01T16:52:59.626Z [DEBUG] Using git SHA for github@claude-plugins-official: d49ad3558669
+2026-02-01T16:52:59.626Z [DEBUG] Plugin github@claude-plugins-official version d49ad3558669 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/d49ad3558669
+2026-02-01T16:52:59.626Z [DEBUG] Copied local plugin github to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/d49ad3558669
+2026-02-01T16:52:59.629Z [DEBUG] Loading plugin pr-review-toolkit from source: "./plugins/pr-review-toolkit"
+2026-02-01T16:52:59.647Z [DEBUG] [Claude in Chrome] Extension not found in any browser
+2026-02-01T16:52:59.652Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: d49ad3558669
+2026-02-01T16:52:59.652Z [DEBUG] Plugin pr-review-toolkit@claude-plugins-official version d49ad3558669 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/d49ad3558669
+2026-02-01T16:52:59.653Z [DEBUG] Copied local plugin pr-review-toolkit to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/d49ad3558669
+2026-02-01T16:52:59.653Z [DEBUG] Found 4 plugins (4 enabled, 0 disabled)
+2026-02-01T16:52:59.653Z [DEBUG] getPluginSkills: Processing 4 enabled plugins
+2026-02-01T16:52:59.653Z [DEBUG] Checking plugin canvas: skillsPath=exists, skillsPaths=0 paths
+2026-02-01T16:52:59.653Z [DEBUG] Attempting to load skills from plugin canvas default skillsPath: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0/skills
+2026-02-01T16:52:59.658Z [DEBUG] Registered 0 hooks from 4 plugins
+2026-02-01T16:52:59.658Z [DEBUG] Loaded 4 skills from plugin canvas default directory
+2026-02-01T16:52:59.658Z [DEBUG] Checking plugin code-simplifier: skillsPath=none, skillsPaths=0 paths
+2026-02-01T16:52:59.658Z [DEBUG] Checking plugin github: skillsPath=none, skillsPaths=0 paths
+2026-02-01T16:52:59.658Z [DEBUG] Checking plugin pr-review-toolkit: skillsPath=none, skillsPaths=0 paths
+2026-02-01T16:52:59.658Z [DEBUG] Total plugin skills loaded: 4
+2026-02-01T16:52:59.658Z [DEBUG] Loaded 1 commands from plugin canvas default directory
+2026-02-01T16:52:59.660Z [DEBUG] Loaded 1 commands from plugin pr-review-toolkit default directory
+2026-02-01T16:52:59.660Z [DEBUG] Total plugin commands loaded: 2
+2026-02-01T16:52:59.661Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-02-01T16:52:59.691Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at eM1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2952:20333)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-02-01T16:52:59.695Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+2026-02-01T16:52:59.706Z [DEBUG] Loaded 1 agents from plugin code-simplifier default directory
+2026-02-01T16:52:59.713Z [DEBUG] Loaded 6 agents from plugin pr-review-toolkit default directory
+2026-02-01T16:52:59.713Z [DEBUG] Total plugin agents loaded: 7
+2026-02-01T16:52:59.716Z [DEBUG] Loaded 29 unique skills (managed: 0, user: 19, project: 0, legacy commands: 10)
+2026-02-01T16:52:59.716Z [DEBUG] getSkills returning: 29 skill dir commands, 4 plugin skills, 1 bundled skills
+2026-02-01T16:52:59.717Z [DEBUG] [STARTUP] Commands and agents loaded in 452ms
+2026-02-01T16:52:59.717Z [DEBUG] [STARTUP] Running showSetupScreens()...
+2026-02-01T16:52:59.717Z [DEBUG] [render] initLayout starting
+2026-02-01T16:52:59.717Z [DEBUG] Layout engine: yoga
+2026-02-01T16:52:59.724Z [DEBUG] [render] initLayout complete
+2026-02-01T16:52:59.725Z [DEBUG] [render] first ink render: 1678ms since process start
+2026-02-01T16:52:59.728Z [DEBUG] [keybindings] KeybindingSetup initialized with 99 bindings, 0 warnings
+2026-02-01T16:52:59.759Z [DEBUG] [keybindings] Watching for changes to /Users/kiranbiliyawala/.claude/keybindings.json
+2026-02-01T16:52:59.765Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964779765
+2026-02-01T16:52:59.765Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T16:52:59.765Z [DEBUG] Temp file written successfully, size: 43588 bytes
+2026-02-01T16:52:59.765Z [DEBUG] Applied original permissions to temp file
+2026-02-01T16:52:59.765Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964779765 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T16:52:59.765Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T16:53:00.900Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-02-01T16:53:00.905Z [DEBUG] [STARTUP] showSetupScreens() completed in 1188ms
+2026-02-01T16:53:00.905Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-02-01T16:53:00.905Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-02-01T16:53:00.905Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-02-01T16:53:00.907Z [DEBUG] [STARTUP] MCP configs loaded in 1683ms
+2026-02-01T16:53:00.912Z [DEBUG] MCP server "gemini-collab": Starting connection with timeout of 30000ms
+2026-02-01T16:53:00.918Z [DEBUG] MCP server "mcp-atlassian": Starting connection with timeout of 30000ms
+2026-02-01T16:53:00.923Z [DEBUG] MCP server "firecrawl": Starting connection with timeout of 30000ms
+2026-02-01T16:53:00.925Z [DEBUG] MCP server "plugin:github:github": Initializing HTTP transport to https://api.githubcopilot.com/mcp/
+2026-02-01T16:53:00.925Z [DEBUG] MCP server "plugin:github:github": Node version: v23.9.0, Platform: darwin
+2026-02-01T16:53:00.925Z [DEBUG] MCP server "plugin:github:github": Environment: {"NODE_OPTIONS":"not set","UV_THREADPOOL_SIZE":"default","HTTP_PROXY":"not set","HTTPS_PROXY":"not set","NO_PROXY":"not set"}
+2026-02-01T16:53:00.931Z [DEBUG] All plugins already exist, skipping migration
+2026-02-01T16:53:00.933Z [DEBUG] [Reconnection] computeInitialTeamContext: No teammate context set (not a teammate)
+2026-02-01T16:53:00.934Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964780934
+2026-02-01T16:53:00.934Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T16:53:00.935Z [DEBUG] Temp file written successfully, size: 43588 bytes
+2026-02-01T16:53:00.935Z [DEBUG] Applied original permissions to temp file
+2026-02-01T16:53:00.935Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964780934 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T16:53:00.935Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T16:53:00.936Z [DEBUG] Loaded 4 installed plugins from /Users/kiranbiliyawala/.claude/plugins/installed_plugins.json
+2026-02-01T16:53:00.936Z [DEBUG] Initialized versioned plugins system with 4 plugins
+2026-02-01T16:53:00.937Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2026-02-01T16:53:00.937Z [DEBUG] Found 0 hook matchers in settings
+2026-02-01T16:53:00.937Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2026-02-01T16:53:00.937Z [DEBUG] MCP server "plugin:github:github": Proxy options: default
+2026-02-01T16:53:00.937Z [DEBUG] MCP server "plugin:github:github": HTTP transport options: {"url":"https://api.githubcopilot.com/mcp/","headers":{"User-Agent":"claude-code/2.1.29","Authorization":"[REDACTED]"},"hasAuthProvider":true,"timeoutMs":60000}
+2026-02-01T16:53:00.937Z [DEBUG] MCP server "plugin:github:github": HTTP transport created successfully
+2026-02-01T16:53:00.938Z [DEBUG] MCP server "plugin:github:github": Client created, setting up request handler
+2026-02-01T16:53:00.938Z [DEBUG] MCP server "plugin:github:github": Starting connection with timeout of 30000ms
+2026-02-01T16:53:00.938Z [DEBUG] MCP server "plugin:github:github": Testing basic HTTP connectivity to https://api.githubcopilot.com/mcp/
+2026-02-01T16:53:00.938Z [DEBUG] MCP server "plugin:github:github": Parsed URL: host=api.githubcopilot.com, port=default, protocol=https:
+2026-02-01T16:53:00.995Z [DEBUG] MCP server "plugin:github:github": No token data found
+2026-02-01T16:53:00.996Z [DEBUG] [render] initLayout starting
+2026-02-01T16:53:00.997Z [DEBUG] [render] initLayout complete
+2026-02-01T16:53:00.998Z [DEBUG] [render] first ink render: 2951ms since process start
+2026-02-01T16:53:01.004Z [DEBUG] Watching for changes in setting files /Users/kiranbiliyawala/.claude/settings.json, /Users/kiranbiliyawala/.claude/settings.local.json...
+2026-02-01T16:53:01.057Z [DEBUG] [keybindings] KeybindingSetup initialized with 99 bindings, 0 warnings
+2026-02-01T16:53:01.156Z [DEBUG] High write ratio: blit=0, write=1010 (100.0% writes), screen=18x121
+2026-02-01T16:53:01.181Z [DEBUG] Git remote URL: null
+2026-02-01T16:53:01.181Z [DEBUG] No git remote URL found
+2026-02-01T16:53:01.181Z [DEBUG] Not in a GitHub repository, skipping path mapping update
+2026-02-01T16:53:01.185Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964781185
+2026-02-01T16:53:01.186Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T16:53:01.186Z [DEBUG] Temp file written successfully, size: 43588 bytes
+2026-02-01T16:53:01.186Z [DEBUG] Applied original permissions to temp file
+2026-02-01T16:53:01.186Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964781185 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T16:53:01.186Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T16:53:01.190Z [DEBUG] [REPL:mount] REPL mounted, disabled=false
+2026-02-01T16:53:01.193Z [DEBUG] Official marketplace auto-install skipped: already_attempted
+2026-02-01T16:53:01.194Z [DEBUG] performStartupChecks called
+2026-02-01T16:53:01.194Z [DEBUG] Starting background plugin installations
+2026-02-01T16:53:01.194Z [DEBUG] performBackgroundPluginInstallations called
+2026-02-01T16:53:01.196Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-02-01T16:53:01.200Z [DEBUG] Found 4 enabled plugins
+2026-02-01T16:53:01.200Z [DEBUG] All plugins already exist, skipping migration
+2026-02-01T16:53:01.200Z [DEBUG] Found 4 installed plugins (V2 format)
+2026-02-01T16:53:01.202Z [DEBUG] Loaded plugins - Enabled: 4, Disabled: 0, Commands: 2, Agents: 7, Errors: 0
+2026-02-01T16:53:01.202Z [DEBUG] Found 0 missing plugins (not installed):
+2026-02-01T16:53:01.202Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2026-02-01T16:53:01.203Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-02-01T16:53:01.203Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-02-01T16:53:01.204Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at eM1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2952:20333)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async M (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3884:16287)
+2026-02-01T16:53:01.204Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at eM1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2952:20333)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async P (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3884:16803)
+2026-02-01T16:53:01.205Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-02-01T16:53:01.205Z [DEBUG] [claudeai-mcp] Gate returned: false
+2026-02-01T16:53:01.205Z [DEBUG] [claudeai-mcp] Disabled via gate
+2026-02-01T16:53:01.233Z [DEBUG] Total LSP servers loaded: 0
+2026-02-01T16:53:01.233Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2026-02-01T16:53:01.233Z [DEBUG] LSP manager initialized with 0 servers
+2026-02-01T16:53:01.233Z [DEBUG] LSP server manager initialized successfully
+2026-02-01T16:53:01.234Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-02-01T16:53:01.235Z [DEBUG] Watching for changes in skill/command directories: /Users/kiranbiliyawala/.claude/skills, /Users/kiranbiliyawala/.claude/commands, /Users/kiranbiliyawala/.claude/skills, /Users/kiranbiliyawala/.claude/commands...
+2026-02-01T16:53:01.247Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964781247
+2026-02-01T16:53:01.247Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T16:53:01.247Z [DEBUG] Temp file written successfully, size: 43588 bytes
+2026-02-01T16:53:01.247Z [DEBUG] Applied original permissions to temp file
+2026-02-01T16:53:01.247Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964781247 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T16:53:01.247Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T16:53:01.271Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964781271
+2026-02-01T16:53:01.271Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T16:53:01.271Z [DEBUG] Temp file written successfully, size: 43588 bytes
+2026-02-01T16:53:01.271Z [DEBUG] Applied original permissions to temp file
+2026-02-01T16:53:01.271Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.57277.1769964781271 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T16:53:01.271Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T16:53:01.926Z [DEBUG] MCP server "plugin:github:github": HTTP Connection failed after 1001ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+ (code: 400, errno: none)
+2026-02-01T16:53:01.926Z [ERROR] MCP server "plugin:github:github" Error: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-02-01T16:53:01.927Z [DEBUG] MCP server "plugin:github:github": Connection failed after 1001ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-02-01T16:53:01.927Z [ERROR] MCP server "plugin:github:github" Connection failed: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-02-01T16:53:02.148Z [DEBUG] MCP server "gemini-collab": Successfully connected to stdio server in 1239ms
+2026-02-01T16:53:02.148Z [DEBUG] MCP server "gemini-collab": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"claude-gemini-mcp","version":"1.0.0"}}
+2026-02-01T16:53:02.149Z [DEBUG] MCP server "gemini-collab": STDIO connection dropped after 0s uptime
+2026-02-01T16:53:02.149Z [DEBUG] MCP server "gemini-collab": Connection error: [
+  {
+    "code": "invalid_union",
+    "errors": [
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "id",
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"id\", \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "result"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        }
+      ]
+    ],
+    "path": [],
+    "message": "Invalid input"
+  }
+]
+2026-02-01T16:53:02.446Z [ERROR] MCP server "firecrawl" Server stderr: npm notice Access token expired or revoked. Please try logging in again.
+npm notice Access token expired or revoked. Please try logging in again.
+npm error code E404
+npm error 404 Not Found - GET https://registry.npmjs.org/@modelcontextprotocol%2fserver-firecrawl - Not found
+npm error 404
+npm error 404  '@modelcontextprotocol/server-firecrawl@*' is not in this registry.
+npm error 404
+npm error 404 Note that you can also install from a
+npm error 404 tarball, folder, http url, or git url.
+npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.npm/_logs/2026-02-01T16_53_01_097Z-debug-0.log
+2026-02-01T16:53:02.449Z [DEBUG] MCP server "firecrawl": Connection failed after 1524ms: MCP error -32000: Connection closed
+2026-02-01T16:53:02.449Z [ERROR] MCP server "firecrawl" Connection failed: MCP error -32000: Connection closed
+2026-02-01T16:53:09.183Z [ERROR] MCP server "mcp-atlassian" Server stderr: Installed 113 packages in 200ms
+
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                                                              │
+│                                FastMCP 2.14.4                                │
+│                            https://gofastmcp.com                             │
+│                                                                              │
+│                    🖥  Server:      Atlassian MCP                             │
+│                    🚀 Deploy free: https://fastmcp.cloud                     │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                          ✨ FastMCP 3.0 is coming!                           │
+│       Pin `fastmcp < 3` in production, then upgrade when you're ready.       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+[02/01/26 22:23:09] INFO     Starting MCP server 'Atlassian MCP'  server.py:2506
+                             with transport 'stdio'
+2026-02-01T16:53:09.186Z [DEBUG] MCP server "mcp-atlassian": Successfully connected to stdio server in 8268ms
+2026-02-01T16:53:09.186Z [DEBUG] MCP server "mcp-atlassian": Connection established with capabilities: {"hasTools":true,"hasPrompts":true,"hasResources":true,"serverVersion":{"name":"Atlassian MCP","version":"2.14.4"}}
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.206Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.207Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.207Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.207Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.207Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.673Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.674Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.674Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.674Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.674Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.677Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.677Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.677Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.677Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.677Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.679Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.679Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.679Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.679Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.679Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.684Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.684Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.684Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.684Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.684Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.686Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.686Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.686Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.686Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.686Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.692Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.692Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.692Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.692Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.692Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.696Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.696Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.696Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.696Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.696Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.696Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.696Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.696Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.696Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.696Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.700Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.701Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.701Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.701Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.701Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.702Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.702Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.702Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.702Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.702Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.705Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.705Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.705Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.705Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.705Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.706Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.706Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.706Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.706Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.706Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.706Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.706Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.706Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.706Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.706Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.707Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.707Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.707Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.707Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.707Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.707Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.707Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.707Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.707Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.707Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.711Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.711Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.711Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.711Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.711Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.712Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.712Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.712Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.712Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.712Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.715Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.715Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.716Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.716Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.716Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.718Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.718Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.718Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.718Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.718Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.732Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.732Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.732Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.732Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.732Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.733Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.733Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.733Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.733Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.733Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.733Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.733Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.733Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.733Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.733Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.734Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.734Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.734Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.734Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.734Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.734Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.734Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.734Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.734Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.734Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.739Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.739Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.739Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.739Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.739Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.740Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.740Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.740Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.740Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.740Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.741Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.741Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.741Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.741Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.741Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.741Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.741Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.741Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.741Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.741Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.742Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.742Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.742Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.742Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.742Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.749Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.749Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.749Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.749Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.749Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.749Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.749Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.749Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.749Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.749Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.750Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.750Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.750Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.750Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.750Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.754Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.754Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.754Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.754Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.754Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.755Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.755Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.755Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.755Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.755Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.755Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.755Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.755Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.755Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.755Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.756Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.756Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.756Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.756Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.756Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.762Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.762Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.762Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.762Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.762Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.764Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.764Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.764Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.764Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.764Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.766Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.766Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.766Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.766Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.766Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.767Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.767Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.767Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.767Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.767Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.768Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.768Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.769Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.769Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.769Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.775Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.775Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.775Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.775Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.775Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.776Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.776Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.776Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.776Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.776Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.777Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.777Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.777Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.777Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.777Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.778Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.778Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.778Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.778Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.778Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:09.785Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:09.785Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-02-01T16:53:09.785Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:09.785Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:09.785Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:10.070Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.071Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 7)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.071Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_project_issues
+2026-02-01T16:53:10.104Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.104Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 27)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.104Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_remove_issue_link
+2026-02-01T16:53:10.109Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.109Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 32)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.109Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_all_projects
+2026-02-01T16:53:10.121Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.121Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 9)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.121Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_worklog
+2026-02-01T16:53:10.122Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.122Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 39)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.122Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_get_labels
+2026-02-01T16:53:10.122Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.122Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 13)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.122Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_sprints_from_board
+2026-02-01T16:53:10.124Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.124Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 23)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.124Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_add_worklog
+2026-02-01T16:53:10.127Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.127Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 45)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.127Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_search_user
+2026-02-01T16:53:10.128Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.128Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 12)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.128Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_board_issues
+2026-02-01T16:53:10.132Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.132Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 43)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.132Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_delete_page
+2026-02-01T16:53:10.136Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.136Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 19)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.136Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_update_issue
+2026-02-01T16:53:10.142Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.142Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 14)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.142Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_sprint_issues
+2026-02-01T16:53:10.145Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.145Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 1)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.145Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__gemini-collab__gemini_code_review
+2026-02-01T16:53:10.150Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.150Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 38)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.150Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_get_comments
+2026-02-01T16:53:10.155Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.155Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 2)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.155Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__gemini-collab__gemini_brainstorm
+2026-02-01T16:53:10.155Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.155Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 29)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.155Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_create_sprint
+2026-02-01T16:53:10.160Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.160Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 16)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.160Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_create_issue
+2026-02-01T16:53:10.160Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.160Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 4)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.160Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_issue
+2026-02-01T16:53:10.160Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.160Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 31)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.160Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_project_versions
+2026-02-01T16:53:10.161Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.161Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 25)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.161Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_create_issue_link
+2026-02-01T16:53:10.162Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.162Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 3)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.162Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_user_profile
+2026-02-01T16:53:10.171Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.171Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 15)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.171Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_link_types
+2026-02-01T16:53:10.192Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.192Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 8)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.192Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_transitions
+2026-02-01T16:53:10.193Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.194Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 30)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.194Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_update_sprint
+2026-02-01T16:53:10.194Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.194Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 44)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.195Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_add_comment
+2026-02-01T16:53:10.195Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.196Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 10)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.196Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_download_attachments
+2026-02-01T16:53:10.197Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.198Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 21)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.198Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_add_comment
+2026-02-01T16:53:10.211Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.212Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 42)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.212Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_update_page
+2026-02-01T16:53:10.212Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.212Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 37)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.212Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_get_page_children
+2026-02-01T16:53:10.212Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.212Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 28)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.212Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_transition_issue
+2026-02-01T16:53:10.212Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.212Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 17)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.212Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_batch_create_issues
+2026-02-01T16:53:10.215Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.215Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 40)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.215Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_add_label
+2026-02-01T16:53:10.215Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.215Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 26)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.215Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_create_remote_issue_link
+2026-02-01T16:53:10.216Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.216Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 0)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.216Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__gemini-collab__ask_gemini
+2026-02-01T16:53:10.216Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.216Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 35)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.216Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_search
+2026-02-01T16:53:10.218Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.218Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 5)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.218Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_search
+2026-02-01T16:53:10.219Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.219Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 33)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.219Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_create_version
+2026-02-01T16:53:10.221Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.221Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 6)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.221Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_search_fields
+2026-02-01T16:53:10.222Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.222Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 34)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.222Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_batch_create_versions
+2026-02-01T16:53:10.222Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.222Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 24)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.222Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_link_to_epic
+2026-02-01T16:53:10.223Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.223Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 20)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.223Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_delete_issue
+2026-02-01T16:53:10.224Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.224Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 36)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.224Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_get_page
+2026-02-01T16:53:10.227Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.227Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 18)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.227Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_batch_get_changelogs
+2026-02-01T16:53:10.244Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.244Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 11)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.244Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_get_agile_boards
+2026-02-01T16:53:10.245Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.245Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 22)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.245Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__jira_edit_comment
+2026-02-01T16:53:10.259Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:10.259Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Promise.all (index 41)
+    at async DF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:7126)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:503)
+2026-02-01T16:53:10.259Z [DEBUG] countToolDefinitionTokens returned null for 1 tools: mcp__mcp-atlassian__confluence_create_page
+2026-02-01T16:53:10.260Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-02-01T16:53:10.271Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:10.271Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:10.271Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:10.727Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:18631
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2232
+    at async Ck9 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1026:17215)
+    at async Ls7 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1027:2165)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3684)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+2026-02-01T16:53:10.727Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (22 tools)
+2026-02-01T16:53:10.727Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-02-01T16:53:10.727Z [DEBUG] [API:auth] OAuth token check starting
+2026-02-01T16:53:10.727Z [DEBUG] [API:auth] OAuth token check complete
+2026-02-01T16:53:11.177Z [DEBUG] countTokensWithFallback: haiku fallback failed: 502 Gateway unreachable
+2026-02-01T16:53:11.178Z [ERROR] Error: Error: 502 Gateway unreachable
+
+    at g4.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:404:8909)
+    at gy.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:2195)
+    at gy.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:421:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Ei4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:19323)
+    at async mF1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:3956)
+    at async vp (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3286:4380)
+    at async Lc4 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3132:554)
+2026-02-01T16:53:11.178Z [DEBUG] countToolDefinitionTokens returned null for 22 tools: Task, TaskOutput, Bash, Glob, Grep, ExitPlanMode, Read, Edit, Write, NotebookEdit, WebFetch, WebSear...
+2026-02-01T16:58:00.917Z [DEBUG] Metrics opt-out check failed: No API key available
+2026-02-01T16:58:00.918Z [DEBUG] Metrics check failed, defaulting to disabled
+2026-02-01T16:58:00.918Z [DEBUG] Metrics export disabled by organization setting

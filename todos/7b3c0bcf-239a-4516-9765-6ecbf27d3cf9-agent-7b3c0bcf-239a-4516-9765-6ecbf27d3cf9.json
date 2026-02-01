@@ -1,0 +1,22 @@
+[
+  {
+    "content": "Analyze test failure patterns and root cause",
+    "status": "completed",
+    "id": "1"
+  },
+  {
+    "content": "Examine one of the failing test files to understand the IllegalStateException",
+    "status": "completed",
+    "id": "2"
+  },
+  {
+    "content": "Fix the test initialization issues",
+    "status": "completed",
+    "id": "3"
+  },
+  {
+    "content": "Run tests again to verify fixes",
+    "status": "in_progress",
+    "id": "4"
+  }
+]

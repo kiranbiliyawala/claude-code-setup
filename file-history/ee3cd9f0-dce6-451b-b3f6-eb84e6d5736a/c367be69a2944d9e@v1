@@ -1,0 +1,322 @@
+# Payment Service PR Reviews - Archana Badagi
+
+## PR #832 - CVV Disablement Support at Provider Level
+**Merged:** March 25, 2025 | **Size:** +552/-38 | **Files:** 29
+
+### Summary
+Added configuration support for CVV disablement for Visa and Mastercard at the provider level across multiple payment providers.
+
+### Key Changes
+- Added `DISABLE_MASTERCARD_CVV` setting key
+- Implemented `isMastercardCvvDisabled()` and `isVisaCvvDisabled()` methods in `PaymentProviderSettingService`
+- Updated provider adapters: Cashfree, Cybersource, EC Card, MPGS, Pinelabs, Razorpay Direct
+- Added interface method `isCvvRequired()` with default implementation
+
+### Positive Aspects
+- Clean interface design with default implementations
+- Comprehensive test coverage (171 lines for ECCardProviderAdapter, 88 for MPGSRequestBuilder)
+- Proper use of Optional for setting retrieval
+- Good separation of concerns across providers
+
+### Rating: 4/5
+---
+
+## PR #891 - Digio Sync Flow Fix with Redirection Parameters
+**Merged:** April 28, 2025 | **Size:** +4/-3 | **Files:** 3
+
+### Summary
+Bug fix for Digio webhook handling when redirection parameters are null.
+
+### Key Changes
+- Added null check before accessing redirection parameters: `Objects.isNull(redirectionParams) || !redirectionParams.containsKey(STATUS_QUERY_PARAM)`
+- Upgraded digio-provider-client version
+
+### Positive Aspects
+- Simple, focused fix
+- Defensive null check prevents NPE
+- Comment formatting improvement
+
+### Rating: 4/5
+---
+
+## PR #900 - Settlement Route Integration for Digio Provider
+**Merged:** May 14, 2025 | **Size:** +6/-1 | **Files:** 1
+
+### Summary
+Added route support for Digio mandate debit with corporate account number fallback.
+
+### Key Changes
+- Implemented route-based corporate account selection with Optional chain
+- Falls back to provider account configuration if no route specified
+
+### Code Quality
+```java
+.corporateAccountNumber(Optional.ofNullable(context.getRoutesBreakup())
+    .map(routesBreakup -> routesBreakup.getRouteInformationList())
+    .filter(routeInformationList -> !routeInformationList.isEmpty())
+    .map(routeInformation -> routeInformation.get(0).getProviderRouteId())
+    .orElse(providerAccountConfiguration.getCorporateAccountNumber()))
+```
+
+### Rating: 4/5
+---
+
+## PR #917 - Enriching RRN for Razorpay Mandate Provider
+**Merged:** June 2, 2025 | **Size:** +20/-6 | **Files:** 3
+
+### Summary
+Added RRN (Retrieval Reference Number) enrichment for Razorpay mandate payments and refunds.
+
+### Key Changes
+- Added `addPaymentAttemptAttributes()` method in `AbstractRPMandateProviderAdapter`
+- Enriched RRN from acquirer data for payment attempts
+- Extended refund attributes to include RRN from additional info
+
+### Positive Aspects
+- Clean method extraction for reusability
+- Proper null checks before attribute addition
+- Consistent attribute handling pattern
+
+### Rating: 4/5
+---
+
+## PR #944 - ICICI UPI Provider Prefix Fix
+**Merged:** July 16, 2025 | **Size:** +2/-0 | **Files:** 2
+
+### Summary
+Simple fix to add `upiRequestId` field to ICICI UPI provider SDK params.
+
+### Key Changes
+- Added `.upiRequestId(refId)` to both CRED and Pay ICICI UPI provider implementations
+
+### Rating: 3.5/5 (Simple but correct fix)
+---
+
+## PR #1037 - Mandate Token Enrichment on Failed Payment Attempt
+**Merged:** August 26, 2025 | **Size:** +26/-20 | **Files:** 1
+
+### Summary
+Fixed mandate status update logic on payment attempt failure, differentiating between auto-debit and registration flows.
+
+### Key Changes
+- Refactored to determine flow type (auto-debit vs registration) early
+- Added proper mandate ID retrieval based on flow type
+- Implemented appropriate action (REVOKE for auto-debit, REJECTED status for registration)
+- Extracted `getMerchantId()` helper method
+
+### Code Quality
+Clean refactoring with proper error handling:
+```java
+String mandateIdValue = mandateId.orElseThrow(() -> {
+    log.error(...);
+    return Error.invalid_mandate.getBuilder().build();
+});
+```
+
+### Rating: 4.5/5
+---
+
+## PR #1041 - Wallet Stuck in CREATE State Fix
+**Merged:** August 26, 2025 | **Size:** +37/-6 | **Files:** 5
+
+### Summary
+Fixed issue where wallets could get stuck in CREATE state during authless payment processing.
+
+### Key Changes
+- Added empty value checks in `addAttributes()` methods across entities
+- Created static `AUTH_LESS_PAYMENT_MODES` constant
+- Added check for failed payment state before order status update
+- Fixed typo: "StarprocessAuthLessTwoPhasePayment" -> "Start"
+
+### Positive Aspects
+- Defensive coding with value validation
+- Proper state machine handling
+- Code cleanup (typo fix, constant extraction)
+
+### Rating: 4/5
+---
+
+## PR #1047 - Digio Refund Integration
+**Merged:** August 30, 2025 | **Size:** +427/-18 | **Files:** 5
+
+### Summary
+Large feature implementing refund functionality for Digio mandate debits.
+
+### Key Changes
+- Extended `DigioWebhookController` to handle refund webhooks
+- Implemented `syncRefund()` method in `DigioMandateDebitProviderAdapter`
+- Added refund status mapping logic
+- Comprehensive test coverage (218 lines)
+
+### Positive Aspects
+- Well-structured provider adapter implementation
+- Proper webhook handling separation
+- Good test coverage for refund scenarios
+
+### Rating: 4/5
+---
+
+## PR #1059 - Token Type Support to LCM Resolve Terminal
+**Merged:** September 19, 2025 | **Size:** +42/-2 | **Files:** 4
+
+### Summary
+Added token type enrichment for LCM card resolve terminal requests.
+
+### Key Changes
+- Added token type conversion using switch expression
+- Extended test factory for tokenized card scenarios
+
+### Code Quality
+Modern Java usage:
+```java
+private String getTokenType(TokenType tokenType) {
+    return switch (tokenType) {
+        case COF -> COF.getValue();
+        case DEVICE_TOKEN -> DEVICE.getValue();
+        default -> null;
+    };
+}
+```
+
+### Rating: 4/5
+---
+
+## PR #1077 - Cashback Wallet Utilisation in Autopay Registration
+**Merged:** November 12, 2025 | **Size:** +915/-61 | **Files:** 18
+
+### Summary
+Large feature enabling cashback wallet utilization during autopay mandate registration.
+
+### Key Changes
+- Modified `MandateUtil` to calculate first debit amount excluding authless payments
+- Extended mandate bulk payment workflow for cashback handling
+- Added wallet autopay provider adapter support
+- Comprehensive test suite (MandateUtilTest: 250 lines, PaymentCreateWorkflowFactoryTest: 168 lines, etc.)
+
+### Positive Aspects
+- Extensive test coverage
+- Good refactoring of existing code
+- Clean separation of concerns
+
+### Areas for Improvement
+- Large PR could be split into smaller changes
+
+### Rating: 4/5
+---
+
+## PR #1103 - Refund Adjustment Backfill API
+**Merged:** October 9, 2025 | **Size:** +89/-2 | **Files:** 3
+
+### Summary
+Added admin API for backfilling refund adjustments.
+
+### Key Changes
+- New endpoint: `POST /{externalId}/backfill-refund-adjustments`
+- Validation logic for adjustment amounts
+- Proper authorization with `@AuthorizedApplication`
+
+### Positive Aspects
+- Good input validation
+- Clear error messages
+- Proper authorization
+
+### Rating: 4/5
+---
+
+## PR #1118 - Billdesk 404 Handling in Refund Flow
+**Merged:** October 28, 2025 | **Size:** +364/-47 | **Files:** 2
+
+### Summary
+Improved error handling for Billdesk refund sync, specifically for 404 responses.
+
+### Key Changes
+- Refactored `syncRefund()` method for better readability
+- Extracted `updateRefundAttemptEntity()` and `handleBilldeskErrorResponse()` methods
+- Added special handling for 404 responses (mark refund as FAILED)
+- Comprehensive test suite (310 lines)
+
+### Code Quality
+Excellent test documentation:
+```java
+/**
+ * Test case: handleBilldeskErrorResponse with 404 status code
+ * Scenario: When BillDesk API returns a 404 (Not Found) response
+ * Expected behavior:
+ * - Refund status should be set to FAILED
+ * - Error message should indicate "Refund not found in BillDesk"
+ */
+```
+
+### Rating: 4.5/5
+---
+
+## PR #1131 - Guest Checkout Flow Fix (Alt ID for Both Card Payment Mode)
+**Merged:** October 29, 2025 | **Size:** +467/-2 | **Files:** 3
+
+### Summary
+Fixed card payment mode handling for "BOTH" token type in Cybersource integration.
+
+### Key Changes
+- Added `BOTH` constant to `Constant.java`
+- Updated `TOKEN_CARD_PAYMENT_MODES` list to include both TOKEN and BOTH
+- Comprehensive test suite (459 lines)
+
+### Rating: 4/5
+---
+
+## PR #1141 - HB Darwin DT UI Fix - Cache in Global Config
+**Merged:** November 1, 2025 | **Size:** +10/-4 | **Files:** 2
+
+### Summary
+Performance optimization using cached client data for decision tree global config.
+
+### Key Changes
+- Added `getAllClients()` method to `ClientConfigurationCache`
+- Replaced DAO query with cache lookup in `DecisionTreeService`
+
+### Rating: 4/5
+---
+
+## PR #1170 - Razorpay Refund Sync Fallback on Payment ID
+**Merged:** November 26, 2025 | **Size:** +740/-4 | **Files:** 7
+
+### Summary
+Added fallback mechanism for Razorpay refund sync using payment ID when refund ID is not available.
+
+### Key Changes
+- Added `syncRefundWithPaymentId()` method to `RazorpayClientWrapper`
+- Implemented fallback logic in both `RPMandateDebitProviderAdapter` and `RPDirectProviderAdapter`
+- Comprehensive test coverage (212 + 244 lines)
+
+### Rating: 4/5
+---
+
+## PR #1191 - Non-2xx Handling for Billdesk
+**Merged:** November 20, 2025 | **Size:** +1/-1 | **Files:** 1
+
+### Summary
+Library version upgrade for improved Billdesk error handling.
+
+### Changes
+- Upgraded billdesk-client from 1.0.10 to 1.0.11
+
+### Rating: 3.5/5 (Simple version bump)
+---
+
+## PR #1213 - Inline Autopay Refund Support
+**Merged:** December 2, 2025 | **Size:** +99/-4 | **Files:** 3
+
+### Summary
+Filter zero amount payment attempts from refund eligibility calculation.
+
+### Key Changes
+- Added filter for null and zero amounts in refund pro-rate calculation
+- Comprehensive test cases for edge scenarios
+
+### Code Quality
+Clean filter chain:
+```java
+.filter(p -> Objects.nonNull(p.getAmount()) && p.getAmount().compareTo(BigDecimal.ZERO) > 0)
+```
+
+### Rating: 4/5

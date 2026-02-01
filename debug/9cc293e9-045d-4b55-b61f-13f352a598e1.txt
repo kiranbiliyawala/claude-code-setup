@@ -1,0 +1,1619 @@
+2026-01-07T15:45:23.325Z [DEBUG] Watching for changes in setting files /Users/kiranbiliyawala/.claude, /Users/kiranbiliyawala/code/cred/payments/.claude...
+2026-01-07T15:45:23.353Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (26.9ms): security find-generic-password -a $USER -w -s "Claude Code"
+2026-01-07T15:45:23.387Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (27.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:23.395Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-01-07T15:45:23.395Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-01-07T15:45:23.395Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-01-07T15:45:23.396Z [DEBUG] Applying permission update: Adding 10 allow rule(s) to destination 'localSettings': ["WebFetch(domain:dreamplug.atlassian.net)","mcp__mcp-atlassian__confluence_get_page","mcp__github__get_pull_request","mcp__github__get_pull_request_files","Bash(gh pr view:*)","Bash(gh pr diff:*)","mcp__codelens__analyze_pr_impact","mcp__codelens__document_search","mcp__codelens__get_dependencies","mcp__codelens__find_services"]
+2026-01-07T15:45:23.406Z [DEBUG] LSP server manager initialized successfully
+2026-01-07T15:45:23.406Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-01-07T15:45:23.409Z [DEBUG] Loading plugin github from source: "./external_plugins/github"
+2026-01-07T15:45:23.415Z [DEBUG] Git remote URL: null
+2026-01-07T15:45:23.415Z [DEBUG] No git remote URL found
+2026-01-07T15:45:23.415Z [DEBUG] Not in a GitHub repository, skipping path mapping update
+2026-01-07T15:45:23.418Z [DEBUG] Using git SHA for github@claude-plugins-official: b97f6eadd929
+2026-01-07T15:45:23.419Z [DEBUG] Plugin github@claude-plugins-official version b97f6eadd929 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/b97f6eadd929
+2026-01-07T15:45:23.419Z [DEBUG] Copied local plugin github to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/b97f6eadd929
+2026-01-07T15:45:23.420Z [DEBUG] Loading plugin pr-review-toolkit from source: "./plugins/pr-review-toolkit"
+2026-01-07T15:45:23.430Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: b97f6eadd929
+2026-01-07T15:45:23.431Z [DEBUG] Plugin pr-review-toolkit@claude-plugins-official version b97f6eadd929 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/b97f6eadd929
+2026-01-07T15:45:23.431Z [DEBUG] Copied local plugin pr-review-toolkit to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/b97f6eadd929
+2026-01-07T15:45:23.431Z [DEBUG] Loading plugin canvas from source: "./canvas"
+2026-01-07T15:45:23.431Z [DEBUG] Using provided version for canvas@claude-canvas: 0.1.0
+2026-01-07T15:45:23.431Z [DEBUG] Plugin canvas@claude-canvas version 0.1.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-07T15:45:23.431Z [DEBUG] Copied local plugin canvas to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-07T15:45:23.431Z [DEBUG] Plugin canvas has no entry.skills defined
+2026-01-07T15:45:23.431Z [DEBUG] Found 3 plugins (3 enabled, 0 disabled)
+2026-01-07T15:45:23.434Z [DEBUG] Stats cache is up to date
+2026-01-07T15:45:23.436Z [DEBUG] Loading skills from: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/kiranbiliyawala/.claude/skills, project=[]
+2026-01-07T15:45:23.438Z [DEBUG] Loaded 3 installed plugins from /Users/kiranbiliyawala/.claude/plugins/installed_plugins.json
+2026-01-07T15:45:23.477Z [DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+2026-01-07T15:45:23.477Z [DEBUG] Looking for shell config file: /Users/kiranbiliyawala/.zshrc
+2026-01-07T15:45:23.477Z [DEBUG] Snapshots directory: /Users/kiranbiliyawala/.claude/shell-snapshots
+2026-01-07T15:45:23.478Z [DEBUG] Creating snapshot at: /Users/kiranbiliyawala/.claude/shell-snapshots/snapshot-zsh-1767800723477-p2nibo.sh
+2026-01-07T15:45:23.478Z [DEBUG] Shell binary exists: true
+2026-01-07T15:45:23.478Z [DEBUG] Execution timeout: 10000ms
+2026-01-07T15:45:23.478Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude/todos/9cc293e9-045d-4b55-b61f-13f352a598e1-agent-9cc293e9-045d-4b55-b61f-13f352a598e1.json.tmp.42816.1767800723478
+2026-01-07T15:45:23.485Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (6.6ms)
+2026-01-07T15:45:23.485Z [DEBUG] Temp file written successfully, size: 2 bytes
+2026-01-07T15:45:23.485Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude/todos/9cc293e9-045d-4b55-b61f-13f352a598e1-agent-9cc293e9-045d-4b55-b61f-13f352a598e1.json.tmp.42816.1767800723478 to /Users/kiranbiliyawala/.claude/todos/9cc293e9-045d-4b55-b61f-13f352a598e1-agent-9cc293e9-045d-4b55-b61f-13f352a598e1.json
+2026-01-07T15:45:23.485Z [DEBUG] File /Users/kiranbiliyawala/.claude/todos/9cc293e9-045d-4b55-b61f-13f352a598e1-agent-9cc293e9-045d-4b55-b61f-13f352a598e1.json written atomically
+2026-01-07T15:45:23.490Z [DEBUG] getPluginSkills: Processing 3 enabled plugins
+2026-01-07T15:45:23.491Z [DEBUG] Checking plugin github: skillsPath=none, skillsPaths=0 paths
+2026-01-07T15:45:23.491Z [DEBUG] Checking plugin pr-review-toolkit: skillsPath=none, skillsPaths=0 paths
+2026-01-07T15:45:23.491Z [DEBUG] Checking plugin canvas: skillsPath=exists, skillsPaths=0 paths
+2026-01-07T15:45:23.491Z [DEBUG] Attempting to load skills from plugin canvas default skillsPath: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0/skills
+2026-01-07T15:45:23.492Z [DEBUG] Registered 0 hooks from 3 plugins
+2026-01-07T15:45:23.493Z [DEBUG] Loaded 4 skills from plugin canvas default directory
+2026-01-07T15:45:23.493Z [DEBUG] Total plugin skills loaded: 4
+2026-01-07T15:45:23.493Z [DEBUG] Loaded 1 commands from plugin pr-review-toolkit default directory
+2026-01-07T15:45:23.499Z [DEBUG] Loaded 1 commands from plugin canvas default directory
+2026-01-07T15:45:23.499Z [DEBUG] Total plugin commands loaded: 2
+2026-01-07T15:45:23.500Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, legacy commands: 0)
+2026-01-07T15:45:23.500Z [DEBUG] getSkills returning: 0 skill dir commands, 4 plugin skills
+2026-01-07T15:45:23.512Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+2026-01-07T15:45:23.516Z [DEBUG] Loaded 6 agents from plugin pr-review-toolkit default directory
+2026-01-07T15:45:23.516Z [DEBUG] Total plugin agents loaded: 6
+2026-01-07T15:45:23.541Z [DEBUG] MCP server "plugin:github:github": Initializing HTTP transport to https://api.githubcopilot.com/mcp/
+2026-01-07T15:45:23.541Z [DEBUG] MCP server "plugin:github:github": Node version: v23.9.0, Platform: darwin
+2026-01-07T15:45:23.541Z [DEBUG] MCP server "plugin:github:github": Environment: {"NODE_OPTIONS":"not set","UV_THREADPOOL_SIZE":"default","HTTP_PROXY":"not set","HTTPS_PROXY":"not set","NO_PROXY":"not set"}
+2026-01-07T15:45:23.543Z [DEBUG] MCP server "gemini-collab": Starting connection with timeout of 30000ms
+2026-01-07T15:45:23.549Z [DEBUG] All plugins already exist, skipping migration
+2026-01-07T15:45:23.554Z [DEBUG] Initialized versioned plugins system with 3 plugins
+2026-01-07T15:45:23.555Z [DEBUG] MCP server "plugin:github:github": Proxy options: default
+2026-01-07T15:45:23.555Z [DEBUG] MCP server "plugin:github:github": HTTP transport options: {"url":"https://api.githubcopilot.com/mcp/","headers":{"User-Agent":"claude-code/2.0.76","Authorization":"Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}"},"hasAuthProvider":true,"timeoutMs":60000}
+2026-01-07T15:45:23.555Z [DEBUG] MCP server "plugin:github:github": HTTP transport created successfully
+2026-01-07T15:45:23.555Z [DEBUG] MCP server "plugin:github:github": Client created, setting up request handler
+2026-01-07T15:45:23.555Z [DEBUG] MCP server "plugin:github:github": Starting connection with timeout of 30000ms
+2026-01-07T15:45:23.555Z [DEBUG] MCP server "plugin:github:github": Testing basic HTTP connectivity to https://api.githubcopilot.com/mcp/
+2026-01-07T15:45:23.556Z [DEBUG] MCP server "plugin:github:github": Parsed URL: host=api.githubcopilot.com, port=default, protocol=https:
+2026-01-07T15:45:23.556Z [DEBUG] MCP server "codelens": SSE transport initialized, awaiting connection
+2026-01-07T15:45:23.556Z [DEBUG] MCP server "codelens": Starting connection with timeout of 30000ms
+2026-01-07T15:45:23.578Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (21.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:23.578Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:23.581Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723581
+2026-01-07T15:45:23.581Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:45:23.586Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:45:23.586Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:45:23.586Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723581 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:45:23.586Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:45:23.590Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2026-01-07T15:45:23.590Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:45:23.590Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2026-01-07T15:45:23.610Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (20.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:23.610Z [DEBUG] MCP server "plugin:github:github": No token data found
+2026-01-07T15:45:23.624Z [DEBUG] MCP server "codelens": SSE Connection failed after 67ms: {"url":"http://codelens-mcp-server.central.dreamplug.net/sse","error":"SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net","errorType":"FA2","stack":"Error: SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net\n    at _eventSource.onerror (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1085:26036)\n    at AWA.y30 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1085:5571)\n    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1085:2987\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"}
+2026-01-07T15:45:23.624Z [ERROR] MCP server "codelens" Error: SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net
+2026-01-07T15:45:23.624Z [DEBUG] MCP server "codelens": Connection failed after 78ms: SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net
+2026-01-07T15:45:23.624Z [ERROR] MCP server "codelens" Connection failed: SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net
+2026-01-07T15:45:23.629Z [DEBUG] Getting matching hook commands for SubagentStart with query: Explore
+2026-01-07T15:45:23.629Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:45:23.629Z [DEBUG] Matched 0 unique hooks for query "Explore" (0 before deduplication)
+2026-01-07T15:45:23.631Z [DEBUG] Getting matching hook commands for SubagentStart with query: Plan
+2026-01-07T15:45:23.631Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:45:23.631Z [DEBUG] Matched 0 unique hooks for query "Plan" (0 before deduplication)
+2026-01-07T15:45:23.637Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723637
+2026-01-07T15:45:23.637Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:45:23.641Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:45:23.641Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:45:23.641Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723637 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:45:23.641Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:45:23.702Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723702
+2026-01-07T15:45:23.702Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:45:23.705Z [DEBUG] Temp file written successfully, size: 81154 bytes
+2026-01-07T15:45:23.705Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:45:23.705Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723702 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:45:23.705Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:45:23.711Z [DEBUG] Official marketplace auto-install skipped: already_attempted
+2026-01-07T15:45:23.712Z [DEBUG] performStartupChecks called
+2026-01-07T15:45:23.712Z [DEBUG] Starting background plugin installations
+2026-01-07T15:45:23.712Z [DEBUG] performBackgroundPluginInstallations called
+2026-01-07T15:45:23.716Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:45:23.719Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723719
+2026-01-07T15:45:23.719Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:45:23.721Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:45:23.721Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:45:23.721Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723719 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:45:23.721Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:45:23.723Z [DEBUG] Found 3 enabled plugins
+2026-01-07T15:45:23.724Z [DEBUG] All plugins already exist, skipping migration
+2026-01-07T15:45:23.724Z [DEBUG] Found 3 installed plugins (V2 format)
+2026-01-07T15:45:23.724Z [DEBUG] Loaded plugins - Enabled: 3, Disabled: 0, Commands: 2, Agents: 6, Errors: 0
+2026-01-07T15:45:23.724Z [DEBUG] Found 0 missing plugins (not installed):
+2026-01-07T15:45:23.724Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2026-01-07T15:45:23.740Z [DEBUG] Summarizing all 6 messages (~0 tokens)
+2026-01-07T15:45:23.760Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723760
+2026-01-07T15:45:23.760Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:45:23.764Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:45:23.764Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:45:23.764Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767800723760 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:45:23.764Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:45:23.943Z [DEBUG] MCP server "gemini-collab": Successfully connected to stdio server in 402ms
+2026-01-07T15:45:23.943Z [DEBUG] MCP server "gemini-collab": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"claude-gemini-mcp","version":"1.0.0"}}
+2026-01-07T15:45:23.945Z [DEBUG] MCP server "gemini-collab": STDIO connection dropped after 0s uptime
+2026-01-07T15:45:23.945Z [DEBUG] MCP server "gemini-collab": Connection error: [
+  {
+    "code": "invalid_union",
+    "errors": [
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "id",
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"id\", \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "result"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        }
+      ]
+    ],
+    "path": [],
+    "message": "Invalid input"
+  }
+]
+2026-01-07T15:45:24.234Z [DEBUG] Shell snapshot created successfully (163219 bytes)
+2026-01-07T15:45:24.584Z [DEBUG] MCP server "plugin:github:github": HTTP Connection failed after 1043ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+ (code: 400, errno: none)
+2026-01-07T15:45:24.584Z [ERROR] MCP server "plugin:github:github" Error: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-07T15:45:24.584Z [DEBUG] MCP server "plugin:github:github": Connection failed after 1043ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-07T15:45:24.584Z [ERROR] MCP server "plugin:github:github" Connection failed: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-07T15:45:24.586Z [DEBUG] MCP server "github": Starting connection with timeout of 30000ms
+2026-01-07T15:45:24.591Z [DEBUG] MCP server "mcp-atlassian": Starting connection with timeout of 30000ms
+2026-01-07T15:45:25.147Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:45:25.362Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:45:25.366Z [ERROR] MCP server "github" Server stderr: GitHub MCP Server running on stdio
+2026-01-07T15:45:25.367Z [DEBUG] MCP server "github": Successfully connected to stdio server in 782ms
+2026-01-07T15:45:25.367Z [DEBUG] MCP server "github": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"github-mcp-server","version":"0.6.2"}}
+2026-01-07T15:45:25.700Z [ERROR] MCP server "mcp-atlassian" Server stderr: ╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                                                              │
+│                                FastMCP 2.14.2                                │
+│                            https://gofastmcp.com                             │
+│                                                                              │
+│                    🖥  Server:      Atlassian MCP                             │
+│                    🚀 Deploy free: https://fastmcp.cloud                     │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                          ✨ FastMCP 3.0 is coming!                           │
+│         Pin fastmcp<3 in production, then upgrade when you're ready.         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+2026-01-07T15:45:25.756Z [ERROR] MCP server "mcp-atlassian" Server stderr: [01/07/26 21:15:25] INFO     Starting MCP server 'Atlassian MCP'  server.py:2504
+                             with transport 'stdio'
+2026-01-07T15:45:25.761Z [DEBUG] MCP server "mcp-atlassian": Successfully connected to stdio server in 1171ms
+2026-01-07T15:45:25.761Z [DEBUG] MCP server "mcp-atlassian": Connection established with capabilities: {"hasTools":true,"hasPrompts":true,"hasResources":true,"serverVersion":{"name":"Atlassian MCP","version":"2.14.2"}}
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:calendar" (userFacingName="calendar")
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:document" (userFacingName="document")
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:flight" (userFacingName="flight")
+2026-01-07T15:45:25.974Z [DEBUG] Skills and commands included in Skill tool: pr-review-toolkit:review-pr, canvas, calendar, canvas, document, flight
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:calendar" (userFacingName="calendar")
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:canvas" (userFacingName="canvas")
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:document" (userFacingName="document")
+2026-01-07T15:45:25.974Z [DEBUG] Skill prompt: showing "canvas:flight" (userFacingName="flight")
+2026-01-07T15:45:26.052Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (11.3ms)
+2026-01-07T15:45:26.052Z [DEBUG] Successfully refreshed marketplace: claude-plugins-official
+2026-01-07T15:45:26.056Z [DEBUG] Successfully refreshed marketplace: claude-code-plugins
+2026-01-07T15:45:26.056Z [DEBUG] Plugin autoupdate: checking installed plugins
+2026-01-07T15:45:26.069Z [DEBUG] Using git SHA for github@claude-plugins-official: b97f6eadd929
+2026-01-07T15:45:26.071Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: b97f6eadd929
+2026-01-07T15:45:26.413Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:45:26.648Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (34.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:26.648Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:26.816Z [DEBUG] Using cached install counts
+2026-01-07T15:45:27.286Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2026-01-07T15:45:27.286Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:45:27.286Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:45:28.701Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2026-01-07T15:45:28.701Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:45:28.701Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:45:28.899Z [ERROR] Error: Error: 1P event logging: 57 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:45:28.900Z [ERROR] Error: Error: {"stack":"Error: Failed to export 57 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 57 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:45:29.721Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:29.721Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:32.785Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (58.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:32.785Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:33.997Z [ERROR] Error: Error: 1P event logging: 5 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:45:33.997Z [ERROR] Error: Error: {"stack":"Error: Failed to export 5 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 5 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:45:34.494Z [DEBUG] FileHistory: Added snapshot for a1865311-9cd9-44b7-bf78-6b8ad9c6c252, tracking 0 files
+2026-01-07T15:45:34.501Z [DEBUG] UserCommandMessage rendering: "plugin" (args: "none")
+2026-01-07T15:45:34.501Z [DEBUG] isSkillFormat: false
+2026-01-07T15:45:34.524Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:45:35.839Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (46.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:35.839Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:38.930Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (86.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:38.930Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:39.537Z [ERROR] Error: Error: 1P event logging: 4 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:45:39.537Z [ERROR] Error: Error: {"stack":"Error: Failed to export 4 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 4 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:45:42.004Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:42.005Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:45.073Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:45.073Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:48.141Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:48.141Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:51.218Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:51.218Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:54.290Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:54.290Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:45:57.368Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (72.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:45:57.368Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:00.444Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (71.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:00.444Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:03.510Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:03.511Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:06.578Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:06.578Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:09.650Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:09.651Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:12.731Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (77.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:12.735Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:15.815Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (60.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:15.815Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:18.874Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (54.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:18.874Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:20.839Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-07T15:46:20.840Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-07T15:46:20.840Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-07T15:46:20.840Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-07T15:46:20.867Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-01-07T15:46:20.867Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:46:20.867Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:46:20.869Z [DEBUG] FileHistory: Making snapshot for message e6993212-174e-41f7-906d-e6974a9bc571
+2026-01-07T15:46:20.870Z [DEBUG] FileHistory: Added snapshot for e6993212-174e-41f7-906d-e6974a9bc571, tracking 0 files
+2026-01-07T15:46:20.886Z [DEBUG] Total plugin output styles loaded: 0
+2026-01-07T15:46:21.926Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (49.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:21.927Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:22.264Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:46:24.981Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (49.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:24.981Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:26.079Z [ERROR] Error: Error: 1P event logging: 18 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:46:26.079Z [ERROR] Error: Error: {"stack":"Error: Failed to export 18 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 18 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:46:28.050Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:28.050Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:31.110Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:31.110Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:34.173Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (56.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:34.173Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:37.233Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (57.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:37.234Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:40.289Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:40.290Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:43.338Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (43.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:43.339Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:46.401Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (57.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:46.401Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:49.482Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:49.483Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:52.536Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (45.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:52.537Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:55.594Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (50.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:55.594Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:46:55.930Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:46:57.381Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2026-01-07T15:46:57.381Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:46:57.381Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:46:58.662Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:46:58.662Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:01.088Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:47:01.724Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (58.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:01.725Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:02.559Z [ERROR] Error: Error: 1P event logging: 6 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:02.560Z [ERROR] Error: Error: {"stack":"Error: Failed to export 6 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 6 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:04.793Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:04.793Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:04.851Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2026-01-07T15:47:04.851Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:47:04.851Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:47:07.861Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:07.861Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:10.126Z [ERROR] Error: Error: 1P event logging: 2 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:10.126Z [ERROR] Error: Error: {"stack":"Error: Failed to export 2 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 2 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:10.929Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:10.929Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:13.997Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:13.998Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:17.067Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:17.068Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:20.135Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:20.135Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:23.199Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (59.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:23.200Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:25.341Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:25.341Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 1 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:26.254Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (49.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:26.254Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:29.325Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (67.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:29.325Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:30.611Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:30.611Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 1 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:32.399Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:32.399Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:35.470Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (67.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:35.470Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:38.525Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:38.526Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:41.593Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:41.594Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:44.473Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-07T15:47:44.473Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-07T15:47:44.473Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-07T15:47:44.473Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-07T15:47:44.488Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-01-07T15:47:44.488Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:47:44.488Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:47:44.489Z [DEBUG] FileHistory: Making snapshot for message bcdf41b2-bc8f-4da4-a265-03fbc92dd8a1
+2026-01-07T15:47:44.490Z [DEBUG] FileHistory: Added snapshot for bcdf41b2-bc8f-4da4-a265-03fbc92dd8a1, tracking 0 files
+2026-01-07T15:47:44.644Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (45.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:44.644Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:46.587Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:47:47.711Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:47.712Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:48.394Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:47:49.708Z [ERROR] Error: Error: 1P event logging: 17 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:49.708Z [ERROR] Error: Error: {"stack":"Error: Failed to export 17 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 17 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:50.761Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (45.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:50.761Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:51.383Z [DEBUG] executePreToolHooks called for tool: WebFetch
+2026-01-07T15:47:51.389Z [DEBUG] Getting matching hook commands for PreToolUse with query: WebFetch
+2026-01-07T15:47:51.389Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:47:51.389Z [DEBUG] Matched 0 unique hooks for query "WebFetch" (0 before deduplication)
+2026-01-07T15:47:51.413Z [DEBUG] executePermissionRequestHooks called for tool: WebFetch
+2026-01-07T15:47:51.420Z [DEBUG] Getting matching hook commands for PermissionRequest with query: WebFetch
+2026-01-07T15:47:51.420Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:47:51.420Z [DEBUG] Matched 0 unique hooks for query "WebFetch" (0 before deduplication)
+2026-01-07T15:47:53.834Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (67.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:53.834Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:56.377Z [DEBUG] Persisting permission update: addRules to source 'localSettings'
+2026-01-07T15:47:56.377Z [DEBUG] Persisting 1 allow rule(s) to localSettings
+2026-01-07T15:47:56.380Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/code/cred/payments/.claude/settings.local.json.tmp.42816.1767800876380
+2026-01-07T15:47:56.380Z [DEBUG] Preserving file permissions: 100600
+2026-01-07T15:47:56.386Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (6.3ms)
+2026-01-07T15:47:56.386Z [DEBUG] Temp file written successfully, size: 484 bytes
+2026-01-07T15:47:56.387Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:47:56.387Z [DEBUG] Renaming /Users/kiranbiliyawala/code/cred/payments/.claude/settings.local.json.tmp.42816.1767800876380 to /Users/kiranbiliyawala/code/cred/payments/.claude/settings.local.json
+2026-01-07T15:47:56.387Z [DEBUG] File /Users/kiranbiliyawala/code/cred/payments/.claude/settings.local.json written atomically
+2026-01-07T15:47:56.398Z [DEBUG] Applying permission update: Adding 1 allow rule(s) to destination 'localSettings': ["WebFetch(domain:github.com)"]
+2026-01-07T15:47:56.425Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:47:56.640Z [ERROR] Error: Error: 1P event logging: 14 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:56.640Z [ERROR] Error: Error: {"stack":"Error: Failed to export 14 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 14 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:47:56.865Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (28.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:56.865Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:47:59.919Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:47:59.919Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:00.133Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:48:02.274Z [DEBUG] Getting matching hook commands for PostToolUse with query: WebFetch
+2026-01-07T15:48:02.274Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:48:02.274Z [DEBUG] Matched 0 unique hooks for query "WebFetch" (0 before deduplication)
+2026-01-07T15:48:02.290Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-07T15:48:02.290Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-07T15:48:02.290Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-07T15:48:02.290Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-07T15:48:02.662Z [ERROR] Error: Error: 1P event logging: 15 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:48:02.662Z [ERROR] Error: Error: {"stack":"Error: Failed to export 15 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 15 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:48:02.989Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:02.989Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:05.347Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:48:06.045Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:06.045Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:09.108Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (59.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:09.108Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:12.177Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:12.178Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:13.633Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2026-01-07T15:48:13.635Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2026-01-07T15:48:13.733Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2026-01-07T15:48:13.733Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:48:13.733Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:48:15.254Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:15.254Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:17.183Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:48:18.323Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:18.323Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:18.920Z [ERROR] Error: Error: 1P event logging: 6 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:48:18.921Z [ERROR] Error: Error: {"stack":"Error: Failed to export 6 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 6 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:48:19.003Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2026-01-07T15:48:19.003Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:48:19.003Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:48:21.395Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:21.395Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:24.182Z [ERROR] Error: Error: 1P event logging: 2 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:48:24.182Z [ERROR] Error: Error: {"stack":"Error: Failed to export 2 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 2 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:48:24.464Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (66.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:24.464Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:27.537Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:27.537Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:30.611Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:30.611Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:33.680Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:33.680Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:36.730Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (46.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:36.730Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:39.803Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:39.803Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:42.877Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:42.877Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:45.948Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (66.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:45.948Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:49.012Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:49.012Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:52.086Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:52.086Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:55.154Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:55.155Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:55.579Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-07T15:48:55.580Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-07T15:48:55.580Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-07T15:48:55.580Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-07T15:48:55.597Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-01-07T15:48:55.597Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:48:55.597Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:48:55.598Z [DEBUG] FileHistory: Making snapshot for message 32a8a650-6240-41fa-8ea5-286c755c3b14
+2026-01-07T15:48:55.599Z [DEBUG] FileHistory: Added snapshot for 32a8a650-6240-41fa-8ea5-286c755c3b14, tracking 0 files
+2026-01-07T15:48:57.853Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:48:58.211Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:48:58.211Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:48:59.611Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:00.820Z [ERROR] Error: Error: 1P event logging: 17 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:00.821Z [ERROR] Error: Error: {"stack":"Error: Failed to export 17 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 17 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:01.256Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (39.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:01.257Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:03.376Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-01-07T15:49:03.383Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-01-07T15:49:03.383Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:03.383Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:03.393Z [DEBUG] tree-sitter: WASM files not found
+2026-01-07T15:49:04.290Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (30.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:04.290Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:04.908Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:05.057Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:05.759Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:05.795Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "bun:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2026-01-07T15:49:05.811Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-01-07T15:49:05.821Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-01-07T15:49:05.821Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:05.821Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:07.360Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:07.360Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:08.576Z [ERROR] Error: Error: 1P event logging: 33 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:08.576Z [ERROR] Error: Error: {"stack":"Error: Failed to export 33 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 33 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:10.419Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (55.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:10.419Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:11.397Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:49:11.400Z [DEBUG] No session environment scripts found
+2026-01-07T15:49:11.877Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-01-07T15:49:11.877Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:11.877Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:11.882Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-01-07T15:49:11.888Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-01-07T15:49:11.888Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:11.888Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:12.846Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:13.094Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:13.275Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:13.469Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (47.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:13.470Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:13.498Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:13.534Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "tmux -V:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2026-01-07T15:49:13.548Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-01-07T15:49:13.555Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-01-07T15:49:13.555Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:13.555Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:15.431Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:49:15.686Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-01-07T15:49:15.686Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:15.686Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:15.690Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-01-07T15:49:15.696Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-01-07T15:49:15.696Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:15.696Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:16.469Z [ERROR] Error: Error: 1P event logging: 62 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:16.470Z [ERROR] Error: Error: {"stack":"Error: Failed to export 62 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 62 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:16.521Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (45.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:16.521Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:16.675Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:17.246Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:17.282Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "echo:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2026-01-07T15:49:17.298Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-01-07T15:49:17.306Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-01-07T15:49:17.306Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:17.306Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:19.582Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (56.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:19.582Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:20.790Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:49:21.131Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-01-07T15:49:21.131Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:21.131Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:21.138Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-07T15:49:21.138Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-07T15:49:21.138Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-07T15:49:21.138Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-07T15:49:22.071Z [ERROR] Error: Error: 1P event logging: 34 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:22.071Z [ERROR] Error: Error: {"stack":"Error: Failed to export 34 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 34 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:22.641Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (54.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:22.641Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:22.642Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:24.956Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:25.701Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (56.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:25.702Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:27.845Z [ERROR] Error: Error: 1P event logging: 2 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:27.845Z [ERROR] Error: Error: {"stack":"Error: Failed to export 2 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 2 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:28.764Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (56.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:28.764Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:28.855Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2026-01-07T15:49:28.855Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:28.855Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:49:31.860Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:31.860Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:32.602Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:34.042Z [ERROR] Error: Error: 1P event logging: 6 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:34.042Z [ERROR] Error: Error: {"stack":"Error: Failed to export 6 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 6 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:34.576Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2026-01-07T15:49:34.576Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:34.576Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:49:34.935Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:34.936Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:37.993Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:37.994Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:38.140Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-07T15:49:38.140Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-07T15:49:38.140Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-07T15:49:38.140Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-07T15:49:38.159Z [DEBUG] Getting matching hook commands for UserPromptSubmit with query: undefined
+2026-01-07T15:49:38.159Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:38.159Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:49:38.160Z [DEBUG] FileHistory: Making snapshot for message b8237f4d-367c-44a7-9b9c-666d065f7217
+2026-01-07T15:49:38.161Z [DEBUG] FileHistory: Added snapshot for b8237f4d-367c-44a7-9b9c-666d065f7217, tracking 0 files
+2026-01-07T15:49:39.560Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:39.816Z [ERROR] Error: Error: 1P event logging: 19 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:39.816Z [ERROR] Error: Error: {"stack":"Error: Failed to export 19 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 19 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:41.062Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:41.063Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:41.992Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:43.816Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-01-07T15:49:43.823Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-01-07T15:49:43.823Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:43.823Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:44.096Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (28.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:44.096Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:44.877Z [ERROR] Error: Error: 1P event logging: 8 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:44.877Z [ERROR] Error: Error: {"stack":"Error: Failed to export 8 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 8 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:45.998Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:49:46.034Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "brew install:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2026-01-07T15:49:46.054Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-01-07T15:49:46.071Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-01-07T15:49:46.071Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:49:46.071Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:49:47.162Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:47.162Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:49.820Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:49:50.199Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (32.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:50.199Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:51.231Z [ERROR] Error: Error: 1P event logging: 17 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:51.231Z [ERROR] Error: Error: {"stack":"Error: Failed to export 17 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 17 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:53.243Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (39.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:53.243Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:56.284Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (39.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:56.284Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:49:57.009Z [ERROR] Error: Error: 1P event logging: 10 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:57.009Z [ERROR] Error: Error: {"stack":"Error: Failed to export 10 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 10 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:49:59.325Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (35.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:49:59.325Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:02.264Z [ERROR] Error: Error: 1P event logging: 12 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:02.264Z [ERROR] Error: Error: {"stack":"Error: Failed to export 12 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 12 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:02.358Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (28.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:02.359Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:04.361Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801004361
+2026-01-07T15:50:04.361Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:50:04.365Z [DEBUG] Temp file written successfully, size: 81154 bytes
+2026-01-07T15:50:04.366Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:50:04.366Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801004361 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:50:04.368Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:50:04.371Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801004371
+2026-01-07T15:50:04.371Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:50:04.374Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:50:04.374Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:50:04.374Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801004371 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:50:04.374Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:50:05.392Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (30.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:05.392Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:07.985Z [ERROR] Error: Error: 1P event logging: 10 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:07.985Z [ERROR] Error: Error: {"stack":"Error: Failed to export 10 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 10 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:08.425Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (29.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:08.425Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:11.467Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (40.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:11.467Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:13.047Z [ERROR] Error: Error: 1P event logging: 12 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:13.048Z [ERROR] Error: Error: {"stack":"Error: Failed to export 12 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 12 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:14.510Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (40.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:14.510Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:16.265Z [DEBUG] UserCommandMessage rendering: "plugin" (args: "none")
+2026-01-07T15:50:16.265Z [DEBUG] isSkillFormat: false
+2026-01-07T15:50:16.269Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2026-01-07T15:50:16.269Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2026-01-07T15:50:16.296Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801016296
+2026-01-07T15:50:16.296Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:50:16.301Z [DEBUG] Temp file written successfully, size: 81154 bytes
+2026-01-07T15:50:16.301Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:50:16.301Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801016296 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:50:16.302Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:50:16.311Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801016311
+2026-01-07T15:50:16.311Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:50:16.314Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:50:16.314Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:50:16.314Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801016311 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:50:16.314Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:50:16.314Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:50:16.882Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-01-07T15:50:16.882Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:50:16.882Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:50:16.887Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-01-07T15:50:16.893Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-01-07T15:50:16.893Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:50:16.893Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:50:17.055Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801017055
+2026-01-07T15:50:17.056Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:50:17.064Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (8.8ms)
+2026-01-07T15:50:17.064Z [DEBUG] Temp file written successfully, size: 81154 bytes
+2026-01-07T15:50:17.064Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:50:17.064Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801017055 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:50:17.065Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:50:17.068Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801017068
+2026-01-07T15:50:17.068Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:50:17.071Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:50:17.071Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:50:17.071Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801017068 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:50:17.072Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:50:17.569Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (56.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:17.569Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:18.638Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:50:19.127Z [ERROR] Error: Error: 1P event logging: 24 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:19.127Z [ERROR] Error: Error: {"stack":"Error: Failed to export 24 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 24 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:19.641Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:50:19.667Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "brew install:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2026-01-07T15:50:19.675Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-01-07T15:50:19.676Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-01-07T15:50:19.676Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:50:19.676Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:50:20.630Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (57.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:20.630Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:23.543Z [DEBUG] Metrics opt-out check failed: No API key available
+2026-01-07T15:50:23.543Z [DEBUG] Metrics check failed, defaulting to disabled
+2026-01-07T15:50:23.543Z [DEBUG] Metrics export disabled by organization setting
+2026-01-07T15:50:23.671Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (37.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:23.672Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:24.323Z [ERROR] Error: Error: 1P event logging: 4 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:24.323Z [ERROR] Error: Error: {"stack":"Error: Failed to export 4 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 4 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:50:26.741Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:26.741Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:29.816Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (70.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:29.816Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:32.884Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:32.884Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:35.959Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:35.959Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:39.033Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:39.033Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:42.101Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:42.101Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:45.165Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (59.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:45.165Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:48.236Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:48.237Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:51.304Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:51.305Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:54.378Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:54.379Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:50:57.443Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (60.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:50:57.443Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:00.505Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (58.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:00.505Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:03.569Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (58.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:03.569Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:06.639Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (66.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:06.639Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:09.708Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:09.708Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:12.774Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (60.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:12.774Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:15.834Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (54.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:15.834Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:18.903Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:18.903Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:21.964Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (57.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:21.965Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:25.021Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:25.021Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:28.095Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:28.095Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:31.162Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:31.162Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:34.232Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (66.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:34.232Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:37.314Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (77.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:37.314Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:40.384Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:40.384Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:43.466Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (77.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:43.466Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:46.531Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (60.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:46.531Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:49.594Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (58.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:49.594Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:52.673Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (74.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:52.673Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:55.741Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:55.741Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:51:58.819Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (73.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:51:58.819Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:01.908Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (83.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:01.908Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:04.964Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:04.964Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:08.031Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:08.031Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:11.107Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (71.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:11.107Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:14.173Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:14.173Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:17.239Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:17.240Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:20.310Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:20.310Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:23.379Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:23.379Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:26.449Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (63.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:26.449Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:29.493Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (39.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:29.493Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:32.563Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (66.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:32.563Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:35.644Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (76.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:35.645Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:38.712Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (55.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:38.712Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:41.790Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (74.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:41.790Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:44.857Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:44.857Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:47.926Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:47.926Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:50.969Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (38.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:50.969Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:54.012Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (41.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:54.012Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:52:55.019Z [DEBUG] [SLOW OPERATION DETECTED] fs.appendFileSync (5.5ms)
+2026-01-07T15:52:57.060Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (45.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:52:57.060Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:00.132Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:00.133Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:01.394Z [DEBUG] UserCommandMessage rendering: "plugin" (args: "none")
+2026-01-07T15:53:01.394Z [DEBUG] isSkillFormat: false
+2026-01-07T15:53:01.400Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2026-01-07T15:53:01.400Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2026-01-07T15:53:01.434Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801181434
+2026-01-07T15:53:01.434Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:53:01.443Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (9.4ms)
+2026-01-07T15:53:01.443Z [DEBUG] Temp file written successfully, size: 81154 bytes
+2026-01-07T15:53:01.444Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:53:01.444Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801181434 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:53:01.444Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:53:01.455Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801181455
+2026-01-07T15:53:01.455Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:53:01.459Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:53:01.459Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:53:01.459Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801181455 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:53:01.459Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:53:01.477Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (6.6ms)
+2026-01-07T15:53:03.209Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (71.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:03.209Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:03.926Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:53:06.251Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (38.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:06.251Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:06.951Z [ERROR] Error: Error: 1P event logging: 23 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:06.951Z [ERROR] Error: Error: {"stack":"Error: Failed to export 23 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 23 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:09.305Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (50.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:09.306Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:10.388Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801190388
+2026-01-07T15:53:10.388Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:53:10.406Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (17.6ms)
+2026-01-07T15:53:10.406Z [DEBUG] Temp file written successfully, size: 81154 bytes
+2026-01-07T15:53:10.406Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:53:10.406Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801190388 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:53:10.406Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:53:10.408Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801190408
+2026-01-07T15:53:10.408Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:53:10.412Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:53:10.412Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:53:10.412Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801190408 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:53:10.412Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:53:12.176Z [ERROR] Error: Error: 1P event logging: 12 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:12.176Z [ERROR] Error: Error: {"stack":"Error: Failed to export 12 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 12 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:12.347Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (33.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:12.347Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:15.384Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (33.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:15.384Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:18.022Z [ERROR] Error: Error: 1P event logging: 10 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:18.022Z [ERROR] Error: Error: {"stack":"Error: Failed to export 10 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 10 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:18.415Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (28.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:18.415Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:18.889Z [DEBUG] UserCommandMessage rendering: "plugin" (args: "none")
+2026-01-07T15:53:18.889Z [DEBUG] isSkillFormat: false
+2026-01-07T15:53:18.891Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2026-01-07T15:53:18.891Z [DEBUG] Language not supported while highlighting code, falling back to markdown:
+2026-01-07T15:53:18.913Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801198913
+2026-01-07T15:53:18.913Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:53:18.919Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (5.8ms)
+2026-01-07T15:53:18.919Z [DEBUG] Temp file written successfully, size: 81154 bytes
+2026-01-07T15:53:18.919Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:53:18.919Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801198913 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:53:18.919Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:53:18.926Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801198926
+2026-01-07T15:53:18.926Z [DEBUG] Preserving file permissions: 100644
+2026-01-07T15:53:18.930Z [DEBUG] Temp file written successfully, size: 81227 bytes
+2026-01-07T15:53:18.930Z [DEBUG] Applied original permissions to temp file
+2026-01-07T15:53:18.930Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.42816.1767801198926 to /Users/kiranbiliyawala/.claude.json
+2026-01-07T15:53:18.930Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-07T15:53:18.932Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:53:21.441Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (23.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:21.441Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:23.300Z [ERROR] Error: Error: 1P event logging: 15 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:23.300Z [ERROR] Error: Error: {"stack":"Error: Failed to export 15 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 15 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:24.473Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (29.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:24.473Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:27.525Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (45.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:27.525Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:27.648Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-01-07T15:53:27.648Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:53:27.648Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:53:27.658Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-07T15:53:27.658Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-07T15:53:27.658Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-07T15:53:27.658Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-07T15:53:28.753Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:53:29.296Z [ERROR] Error: Error: 1P event logging: 24 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:29.296Z [ERROR] Error: Error: {"stack":"Error: Failed to export 24 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 24 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:30.592Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:30.592Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:31.599Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:53:32.905Z [DEBUG] executePreToolHooks called for tool: Bash
+2026-01-07T15:53:32.908Z [DEBUG] Getting matching hook commands for PreToolUse with query: Bash
+2026-01-07T15:53:32.908Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:53:32.908Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:53:33.630Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (32.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:33.630Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:34.498Z [ERROR] Error: Error: 1P event logging: 9 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:34.498Z [ERROR] Error: Error: {"stack":"Error: Failed to export 9 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 9 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:34.675Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:53:34.774Z [DEBUG] Permission suggestions for Bash: [
+  {
+    "type": "addRules",
+    "rules": [
+      {
+        "toolName": "Bash",
+        "ruleContent": "bun:*"
+      },
+      {
+        "toolName": "Bash",
+        "ruleContent": "tmux -V:*"
+      }
+    ],
+    "behavior": "allow",
+    "destination": "localSettings"
+  }
+]
+2026-01-07T15:53:34.786Z [DEBUG] executePermissionRequestHooks called for tool: Bash
+2026-01-07T15:53:34.799Z [DEBUG] Getting matching hook commands for PermissionRequest with query: Bash
+2026-01-07T15:53:34.799Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:53:34.799Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:53:36.682Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (49.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:36.682Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:39.248Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-07T15:53:39.716Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (30.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:39.716Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:39.965Z [ERROR] Error: Error: 1P event logging: 17 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:39.965Z [ERROR] Error: Error: {"stack":"Error: Failed to export 17 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 17 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:41.020Z [DEBUG] Getting matching hook commands for PostToolUse with query: Bash
+2026-01-07T15:53:41.020Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:53:41.020Z [DEBUG] Matched 0 unique hooks for query "Bash" (0 before deduplication)
+2026-01-07T15:53:41.027Z [DEBUG] LSP Diagnostics: getLSPDiagnosticAttachments called
+2026-01-07T15:53:41.027Z [DEBUG] LSP Diagnostics: Checking registry - 0 pending
+2026-01-07T15:53:41.027Z [DEBUG] Hooks: Found 0 total hooks in registry
+2026-01-07T15:53:41.027Z [DEBUG] Hooks: checkForNewResponses returning 0 responses
+2026-01-07T15:53:42.646Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:53:42.770Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:42.770Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:44.894Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:53:45.816Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (42.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:45.816Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:46.208Z [ERROR] Error: Error: 1P event logging: 22 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:46.209Z [ERROR] Error: Error: {"stack":"Error: Failed to export 22 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 22 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:48.550Z [DEBUG] Getting matching hook commands for Stop with query: undefined
+2026-01-07T15:53:48.550Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:53:48.550Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:53:48.871Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:48.871Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:51.942Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:51.942Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:52.298Z [DEBUG] Stream started - received first chunk
+2026-01-07T15:53:53.772Z [ERROR] Error: Error: 1P event logging: 6 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:53.772Z [ERROR] Error: Error: {"stack":"Error: Failed to export 6 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 6 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:53:55.008Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (60.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:55.008Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:58.076Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:53:58.076Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:53:58.095Z [DEBUG] Getting matching hook commands for SubagentStop with query: undefined
+2026-01-07T15:53:58.095Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:53:58.095Z [DEBUG] Matched 0 unique hooks for query "no match query" (0 before deduplication)
+2026-01-07T15:54:01.156Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:01.156Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:03.318Z [ERROR] Error: Error: 1P event logging: 2 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:54:03.318Z [ERROR] Error: Error: {"stack":"Error: Failed to export 2 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 2 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-07T15:54:04.237Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (78.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:04.237Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:07.303Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (60.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:07.303Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:10.375Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:10.375Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:13.451Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (71.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:13.451Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:16.509Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (53.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:16.509Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:19.583Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:19.583Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:22.637Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:22.638Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:25.713Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (72.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:25.713Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:28.792Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (74.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:28.792Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:31.863Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (66.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:31.863Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:34.933Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (65.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:34.933Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:37.975Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (37.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:37.975Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:41.042Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (64.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:41.043Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:44.116Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (68.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:44.116Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:47.167Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (46.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:47.167Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:50.221Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (48.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:50.221Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:53.262Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (37.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:53.262Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:56.321Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (54.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:56.321Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:54:59.358Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (28.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:54:59.358Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:02.400Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (38.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:02.400Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:05.435Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (32.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:05.435Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:08.487Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (46.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:08.487Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:11.536Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (44.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:11.536Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:14.589Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (49.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:14.590Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:17.645Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:17.645Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:20.708Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (58.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:20.709Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:23.548Z [DEBUG] Metrics opt-out check failed: No API key available
+2026-01-07T15:55:23.548Z [DEBUG] Metrics check failed, defaulting to disabled
+2026-01-07T15:55:23.548Z [DEBUG] Metrics export disabled by organization setting
+2026-01-07T15:55:23.765Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:23.765Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:26.807Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (38.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:26.807Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:29.881Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (69.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:29.882Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:32.936Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:32.936Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:36.004Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (66.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:36.004Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:39.070Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:39.070Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:42.129Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (56.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:42.130Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:45.173Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (41.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:45.174Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:48.233Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (57.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:48.234Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:51.292Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (55.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:51.292Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:54.348Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (50.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:54.348Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:55:57.403Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (53.9ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:55:57.404Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:00.443Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (36.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:00.443Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:03.499Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:03.499Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:06.555Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:06.555Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:09.618Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (59.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:09.618Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:12.669Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (49.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:12.669Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:15.730Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (58.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:15.731Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:18.788Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (53.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:18.788Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:21.842Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:21.842Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:24.906Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:24.907Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:27.958Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (49.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:27.958Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:31.015Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (53.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:31.015Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:34.069Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:34.069Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:37.137Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (66.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:37.137Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:40.192Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (51.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:40.192Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:43.255Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (60.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:43.255Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:46.319Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:46.319Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:49.374Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.0ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:49.374Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:52.433Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (56.3ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:52.433Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:55.491Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (54.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:55.491Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:56:58.551Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (57.2ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:56:58.551Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:01.616Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:57:01.616Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:04.677Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (58.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:57:04.677Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:07.743Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (61.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:57:07.743Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:10.803Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (56.6ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:57:10.803Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:13.860Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (52.8ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:57:13.860Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:16.917Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (54.4ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:57:16.917Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:19.982Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (62.1ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:57:19.982Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:23.015Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (29.7ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:57:23.015Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:26.066Z [DEBUG] [SLOW OPERATION DETECTED] execSyncWithDefaults_DEPRECATED (48.5ms): security find-generic-password -a "kiranbiliyawala" -w -s "Claude Code-credentials"
+2026-01-07T15:57:26.067Z [DEBUG] MCP server "codelens": No token data found
+2026-01-07T15:57:27.493Z [DEBUG] Getting matching hook commands for SessionEnd with query: prompt_input_exit
+2026-01-07T15:57:27.493Z [DEBUG] Found 0 hook matchers in settings
+2026-01-07T15:57:27.493Z [DEBUG] Matched 0 unique hooks for query "prompt_input_exit" (0 before deduplication)

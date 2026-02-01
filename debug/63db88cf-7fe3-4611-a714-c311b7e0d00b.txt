@@ -1,0 +1,1329 @@
+2026-01-29T11:47:19.854Z [DEBUG] Failed to check enabledPlatforms: TypeError: yT is not a function
+2026-01-29T11:47:19.884Z [DEBUG] Watching for changes in setting files /Users/kiranbiliyawala/.claude...
+2026-01-29T11:47:19.927Z [DEBUG] [init] configureGlobalMTLS starting
+2026-01-29T11:47:19.927Z [DEBUG] [init] configureGlobalMTLS complete
+2026-01-29T11:47:19.927Z [DEBUG] [init] configureGlobalAgents starting
+2026-01-29T11:47:19.927Z [DEBUG] [init] configureGlobalAgents complete
+2026-01-29T11:47:19.931Z [DEBUG] [STARTUP] Loading MCP configs...
+2026-01-29T11:47:19.944Z [DEBUG] Loading plugin canvas from source: "./canvas"
+2026-01-29T11:47:19.944Z [DEBUG] Using provided version for canvas@claude-canvas: 0.1.0
+2026-01-29T11:47:19.945Z [DEBUG] [ToolSearch:optimistic] mode=standard, ENABLE_TOOL_SEARCH=undefined, result=false
+2026-01-29T11:47:19.945Z [DEBUG] [STARTUP] Running setup()...
+2026-01-29T11:47:19.945Z [DEBUG] Plugin canvas@claude-canvas version 0.1.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-29T11:47:19.946Z [DEBUG] Loading skills from: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/kiranbiliyawala/.claude/skills, project=[]
+2026-01-29T11:47:19.947Z [ERROR] TypeError: TypeError: Cannot read properties of undefined (reading 'safeParse')
+    at wU6 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5222:25476)
+    at ca2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5223:1314)
+    at wv (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5223:1754)
+    at yq (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5223:1683)
+    at Object.bx8 [as isPlatformInEnabledList] (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:244:2532)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4738:21551
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:848
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4875:6409
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:848
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5142:1037
+2026-01-29T11:47:19.947Z [ERROR] Error: Error: ENOENT: no such file or directory, scandir '/Library/Application Support/ClaudeCode/.claude/skills'
+    at Module.readdirSync (node:fs:1581:26)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1909
+    at BX (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:35431)
+    at Object.readdirSync (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1879)
+    at fZ1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1873:369)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1873:4509
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6814)
+    at bo2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4875:4362)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4875:6995
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6814)
+2026-01-29T11:47:19.947Z [ERROR] Error: Error: ENOENT: no such file or directory, scandir '/Users/kiranbiliyawala/.claude/skills'
+    at Module.readdirSync (node:fs:1581:26)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1909
+    at BX (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:35431)
+    at Object.readdirSync (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:9:1879)
+    at fZ1 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1873:369)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1873:4552
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6814)
+    at bo2 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4875:4362)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4875:6995
+    at q (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:8:6814)
+2026-01-29T11:47:19.947Z [DEBUG] Error log sink initialized
+2026-01-29T11:47:19.953Z [DEBUG] Using cached index entry for session: 98db0139-ff7c-44fb-9aee-79766abd487f
+2026-01-29T11:47:19.953Z [DEBUG] Using cached index entry for session: bec08cf5-1b29-4f5d-a90a-a144d1bfdac3
+2026-01-29T11:47:19.953Z [DEBUG] Copied local plugin canvas to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0
+2026-01-29T11:47:19.953Z [DEBUG] Plugin canvas has no entry.skills defined
+2026-01-29T11:47:19.964Z [DEBUG] Loading plugin code-simplifier from source: "./plugins/code-simplifier"
+2026-01-29T11:47:19.965Z [DEBUG] Using manifest version for code-simplifier@claude-plugins-official: 1.0.0
+2026-01-29T11:47:19.966Z [DEBUG] Plugin code-simplifier@claude-plugins-official version 1.0.0 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-01-29T11:47:19.967Z [DEBUG] Copied local plugin code-simplifier to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/code-simplifier/1.0.0
+2026-01-29T11:47:19.968Z [DEBUG] Loading plugin github from source: "./external_plugins/github"
+2026-01-29T11:47:19.970Z [DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, legacy commands: 0)
+2026-01-29T11:47:19.972Z [DEBUG] [Claude in Chrome] Found chrome profiles: Default
+2026-01-29T11:47:19.974Z [DEBUG] [STARTUP] setup() completed in 29ms
+2026-01-29T11:47:19.974Z [DEBUG] [STARTUP] Loading commands and agents...
+2026-01-29T11:47:19.979Z [DEBUG] [Claude in Chrome] Found arc profiles: Default, Profile 1
+2026-01-29T11:47:19.979Z [DEBUG] [Claude in Chrome] Found vivaldi profiles: Default
+2026-01-29T11:47:19.979Z [DEBUG] [Claude in Chrome] Extension not found in any browser
+2026-01-29T11:47:19.986Z [DEBUG] Using git SHA for github@claude-plugins-official: d49ad3558669
+2026-01-29T11:47:19.986Z [DEBUG] Plugin github@claude-plugins-official version d49ad3558669 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/d49ad3558669
+2026-01-29T11:47:19.986Z [DEBUG] Copied local plugin github to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/d49ad3558669
+2026-01-29T11:47:19.987Z [DEBUG] Loading plugin pr-review-toolkit from source: "./plugins/pr-review-toolkit"
+2026-01-29T11:47:20.001Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: d49ad3558669
+2026-01-29T11:47:20.001Z [DEBUG] Plugin pr-review-toolkit@claude-plugins-official version d49ad3558669 already cached at /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/d49ad3558669
+2026-01-29T11:47:20.001Z [DEBUG] Copied local plugin pr-review-toolkit to versioned cache: /Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/d49ad3558669
+2026-01-29T11:47:20.001Z [DEBUG] Found 4 plugins (4 enabled, 0 disabled)
+2026-01-29T11:47:20.001Z [DEBUG] getPluginSkills: Processing 4 enabled plugins
+2026-01-29T11:47:20.001Z [DEBUG] Checking plugin canvas: skillsPath=exists, skillsPaths=0 paths
+2026-01-29T11:47:20.001Z [DEBUG] Attempting to load skills from plugin canvas default skillsPath: /Users/kiranbiliyawala/.claude/plugins/cache/claude-canvas/canvas/0.1.0/skills
+2026-01-29T11:47:20.008Z [DEBUG] Registered 0 hooks from 4 plugins
+2026-01-29T11:47:20.008Z [DEBUG] Loaded 4 skills from plugin canvas default directory
+2026-01-29T11:47:20.008Z [DEBUG] Checking plugin code-simplifier: skillsPath=none, skillsPaths=0 paths
+2026-01-29T11:47:20.008Z [DEBUG] Checking plugin github: skillsPath=none, skillsPaths=0 paths
+2026-01-29T11:47:20.008Z [DEBUG] Checking plugin pr-review-toolkit: skillsPath=none, skillsPaths=0 paths
+2026-01-29T11:47:20.008Z [DEBUG] Total plugin skills loaded: 4
+2026-01-29T11:47:20.008Z [DEBUG] Loaded 1 commands from plugin canvas default directory
+2026-01-29T11:47:20.009Z [DEBUG] Loaded 1 commands from plugin pr-review-toolkit default directory
+2026-01-29T11:47:20.009Z [DEBUG] Total plugin commands loaded: 2
+2026-01-29T11:47:20.010Z [DEBUG] getSkills returning: 0 skill dir commands, 4 plugin skills, 1 bundled skills
+2026-01-29T11:47:20.010Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-29T11:47:20.011Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at cZA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1631:27769)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-01-29T11:47:20.013Z [DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+2026-01-29T11:47:20.018Z [DEBUG] Loaded 1 agents from plugin code-simplifier default directory
+2026-01-29T11:47:20.022Z [DEBUG] Loaded 6 agents from plugin pr-review-toolkit default directory
+2026-01-29T11:47:20.022Z [DEBUG] Total plugin agents loaded: 7
+2026-01-29T11:47:20.022Z [DEBUG] [STARTUP] Commands and agents loaded in 48ms
+2026-01-29T11:47:20.022Z [DEBUG] [STARTUP] Running showSetupScreens()...
+2026-01-29T11:47:20.023Z [DEBUG] [render] initLayout starting
+2026-01-29T11:47:20.023Z [DEBUG] Layout engine: yoga
+2026-01-29T11:47:20.030Z [DEBUG] [render] initLayout complete
+2026-01-29T11:47:20.031Z [DEBUG] [render] first ink render: 645ms since process start
+2026-01-29T11:47:20.034Z [DEBUG] [keybindings] KeybindingSetup initialized with 99 bindings, 0 warnings
+2026-01-29T11:47:20.050Z [DEBUG] [Perfetto] initializePerfettoTracing called, env value: undefined
+2026-01-29T11:47:20.051Z [DEBUG] [STARTUP] showSetupScreens() completed in 29ms
+2026-01-29T11:47:20.051Z [DEBUG] [LSP MANAGER] initializeLspServerManager() called
+2026-01-29T11:47:20.051Z [DEBUG] [LSP MANAGER] Created manager instance, state=pending
+2026-01-29T11:47:20.051Z [DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+2026-01-29T11:47:20.052Z [DEBUG] [STARTUP] MCP configs loaded in 121ms
+2026-01-29T11:47:20.054Z [DEBUG] MCP server "gemini-collab": Starting connection with timeout of 30000ms
+2026-01-29T11:47:20.057Z [DEBUG] MCP server "mcp-atlassian": Starting connection with timeout of 30000ms
+2026-01-29T11:47:20.059Z [DEBUG] MCP server "firecrawl": Starting connection with timeout of 30000ms
+2026-01-29T11:47:20.063Z [DEBUG] MCP server "plugin:github:github": Initializing HTTP transport to https://api.githubcopilot.com/mcp/
+2026-01-29T11:47:20.063Z [DEBUG] MCP server "plugin:github:github": Node version: v23.9.0, Platform: darwin
+2026-01-29T11:47:20.063Z [DEBUG] MCP server "plugin:github:github": Environment: {"NODE_OPTIONS":"not set","UV_THREADPOOL_SIZE":"default","HTTP_PROXY":"not set","HTTPS_PROXY":"not set","NO_PROXY":"not set"}
+2026-01-29T11:47:20.069Z [DEBUG] All plugins already exist, skipping migration
+2026-01-29T11:47:20.070Z [DEBUG] [Reconnection] computeInitialTeamContext: No teammate context set (not a teammate)
+2026-01-29T11:47:20.072Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240072
+2026-01-29T11:47:20.072Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T11:47:20.072Z [DEBUG] Temp file written successfully, size: 43770 bytes
+2026-01-29T11:47:20.072Z [DEBUG] Applied original permissions to temp file
+2026-01-29T11:47:20.072Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240072 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T11:47:20.072Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T11:47:20.076Z [DEBUG] Loaded 4 installed plugins from /Users/kiranbiliyawala/.claude/plugins/installed_plugins.json
+2026-01-29T11:47:20.076Z [DEBUG] Initialized versioned plugins system with 4 plugins
+2026-01-29T11:47:20.076Z [DEBUG] Getting matching hook commands for SessionStart with query: startup
+2026-01-29T11:47:20.076Z [DEBUG] Found 0 hook matchers in settings
+2026-01-29T11:47:20.076Z [DEBUG] Matched 0 unique hooks for query "startup" (0 before deduplication)
+2026-01-29T11:47:20.076Z [DEBUG] MCP server "plugin:github:github": Proxy options: default
+2026-01-29T11:47:20.076Z [DEBUG] MCP server "plugin:github:github": HTTP transport options: {"url":"https://api.githubcopilot.com/mcp/","headers":{"User-Agent":"claude-code/2.1.23","Authorization":"[REDACTED]"},"hasAuthProvider":true,"timeoutMs":60000}
+2026-01-29T11:47:20.077Z [DEBUG] MCP server "plugin:github:github": HTTP transport created successfully
+2026-01-29T11:47:20.077Z [DEBUG] MCP server "plugin:github:github": Client created, setting up request handler
+2026-01-29T11:47:20.077Z [DEBUG] MCP server "plugin:github:github": Starting connection with timeout of 30000ms
+2026-01-29T11:47:20.077Z [DEBUG] MCP server "plugin:github:github": Testing basic HTTP connectivity to https://api.githubcopilot.com/mcp/
+2026-01-29T11:47:20.077Z [DEBUG] MCP server "plugin:github:github": Parsed URL: host=api.githubcopilot.com, port=default, protocol=https:
+2026-01-29T11:47:20.077Z [DEBUG] MCP server "codelens": SSE transport initialized, awaiting connection
+2026-01-29T11:47:20.078Z [DEBUG] MCP server "codelens": Starting connection with timeout of 30000ms
+2026-01-29T11:47:20.189Z [DEBUG] MCP server "codelens": No token data found
+2026-01-29T11:47:20.192Z [DEBUG] MCP server "plugin:github:github": No token data found
+2026-01-29T11:47:20.192Z [DEBUG] MCP server "codelens": No token data found
+2026-01-29T11:47:20.192Z [DEBUG] [render] initLayout starting
+2026-01-29T11:47:20.193Z [DEBUG] [render] initLayout complete
+2026-01-29T11:47:20.193Z [DEBUG] [render] first ink render: 807ms since process start
+2026-01-29T11:47:20.200Z [DEBUG] [keybindings] Watching for changes to /Users/kiranbiliyawala/.claude/keybindings.json
+2026-01-29T11:47:20.200Z [DEBUG] MCP server "codelens": SSE Connection failed after 136ms: {"url":"http://codelens-mcp-server.central.dreamplug.net/sse","error":"SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net","errorType":"ZJ7","stack":"Error: SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net\n    at _eventSource.onerror (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1578:26035)\n    at HZA.vW6 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1578:5571)\n    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1578:2987\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"}
+2026-01-29T11:47:20.201Z [ERROR] MCP server "codelens" Error: SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net
+2026-01-29T11:47:20.201Z [DEBUG] MCP server "codelens": Connection failed after 137ms: SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net
+2026-01-29T11:47:20.201Z [ERROR] MCP server "codelens" Connection failed: SSE error: TypeError: fetch failed: getaddrinfo ENOTFOUND codelens-mcp-server.central.dreamplug.net
+2026-01-29T11:47:20.211Z [DEBUG] Git remote URL: null
+2026-01-29T11:47:20.211Z [DEBUG] No git remote URL found
+2026-01-29T11:47:20.211Z [DEBUG] Not in a GitHub repository, skipping path mapping update
+2026-01-29T11:47:20.245Z [DEBUG] [keybindings] KeybindingSetup initialized with 99 bindings, 0 warnings
+2026-01-29T11:47:20.285Z [DEBUG] High write ratio: blit=0, write=1633 (100.0% writes), screen=19x245
+2026-01-29T11:47:20.302Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240302
+2026-01-29T11:47:20.302Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T11:47:20.302Z [DEBUG] Temp file written successfully, size: 43770 bytes
+2026-01-29T11:47:20.302Z [DEBUG] Applied original permissions to temp file
+2026-01-29T11:47:20.302Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240302 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T11:47:20.302Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T11:47:20.305Z [DEBUG] [REPL:mount] REPL mounted, disabled=false
+2026-01-29T11:47:20.306Z [DEBUG] Official marketplace auto-install skipped: already_attempted
+2026-01-29T11:47:20.307Z [DEBUG] performStartupChecks called
+2026-01-29T11:47:20.307Z [DEBUG] Starting background plugin installations
+2026-01-29T11:47:20.307Z [DEBUG] performBackgroundPluginInstallations called
+2026-01-29T11:47:20.308Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-29T11:47:20.311Z [DEBUG] Found 4 enabled plugins
+2026-01-29T11:47:20.311Z [DEBUG] All plugins already exist, skipping migration
+2026-01-29T11:47:20.311Z [DEBUG] Found 4 installed plugins (V2 format)
+2026-01-29T11:47:20.311Z [DEBUG] Loaded plugins - Enabled: 4, Disabled: 0, Commands: 2, Agents: 7, Errors: 0
+2026-01-29T11:47:20.311Z [DEBUG] Found 0 missing plugins (not installed):
+2026-01-29T11:47:20.311Z [DEBUG] Setting installation status: 0 marketplaces, 0 installable plugins, 0 uninstallable plugins
+2026-01-29T11:47:20.312Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-29T11:47:20.312Z [WARN] Missing environment variables in plugin MCP config: GITHUB_PERSONAL_ACCESS_TOKEN
+2026-01-29T11:47:20.312Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at cZA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1631:27769)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async W (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4248:16262)
+2026-01-29T11:47:20.312Z [ERROR] Error: Error: Plugin MCP server error - mcp-config-invalid: MCP server github invalid: Missing environment variables: GITHUB_PERSONAL_ACCESS_TOKEN
+    at cZA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1631:27769)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async D (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:4248:16778)
+2026-01-29T11:47:20.313Z [DEBUG] [claudeai-mcp] Checking gate (cached)...
+2026-01-29T11:47:20.313Z [DEBUG] [claudeai-mcp] Gate returned: false
+2026-01-29T11:47:20.313Z [DEBUG] [claudeai-mcp] Disabled via gate
+2026-01-29T11:47:20.314Z [DEBUG] Total LSP servers loaded: 0
+2026-01-29T11:47:20.314Z [DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+2026-01-29T11:47:20.314Z [DEBUG] LSP manager initialized with 0 servers
+2026-01-29T11:47:20.314Z [DEBUG] LSP server manager initialized successfully
+2026-01-29T11:47:20.314Z [DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+2026-01-29T11:47:20.350Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240350
+2026-01-29T11:47:20.350Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T11:47:20.350Z [DEBUG] Temp file written successfully, size: 43770 bytes
+2026-01-29T11:47:20.350Z [DEBUG] Applied original permissions to temp file
+2026-01-29T11:47:20.350Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240350 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T11:47:20.350Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T11:47:20.358Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240358
+2026-01-29T11:47:20.358Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T11:47:20.358Z [DEBUG] Temp file written successfully, size: 43770 bytes
+2026-01-29T11:47:20.358Z [DEBUG] Applied original permissions to temp file
+2026-01-29T11:47:20.358Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240358 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T11:47:20.358Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T11:47:20.416Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240416
+2026-01-29T11:47:20.416Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T11:47:20.416Z [DEBUG] Temp file written successfully, size: 43770 bytes
+2026-01-29T11:47:20.416Z [DEBUG] Applied original permissions to temp file
+2026-01-29T11:47:20.416Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687240416 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T11:47:20.416Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T11:47:20.699Z [DEBUG] MCP server "gemini-collab": Successfully connected to stdio server in 647ms
+2026-01-29T11:47:20.699Z [DEBUG] MCP server "gemini-collab": Connection established with capabilities: {"hasTools":true,"hasPrompts":false,"hasResources":false,"serverVersion":{"name":"claude-gemini-mcp","version":"1.0.0"}}
+2026-01-29T11:47:20.700Z [DEBUG] MCP server "gemini-collab": STDIO connection dropped after 0s uptime
+2026-01-29T11:47:20.700Z [DEBUG] MCP server "gemini-collab": Connection error: [
+  {
+    "code": "invalid_union",
+    "errors": [
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "expected": "string",
+          "code": "invalid_type",
+          "path": [
+            "method"
+          ],
+          "message": "Invalid input: expected string, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "id",
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized keys: \"id\", \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        },
+        {
+          "expected": "object",
+          "code": "invalid_type",
+          "path": [
+            "result"
+          ],
+          "message": "Invalid input: expected object, received undefined"
+        },
+        {
+          "code": "unrecognized_keys",
+          "keys": [
+            "error"
+          ],
+          "path": [],
+          "message": "Unrecognized key: \"error\""
+        }
+      ],
+      [
+        {
+          "code": "invalid_union",
+          "errors": [
+            [
+              {
+                "expected": "string",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected string, received null"
+              }
+            ],
+            [
+              {
+                "expected": "number",
+                "code": "invalid_type",
+                "path": [],
+                "message": "Invalid input: expected number, received null"
+              }
+            ]
+          ],
+          "path": [
+            "id"
+          ],
+          "message": "Invalid input"
+        }
+      ]
+    ],
+    "path": [],
+    "message": "Invalid input"
+  }
+]
+2026-01-29T11:47:21.328Z [DEBUG] MCP server "plugin:github:github": HTTP Connection failed after 1265ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+ (code: 400, errno: none)
+2026-01-29T11:47:21.328Z [ERROR] MCP server "plugin:github:github" Error: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-29T11:47:21.328Z [DEBUG] MCP server "plugin:github:github": Connection failed after 1265ms: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-29T11:47:21.328Z [ERROR] MCP server "plugin:github:github" Connection failed: Streamable HTTP error: Error POSTing to endpoint: bad request: Authorization header is badly formatted
+2026-01-29T11:47:21.602Z [ERROR] MCP server "firecrawl" Server stderr: npm notice Access token expired or revoked. Please try logging in again.
+npm notice Access token expired or revoked. Please try logging in again.
+npm error code E404
+npm error 404 Not Found - GET https://registry.npmjs.org/@modelcontextprotocol%2fserver-firecrawl - Not found
+npm error 404
+npm error 404  '@modelcontextprotocol/server-firecrawl@*' is not in this registry.
+npm error 404
+npm error 404 Note that you can also install from a
+npm error 404 tarball, folder, http url, or git url.
+npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.npm/_logs/2026-01-29T11_47_20_261Z-debug-0.log
+2026-01-29T11:47:21.603Z [DEBUG] MCP server "firecrawl": Connection failed after 1543ms: MCP error -32000: Connection closed
+2026-01-29T11:47:21.603Z [ERROR] MCP server "firecrawl" Connection failed: MCP error -32000: Connection closed
+2026-01-29T11:47:21.610Z [ERROR] MCP server "mcp-atlassian" Server stderr: 
+
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                                                                              │
+│                                                                              │
+│                         ▄▀▀ ▄▀█ █▀▀ ▀█▀ █▀▄▀█ █▀▀ █▀█                        │
+│                         █▀  █▀█ ▄▄█  █  █ ▀ █ █▄▄ █▀▀                        │
+│                                                                              │
+│                                                                              │
+│                                FastMCP 2.14.4                                │
+│                            https://gofastmcp.com                             │
+│                                                                              │
+│                    🖥  Server:      Atlassian MCP                             │
+│                    🚀 Deploy free: https://fastmcp.cloud                     │
+│                                                                              │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭──────────────────────────────────────────────────────────────────────────────╮
+│                          ✨ FastMCP 3.0 is coming!                           │
+│       Pin `fastmcp < 3` in production, then upgrade when you're ready.       │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+
+[01/29/26 17:17:21] INFO     Starting MCP server 'Atlassian MCP'  server.py:2506
+                             with transport 'stdio'
+2026-01-29T11:47:21.610Z [DEBUG] MCP server "mcp-atlassian": Successfully connected to stdio server in 1553ms
+2026-01-29T11:47:21.610Z [DEBUG] MCP server "mcp-atlassian": Connection established with capabilities: {"hasTools":true,"hasPrompts":true,"hasResources":true,"serverVersion":{"name":"Atlassian MCP","version":"2.14.4"}}
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.616Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.616Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.617Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:21.618Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.135Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.135Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.135Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.135Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.135Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.137Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.137Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.137Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.137Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.137Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.137Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.137Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.137Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.137Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.137Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.138Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.138Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.138Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.138Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.138Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.163Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.163Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.163Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.163Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.163Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.164Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.164Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.164Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.164Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.164Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.165Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.165Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.165Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.165Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.165Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.165Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.165Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.165Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.165Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.165Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.166Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.166Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.166Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.166Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.166Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.167Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.167Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.167Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.167Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.167Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.167Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.167Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.168Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.168Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.168Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.168Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.168Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.168Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.168Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.168Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.172Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.173Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.173Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.173Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.173Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.173Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.173Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.173Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.173Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.173Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.174Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.174Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.174Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.174Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.174Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.174Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.174Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.174Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.174Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.174Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.175Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.175Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.175Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.175Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.175Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.195Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.195Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.195Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.195Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.195Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.196Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.196Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.196Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.196Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.196Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.196Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.196Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.196Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.196Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.196Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.197Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.197Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.197Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.197Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.197Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.201Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.201Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.201Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.201Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.201Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.202Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.202Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.202Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.202Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.202Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.203Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.203Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.203Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.203Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.203Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.203Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.203Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.203Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.203Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.203Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.204Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.204Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.204Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.204Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.204Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.204Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.204Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.204Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.204Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.204Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.205Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.205Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.205Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.205Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.205Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.205Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.205Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.205Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.206Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.206Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.206Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.206Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.206Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.206Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.206Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.207Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.207Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.207Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.207Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.207Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.207Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.207Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.207Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.208Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.208Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.208Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.208Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.208Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.208Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.208Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.208Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.208Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.208Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.208Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.208Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.208Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.216Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.216Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.216Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.216Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.216Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.217Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.217Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.217Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.217Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.217Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.218Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.218Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.218Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.218Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.218Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.218Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.218Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.218Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.218Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.218Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.219Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.219Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.219Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.219Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.219Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.243Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.243Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.243Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.243Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.243Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.244Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.244Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.244Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.244Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.244Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.244Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.244Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.244Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.244Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.244Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.245Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.245Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.245Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.245Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.245Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.245Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.245Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.245Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.245Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.245Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:22.246Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:22.246Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (1 tools)
+2026-01-29T11:47:22.246Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:22.246Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:22.246Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:23.544Z [DEBUG] MCP server "codelens": No token data found
+2026-01-29T11:47:23.545Z [DEBUG] MCP server "plugin:github:github": No token data found
+2026-01-29T11:47:23.546Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude/todos/63db88cf-7fe3-4611-a714-c311b7e0d00b-agent-63db88cf-7fe3-4611-a714-c311b7e0d00b.json.tmp.58200.1769687243546
+2026-01-29T11:47:23.547Z [DEBUG] Temp file written successfully, size: 2 bytes
+2026-01-29T11:47:23.547Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude/todos/63db88cf-7fe3-4611-a714-c311b7e0d00b-agent-63db88cf-7fe3-4611-a714-c311b7e0d00b.json.tmp.58200.1769687243546 to /Users/kiranbiliyawala/.claude/todos/63db88cf-7fe3-4611-a714-c311b7e0d00b-agent-63db88cf-7fe3-4611-a714-c311b7e0d00b.json
+2026-01-29T11:47:23.547Z [DEBUG] File /Users/kiranbiliyawala/.claude/todos/63db88cf-7fe3-4611-a714-c311b7e0d00b-agent-63db88cf-7fe3-4611-a714-c311b7e0d00b.json written atomically
+2026-01-29T11:47:23.565Z [DEBUG] Stats cache is up to date
+2026-01-29T11:47:24.991Z [DEBUG] Tool search disabled: ToolSearchTool is not available (may have been disallowed via disallowedTools).
+2026-01-29T11:47:25.008Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:25.008Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:25.008Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:25.113Z [ERROR] Error: Error: 404 404 page not found
+
+    at r7.generate (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:152:37712)
+    at pR.makeStatusError (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:2195)
+    at pR.makeRequest (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:169:5420)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:3349
+    at async file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2232
+    at async s2Y (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1074:17216)
+    at async M57 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1075:2165)
+    at async jpA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1263)
+    at async cd (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3291:1959)
+2026-01-29T11:47:25.113Z [DEBUG] countTokensWithFallback: API returned null, trying haiku fallback (22 tools)
+2026-01-29T11:47:25.113Z [DEBUG] [API:request] Creating client, ANTHROPIC_CUSTOM_HEADERS present: false, has Authorization header: false
+2026-01-29T11:47:25.113Z [DEBUG] [API:auth] OAuth token check starting
+2026-01-29T11:47:25.113Z [DEBUG] [API:auth] OAuth token check complete
+2026-01-29T11:47:26.865Z [DEBUG] Successfully refreshed marketplace: claude-plugins-official
+2026-01-29T11:47:27.037Z [DEBUG] Successfully refreshed marketplace: claude-code-plugins
+2026-01-29T11:47:27.038Z [DEBUG] Plugin autoupdate: checking installed plugins
+2026-01-29T11:47:27.049Z [DEBUG] Using manifest version for code-simplifier@claude-plugins-official: 1.0.0
+2026-01-29T11:47:27.061Z [DEBUG] Using git SHA for github@claude-plugins-official: d49ad3558669
+2026-01-29T11:47:27.064Z [DEBUG] Using git SHA for pr-review-toolkit@claude-plugins-official: d49ad3558669
+2026-01-29T11:51:04.873Z [DEBUG] Started caffeinate to prevent sleep
+2026-01-29T11:51:04.879Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-29T11:51:04.891Z [DEBUG] Stopped caffeinate, allowing sleep
+2026-01-29T11:51:04.901Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687464901
+2026-01-29T11:51:04.901Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T11:51:04.901Z [DEBUG] Temp file written successfully, size: 43770 bytes
+2026-01-29T11:51:04.901Z [DEBUG] Applied original permissions to temp file
+2026-01-29T11:51:04.901Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687464901 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T11:51:04.902Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T11:51:04.930Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687464930
+2026-01-29T11:51:04.930Z [DEBUG] Preserving file permissions: 100644
+2026-01-29T11:51:04.931Z [DEBUG] Temp file written successfully, size: 43770 bytes
+2026-01-29T11:51:04.931Z [DEBUG] Applied original permissions to temp file
+2026-01-29T11:51:04.931Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.58200.1769687464930 to /Users/kiranbiliyawala/.claude.json
+2026-01-29T11:51:04.931Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-01-29T11:51:06.587Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-29T11:51:09.425Z [DEBUG] AutoUpdaterWrapper: Installation type: npm-local
+2026-01-29T11:51:10.771Z [DEBUG] Getting matching hook commands for SessionEnd with query: prompt_input_exit
+2026-01-29T11:51:10.771Z [DEBUG] Found 0 hook matchers in settings
+2026-01-29T11:51:10.771Z [DEBUG] Matched 0 unique hooks for query "prompt_input_exit" (0 before deduplication)
+2026-01-29T11:51:10.776Z [DEBUG] MCP server "gemini-collab": Sending SIGINT to MCP server process
+2026-01-29T11:51:10.777Z [DEBUG] MCP server "mcp-atlassian": Sending SIGINT to MCP server process
+2026-01-29T11:51:10.777Z [DEBUG] LSP server manager shut down successfully
+2026-01-29T11:51:10.781Z [DEBUG] Metrics opt-out check failed: No API key available
+2026-01-29T11:51:10.781Z [DEBUG] Metrics check failed, defaulting to disabled
+2026-01-29T11:51:10.782Z [DEBUG] Metrics export disabled by organization setting
+2026-01-29T11:51:10.782Z [DEBUG] BigQuery metrics exporter flush complete
+2026-01-29T11:51:10.782Z [DEBUG] BigQuery metrics exporter flush complete
+2026-01-29T11:51:10.782Z [DEBUG] BigQuery metrics exporter shutdown complete
+2026-01-29T11:51:10.878Z [DEBUG] MCP server "gemini-collab": MCP server process exited cleanly
+2026-01-29T11:51:10.878Z [DEBUG] MCP server "mcp-atlassian": SIGINT failed, sending SIGTERM to MCP server process
+2026-01-29T11:51:11.279Z [DEBUG] MCP server "mcp-atlassian": SIGTERM failed, sending SIGKILL to MCP server process

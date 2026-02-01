@@ -1,0 +1,374 @@
+# Passport Pattern (Multi-Tenancy)
+
+## Overview
+
+The **Passport Pattern** is the core mechanism for multi-tenancy in finhq-verse. Every HTTP request carries tenant context through headers, which is extracted into an immutable `Passport` object and stored in a thread-local context.
+
+---
+
+## The Flow
+
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              HTTP Request                                     │
+│  Headers:                                                                     │
+│    X-Finhq-Mode: LIVE                                                        │
+│    X-Finhq-Org-Id: org_01H123...                                             │
+│    X-Finhq-Namespace-Id: ns_01H456...                                        │
+│    X-Finhq-Request-Id: req_01H789...                                         │
+└──────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                         PassportContextFilter                                 │
+│  1. Extract headers                                                          │
+│  2. Build Passport object                                                    │
+│  3. Store in PassportContext (ThreadLocal)                                   │
+│  4. Continue filter chain                                                    │
+│  5. Clean up on completion                                                   │
+└──────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                              Service Layer                                    │
+│  RepositoryScope scope = RepositoryScope.create();                           │
+│  // Reads orgId, namespaceId from PassportContext                            │
+└──────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌──────────────────────────────────────────────────────────────────────────────┐
+│                            Repository Layer                                   │
+│  repository.findByExternalId(scope, id);                                     │
+│  // Query automatically filtered by orgId + namespaceId                      │
+└──────────────────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Key Components
+
+### 1. Passport.java
+
+**Location:** `finhq-commons-java/finhq-context/src/main/java/io/finhq/commons/context/Passport.java`
+
+```java
+@Getter
+@Builder
+@ToString
+@EqualsAndHashCode
+public final class Passport {
+    // MDC Keys (snake_case for logging)
+    public static final String KEY_REQUEST_ID = "request_id";
+    public static final String KEY_MODE = "mode";
+    public static final String KEY_ORG_ID = "org_id";
+    public static final String KEY_NAMESPACE_ID = "namespace_id";
+    public static final String KEY_PARTITION_HINT_TYPE = "partition_hint_type";
+    public static final String KEY_PARTITION_HINT_VALUE = "partition_hint_value";
+    public static final String DEFAULT_VALUE = "NA";
+
+    private final String requestId;           // Unique request ID
+    private final String mode;                // LIVE or SANDBOX
+    private final String orgId;               // Organization external ID
+    private final String namespaceId;         // Namespace external ID
+    private final String partitionHintType;   // For data routing
+    private final String partitionHintValue;  // For data routing
+
+    // Fail-fast getters (throw if null)
+    public String getModeOrFail() { ... }
+    public String getOrgIdOrFail() { ... }
+    public String getNamespaceIdOrFail() { ... }
+
+    // Safe getters (return default if null)
+    public String getModeOrDefault() { ... }
+    public String getOrgIdOrDefault() { ... }
+    public String getNamespaceIdOrDefault() { ... }
+}
+```
+
+### 2. PassportContext.java
+
+**Location:** `finhq-commons-java/finhq-context/src/main/java/io/finhq/commons/context/PassportContext.java`
+
+```java
+public class PassportContext {
+    private static final Context<Passport> context = new Context<>();
+
+    public static void set(Passport passport) {
+        context.set(passport);
+    }
+
+    public static Passport get() {
+        return context.get();
+    }
+
+    public static void remove() {
+        context.remove();
+    }
+}
+```
+
+### 3. Context.java
+
+**Location:** `finhq-commons-java/finhq-context/src/main/java/io/finhq/commons/context/Context.java`
+
+```java
+public class Context<T> {
+    // InheritableThreadLocal allows async operations to inherit context
+    private final InheritableThreadLocal<T> threadLocal = new InheritableThreadLocal<>();
+
+    public void set(T value) {
+        threadLocal.set(value);
+    }
+
+    public T get() {
+        return threadLocal.get();
+    }
+
+    public T getOrDefault(T defaultValue) {
+        T value = threadLocal.get();
+        return value != null ? value : defaultValue;
+    }
+
+    public void remove() {
+        threadLocal.remove();
+    }
+
+    public void clear() {
+        threadLocal.remove();
+    }
+}
+```
+
+### 4. PassportContextFilter.java
+
+**Location:** `finhq-commons-spring/finhq-spring/src/main/java/io/finhq/commons/spring/passport/PassportContextFilter.java`
+
+```java
+@Component
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class PassportContextFilter extends OncePerRequestFilter {
+
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) {
+        try {
+            // Extract headers and build Passport
+            Passport passport = Passport.builder()
+                .requestId(getHeader(request, "X-Finhq-Request-Id", UlidHelper.generate()))
+                .mode(getHeader(request, "X-Finhq-Mode"))
+                .orgId(getHeader(request, "X-Finhq-Org-Id"))
+                .namespaceId(getHeader(request, "X-Finhq-Namespace-Id"))
+                .partitionHintType(getHeader(request, "X-Finhq-Partition-Hint-Type"))
+                .partitionHintValue(getHeader(request, "X-Finhq-Partition-Hint-Value"))
+                .build();
+
+            // Store in thread-local context
+            PassportContext.set(passport);
+
+            // Also set MDC for logging
+            setMdc(passport);
+
+            // Continue filter chain
+            filterChain.doFilter(request, response);
+        } finally {
+            // Always clean up
+            PassportContext.remove();
+            clearMdc();
+        }
+    }
+}
+```
+
+---
+
+## HTTP Headers
+
+| Header | Required | Description |
+|--------|----------|-------------|
+| `X-Finhq-Mode` | Yes | `LIVE` or `SANDBOX` - determines database routing |
+| `X-Finhq-Org-Id` | Yes* | Organization external ID (ULID) |
+| `X-Finhq-Namespace-Id` | Yes* | Namespace external ID (ULID) |
+| `X-Finhq-Request-Id` | No | Correlation ID (auto-generated if missing) |
+| `X-Finhq-Partition-Hint-Type` | No | Data partitioning hint type |
+| `X-Finhq-Partition-Hint-Value` | No | Data partitioning hint value |
+
+*Required for scoped operations
+
+---
+
+## Using Passport in Code
+
+### In a Service
+
+```java
+@Service
+public class MyService {
+
+    public void doSomething() {
+        // Get current passport
+        Passport passport = PassportContext.get();
+
+        // Access values (fail-fast)
+        String orgId = passport.getOrgIdOrFail();
+        String mode = passport.getModeOrFail();
+
+        // Access values (with default)
+        String requestId = passport.getRequestId(); // Never null
+    }
+}
+```
+
+### Creating a RepositoryScope
+
+```java
+// Most common - creates scope from current PassportContext
+RepositoryScope scope = RepositoryScope.create();
+
+// For system-level operations (no tenant scoping)
+RepositoryScope scope = RepositoryScope.empty();
+
+// Manual construction (rare)
+RepositoryScope scope = RepositoryScope.builder()
+    .orgId("org_123")
+    .namespaceId("ns_456")
+    .build();
+```
+
+### In Repository Queries
+
+```java
+// All repository methods require scope
+Optional<Entity> entity = repository.findByExternalId(scope, id);
+
+// Scope is automatically applied to queries
+CursorPage<Entity> page = repository.findAll(scope, spec, pageRequest);
+```
+
+---
+
+## Mode-Based DataSource Routing
+
+The `mode` field determines which database is used:
+
+```
+mode = LIVE    → Primary DataSource (production data)
+mode = SANDBOX → Sandbox DataSource (test data)
+```
+
+This is handled by `DataSourceRouter`:
+
+```java
+public class DefaultDataSourceRouter extends AbstractRoutingDataSource {
+    @Override
+    protected Object determineCurrentLookupKey() {
+        Passport passport = PassportContext.get();
+        if (passport != null && "SANDBOX".equals(passport.getMode())) {
+            return "sandbox";
+        }
+        return "primary";
+    }
+}
+```
+
+---
+
+## MDC Integration
+
+Passport values are automatically added to MDC (Mapped Diagnostic Context) for logging:
+
+```
+request_id=req_01H123...
+mode=LIVE
+org_id=org_01H456...
+namespace_id=ns_01H789...
+```
+
+This means every log line includes tenant context:
+
+```json
+{
+  "timestamp": "2024-01-15T10:30:00Z",
+  "level": "INFO",
+  "message": "Processing request",
+  "request_id": "req_01H123...",
+  "org_id": "org_01H456...",
+  "namespace_id": "ns_01H789..."
+}
+```
+
+---
+
+## Common Patterns
+
+### Validating Passport Presence
+
+```java
+public void requireValidPassport() {
+    Passport passport = PassportContext.get();
+    if (passport == null) {
+        throw new ApplicationException(GenericErrorCode.UNAUTHORIZED);
+    }
+    // Validate required fields
+    passport.getOrgIdOrFail();      // Throws if null
+    passport.getNamespaceIdOrFail(); // Throws if null
+}
+```
+
+### Async Operations
+
+Because `Context` uses `InheritableThreadLocal`, child threads inherit the passport:
+
+```java
+CompletableFuture.runAsync(() -> {
+    // Passport is available here too!
+    Passport passport = PassportContext.get();
+    String orgId = passport.getOrgId();
+});
+```
+
+**Warning:** Be careful with thread pools - threads may retain old context.
+
+---
+
+## Testing with Passport
+
+In tests, manually set the passport:
+
+```java
+@BeforeEach
+void setUp() {
+    Passport passport = Passport.builder()
+        .requestId("test-request-id")
+        .mode("LIVE")
+        .orgId("test-org-id")
+        .namespaceId("test-namespace-id")
+        .build();
+    PassportContext.set(passport);
+}
+
+@AfterEach
+void tearDown() {
+    PassportContext.remove();
+}
+```
+
+Or use `FinhqMockMvc` which handles this automatically.
+
+---
+
+## Key Takeaways
+
+1. **Every request must have a Passport** - Filter ensures this
+2. **All queries are scoped** - Repository enforces org/namespace filtering
+3. **Mode determines database** - LIVE vs SANDBOX routing
+4. **Thread-local storage** - Context is per-request, per-thread
+5. **Always clean up** - Filter's finally block removes context
+6. **Inheritable for async** - Child threads get parent's context
+
+---
+
+## Next Steps
+
+- [Repository Pattern](./02-repository-pattern.md) - How scoping is enforced
+- [Service Pattern](./03-service-pattern.md) - Using Passport in services

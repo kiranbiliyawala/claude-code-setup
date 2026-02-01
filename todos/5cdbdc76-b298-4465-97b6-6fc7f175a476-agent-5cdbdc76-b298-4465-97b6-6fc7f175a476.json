@@ -1,0 +1,147 @@
+[
+  {
+    "content": "Review PR #832 - CVV disablement support (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #832 - CVV disablement support"
+  },
+  {
+    "content": "Review PR #891 - Digio sync flow fix (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #891 - Digio sync flow fix"
+  },
+  {
+    "content": "Review PR #900 - Settlement route integration for digio (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #900 - Settlement route integration"
+  },
+  {
+    "content": "Review PR #917 - Enriching RRN for rzp mandate (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #917 - Enriching RRN"
+  },
+  {
+    "content": "Review PR #944 - ICICI UPI provider prefix fix (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #944 - ICICI UPI prefix fix"
+  },
+  {
+    "content": "Review PR #1037 - Mandate token enrichment on failed payment (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1037 - Mandate token enrichment"
+  },
+  {
+    "content": "Review PR #1041 - Wallet stuck in CREATE state fix (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1041 - Wallet CREATE state fix"
+  },
+  {
+    "content": "Review PR #1047 - Digio refund integration (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1047 - Digio refund integration"
+  },
+  {
+    "content": "Review PR #1059 - Token type support to LCM resolve terminal (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1059 - Token type support"
+  },
+  {
+    "content": "Review PR #1077 - Cashback wallet utilisation in autopay (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1077 - Cashback wallet utilisation"
+  },
+  {
+    "content": "Review PR #1103 - Refund adjustment backfill API (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1103 - Refund adjustment backfill"
+  },
+  {
+    "content": "Review PR #1118 - Billdesk 404 handling in refund flow (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1118 - Billdesk 404 handling"
+  },
+  {
+    "content": "Review PR #1131 - Guest checkout flow fix (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1131 - Guest checkout flow fix"
+  },
+  {
+    "content": "Review PR #1141 - HB Darwin DT UI fix - cache (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1141 - HB Darwin cache fix"
+  },
+  {
+    "content": "Review PR #1170 - Razorpay refund sync fallback (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1170 - Razorpay refund sync"
+  },
+  {
+    "content": "Review PR #1191 - Non-2xx handling for billdesk (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1191 - Non-2xx handling billdesk"
+  },
+  {
+    "content": "Review PR #1213 - Inline autopay refund support (payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #1213 - Inline autopay refund"
+  },
+  {
+    "content": "Review PR #190 + #915 - PPI authentication support (MPO + payment-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #190 + #915 - PPI authentication"
+  },
+  {
+    "content": "Review PR #196 - PPI debit call error msg handling (MPO)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #196 - PPI debit error handling"
+  },
+  {
+    "content": "Review PR #192 - Preference maker checker fix (LCM)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #192 - Preference maker checker"
+  },
+  {
+    "content": "Review PR #221 - Token type support for resolve terminal (LCM)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #221 - Token type support LCM"
+  },
+  {
+    "content": "Review PR #223 - Cashback wallet support mandate flow (LCM)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #223 - Cashback wallet LCM"
+  },
+  {
+    "content": "Review PR #110 - UPI mandate revoke flow (mandate-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #110 - UPI mandate revoke"
+  },
+  {
+    "content": "Review PR #112 - UPI mandate pause webhook (mandate-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #112 - UPI mandate pause"
+  },
+  {
+    "content": "Review PR #115 - Duplicate axis webhook fix (mandate-service)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #115 - Duplicate axis webhook"
+  },
+  {
+    "content": "Review PR #682 - Handling UTR-22 (genie)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #682 - Handling UTR-22"
+  },
+  {
+    "content": "Review PR #645 - Balance check APIs (genie)",
+    "status": "pending",
+    "activeForm": "Reviewing PR #645 - Balance check APIs"
+  },
+  {
+    "content": "Create individual summary files for each PR review",
+    "status": "pending",
+    "activeForm": "Creating individual summary files"
+  },
+  {
+    "content": "Create overall feedback file with L3 evaluation",
+    "status": "pending",
+    "activeForm": "Creating overall feedback file"
+  }
+]

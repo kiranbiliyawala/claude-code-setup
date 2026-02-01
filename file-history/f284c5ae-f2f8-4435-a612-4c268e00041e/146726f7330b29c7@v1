@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid Diagram Preview</title>
+  <link rel="stylesheet" href="editor.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <h1>Mermaid Diagram Preview</h1>
+      <div class="header-actions">
+        <button id="copyBtn" title="Copy Mermaid code">Copy Code</button>
+        <button id="downloadBtn" title="Download as SVG">Download SVG</button>
+        <button id="clearBtn" title="Clear editor">Clear</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="pane editor-pane">
+        <div class="pane-header">
+          <span>Mermaid Markup</span>
+          <span class="hint">Edit your diagram code here</span>
+        </div>
+        <textarea id="editor" spellcheck="false" placeholder="Enter your Mermaid diagram code here...
+
+Example:
+graph TD
+    A[Start] --> B{Is it working?}
+    B -->|Yes| C[Great!]
+    B -->|No| D[Debug]
+    D --> B"></textarea>
+      </div>
+
+      <div class="resizer" id="resizer"></div>
+
+      <div class="pane preview-pane">
+        <div class="pane-header">
+          <span>Preview</span>
+          <span class="hint" id="status">Ready</span>
+        </div>
+        <div id="preview" class="preview-content"></div>
+        <div id="error" class="error-message"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="lib/mermaid.min.js"></script>
+  <script src="editor.js"></script>
+</body>
+</html>

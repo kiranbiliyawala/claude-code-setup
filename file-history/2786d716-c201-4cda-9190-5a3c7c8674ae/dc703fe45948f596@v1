@@ -1,0 +1,411 @@
+# Bookkeeping Service Deep-Dive
+
+## Overview
+
+**Port:** 7081
+**Purpose:** Double-entry ledger system for financial transactions
+
+This is the **most complex service** in finhq-verse, demonstrating advanced patterns like table partitioning, multi-leg transactions, and specification versioning.
+
+---
+
+## Domain Model
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      BookkeepingSpec                             │
+│  - Defines account/transaction schemas                          │
+│  - Versioned for backward compatibility                         │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              │ references
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                    BookkeepingAccount                            │
+│  - Individual ledger account                                    │
+│  - Has currency, normal balance (DEBIT/CREDIT)                  │
+│  - Can be hierarchical (parent_account_id)                      │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              │ debited/credited by
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  BookkeepingTransaction                          │
+│  - Transaction header                                           │
+│  - Status: PENDING → POSTED → (CANCELLED)                       │
+│  - Partitioned by quarter                                       │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              │ 1:N
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                BookkeepingTransactionLeg                         │
+│  - Individual debit or credit entry                             │
+│  - References account                                           │
+│  - Sum of debits must equal sum of credits                      │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## Key Concepts
+
+### Double-Entry Bookkeeping
+
+Every transaction must balance:
+```
+Total Debits = Total Credits
+```
+
+Example transfer of $100:
+```
+Transaction: "Transfer from Savings to Checking"
+├── Leg 1: DEBIT  Checking Account  $100
+└── Leg 2: CREDIT Savings Account   $100
+```
+
+### Normal Balance
+
+Each account has a "normal balance" side:
+- **DEBIT accounts** (Assets, Expenses): Increase with debits
+- **CREDIT accounts** (Liabilities, Revenue, Equity): Increase with credits
+
+### Multi-Leg Transactions
+
+Transactions can have more than 2 legs:
+```
+Transaction: "Payroll distribution"
+├── Leg 1: DEBIT  Employee 1 Salary    $5,000
+├── Leg 2: DEBIT  Employee 2 Salary    $6,000
+├── Leg 3: DEBIT  Tax Expense          $2,000
+├── Leg 4: CREDIT Payroll Clearing    $13,000
+└── Total: Debits $13,000 = Credits $13,000 ✓
+```
+
+---
+
+## Entities
+
+### BookkeepingAccountEntity
+
+```java
+@Entity
+@Audited
+@Table(name = "bookkeeping_accounts")
+public class BookkeepingAccountEntity
+        extends AbstractNamespaceScopedEntity
+        implements Auditable, ExternalReferenceable {
+
+    @Column(name = "external_reference")
+    private String externalReference;  // Custom ID like "ACCT-001"
+
+    @Column(name = "partner_id")
+    private String partnerId;
+
+    @Column(name = "spec_id")
+    private String specId;
+
+    @Column(name = "spec_version")
+    private Integer specVersion;
+
+    @Column(name = "parent_account_id")
+    private String parentAccountId;    // Hierarchical accounts
+
+    private String name;
+    private String description;
+
+    @Column(length = 3)
+    private String currency;           // ISO currency code
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "normal_balance")
+    private NormalBalance normalBalance;  // DEBIT or CREDIT
+
+    private Boolean postable;          // Can post transactions to this account?
+
+    @Enumerated(EnumType.STRING)
+    private AccountStatus status;
+
+    @Type(JsonType.class)
+    @Column(columnDefinition = "json")
+    private Map<String, Object> parameters;  // Flexible metadata
+}
+```
+
+### BookkeepingTransactionEntity
+
+```java
+@Entity
+@Audited
+@Table(name = "bookkeeping_transactions")
+public class BookkeepingTransactionEntity
+        extends AbstractNamespaceScopedEntity
+        implements Auditable {
+
+    @Column(name = "effective_at")
+    private LocalDateTime effectiveAt;  // Business date
+
+    @Enumerated(EnumType.STRING)
+    private TransactionStatus status;   // PENDING, POSTED, CANCELLED
+
+    private String reference;           // External reference
+
+    @Column(name = "transaction_code")
+    private String transactionCode;     // Transaction type
+
+    @Column(name = "partition_key")
+    private String partitionKey;        // For table partitioning
+
+    @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL)
+    private List<BookkeepingTransactionLegEntity> legs;
+}
+```
+
+### BookkeepingTransactionLegEntity
+
+```java
+@Entity
+@Table(name = "bookkeeping_transaction_legs")
+public class BookkeepingTransactionLegEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "transaction_id")
+    private BookkeepingTransactionEntity transaction;
+
+    @Column(name = "account_id")
+    private String accountId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "entry_type")
+    private EntryType entryType;  // DEBIT or CREDIT
+
+    private BigDecimal amount;
+
+    @Column(length = 3)
+    private String currency;
+}
+```
+
+---
+
+## Database Partitioning
+
+Transactions are partitioned by quarter for performance:
+
+```sql
+CREATE TABLE bookkeeping_transactions (
+    id              BIGINT NOT NULL,
+    partition_key   VARCHAR(10) NOT NULL,  -- e.g., "2024-Q1"
+    -- ... other columns
+    PRIMARY KEY (id, partition_key)
+)
+PARTITION BY RANGE COLUMNS(partition_key) (
+    PARTITION p2024q1 VALUES LESS THAN ('2024-Q2'),
+    PARTITION p2024q2 VALUES LESS THAN ('2024-Q3'),
+    PARTITION p2024q3 VALUES LESS THAN ('2024-Q4'),
+    PARTITION p2024q4 VALUES LESS THAN ('2025-Q1'),
+    -- ...
+);
+```
+
+Benefits:
+- Faster queries (only scan relevant partitions)
+- Easier archival (drop old partitions)
+- Parallel query execution
+
+---
+
+## API Endpoints
+
+### Accounts
+
+```yaml
+POST   /v1/bookkeeping/accounts              # Create account
+GET    /v1/bookkeeping/accounts              # List accounts
+GET    /v1/bookkeeping/accounts/{id}         # Get account
+PATCH  /v1/bookkeeping/accounts/{id}         # Update account
+
+# By external reference
+GET    /v1/bookkeeping/accounts/ref/{ref}    # Get by external reference
+```
+
+### Transactions
+
+```yaml
+POST   /v1/bookkeeping/transactions          # Create transaction
+GET    /v1/bookkeeping/transactions          # List transactions
+GET    /v1/bookkeeping/transactions/{id}     # Get transaction
+POST   /v1/bookkeeping/transactions/{id}/post    # Post transaction
+POST   /v1/bookkeeping/transactions/{id}/cancel  # Cancel transaction
+```
+
+### Specs
+
+```yaml
+POST   /v1/bookkeeping/specs                 # Create spec
+GET    /v1/bookkeeping/specs                 # List specs
+GET    /v1/bookkeeping/specs/{id}            # Get spec
+```
+
+---
+
+## Transaction Processing Flow
+
+```
+1. Create Transaction (status: PENDING)
+   ├── Validate legs balance
+   ├── Validate all accounts exist and are postable
+   └── Save transaction + legs
+
+2. Post Transaction
+   ├── Verify still PENDING
+   ├── Verify accounts still valid
+   ├── Update account balances (if tracking)
+   └── Set status: POSTED
+
+3. Cancel Transaction (optional)
+   ├── Verify is POSTED
+   ├── Reverse balance changes
+   └── Set status: CANCELLED
+```
+
+---
+
+## Validation Example
+
+```java
+@Component
+public class TransactionValidator {
+
+    public void validateCreateRequest(CreateTransactionRequest request) {
+        // Validate legs exist
+        if (request.getLegs() == null || request.getLegs().isEmpty()) {
+            throw new ApplicationException(BookkeepingErrorCode.NO_LEGS);
+        }
+
+        // Validate balance
+        BigDecimal totalDebits = BigDecimal.ZERO;
+        BigDecimal totalCredits = BigDecimal.ZERO;
+
+        for (TransactionLegRequest leg : request.getLegs()) {
+            if (leg.getEntryType() == EntryType.DEBIT) {
+                totalDebits = totalDebits.add(leg.getAmount());
+            } else {
+                totalCredits = totalCredits.add(leg.getAmount());
+            }
+        }
+
+        if (totalDebits.compareTo(totalCredits) != 0) {
+            throw new ApplicationException(BookkeepingErrorCode.UNBALANCED_TRANSACTION)
+                .withDetail("totalDebits", totalDebits)
+                .withDetail("totalCredits", totalCredits);
+        }
+    }
+}
+```
+
+---
+
+## Audit Trail
+
+All entities use Hibernate Envers:
+
+```sql
+-- Main table
+SELECT * FROM bookkeeping_accounts WHERE id = 123;
+
+-- Audit history
+SELECT * FROM bookkeeping_accounts_aud WHERE id = 123 ORDER BY rev;
+
+-- Revision info
+SELECT * FROM revinfo WHERE id IN (1, 2, 3);
+```
+
+---
+
+## File Structure
+
+```
+finhq-bookkeeping/
+├── src/main/java/io/finhq/bookkeeping/
+│   ├── BookkeepingApplication.java
+│   ├── account/
+│   │   ├── BookkeepingAccountEntity.java
+│   │   ├── BookkeepingAccountService.java
+│   │   └── ...
+│   ├── transaction/
+│   │   ├── BookkeepingTransactionEntity.java
+│   │   ├── BookkeepingTransactionLegEntity.java
+│   │   ├── BookkeepingTransactionService.java
+│   │   └── ...
+│   ├── spec/
+│   │   └── ...
+│   └── config/
+│       └── BookkeepingErrorCode.java
+├── src/main/resources/
+│   └── db/migration/
+│       ├── V1__create_bookkeeping_accounts.sql
+│       ├── V2__create_bookkeeping_transactions.sql
+│       └── ...
+└── src/test/java/
+```
+
+---
+
+## Advanced Patterns
+
+### 1. External Reference Lookup
+
+```java
+// Find by ULID (standard)
+Account account = accountService.getAccount("01H123...");
+
+// Find by external reference (custom ID)
+Account account = accountService.getAccountByExternalReference("ACCT-001");
+```
+
+### 2. Hierarchical Accounts
+
+```java
+// Parent account
+Account parent = accountService.createAccount(new CreateAccountRequest()
+    .name("Assets")
+    .postable(false));  // Parent accounts typically not postable
+
+// Child accounts
+Account checking = accountService.createAccount(new CreateAccountRequest()
+    .name("Checking")
+    .parentAccountId(parent.getId())
+    .postable(true));
+```
+
+### 3. Spec Versioning
+
+```java
+// Create account with specific spec version
+Account account = accountService.createAccount(new CreateAccountRequest()
+    .name("Cash Account")
+    .specId("CASH_ACCOUNT_SPEC")
+    .specVersion(2));  // Use version 2 of the spec
+```
+
+---
+
+## Study Exercises
+
+1. **Trace a transaction** - Follow create → post → query
+2. **Understand partitioning** - Review the migration files
+3. **Study validation** - See how balance is validated
+4. **Multi-leg transaction** - Create a 3+ leg transaction
+5. **Audit history** - Query the `_aud` tables
+
+---
+
+## Next Steps
+
+- [Calendar Service](./03-calendar.md) - Simpler service for comparison
+- [Creating an Entity](../examples/01-creating-entity.md) - Build your own

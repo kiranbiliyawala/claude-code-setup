@@ -1,0 +1,32 @@
+[
+  {
+    "content": "Analyze PR diff and code changes for metrics implementation",
+    "status": "completed",
+    "activeForm": "Analyzing PR diff and code changes"
+  },
+  {
+    "content": "Search for relevant flows and service dependencies",
+    "status": "completed",
+    "activeForm": "Searching for relevant flows and service dependencies"
+  },
+  {
+    "content": "Review security, bugs, and code quality issues",
+    "status": "completed",
+    "activeForm": "Reviewing security, bugs, and code quality issues"
+  },
+  {
+    "content": "Post inline comments for CRITICAL/HIGH issues",
+    "status": "in_progress",
+    "activeForm": "Posting inline comments for CRITICAL/HIGH issues"
+  },
+  {
+    "content": "Post summary comment to GitHub PR",
+    "status": "pending",
+    "activeForm": "Posting summary comment to GitHub PR"
+  },
+  {
+    "content": "Create GitHub Check Run for PR status",
+    "status": "pending",
+    "activeForm": "Creating GitHub Check Run for PR status"
+  }
+]
