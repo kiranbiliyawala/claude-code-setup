@@ -7410,3 +7410,23 @@ npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.np
     at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:684:38042
     at z79 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:684:38588)
     at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:685:20245
+2026-02-01T17:16:20.898Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-02-01T17:16:20.900Z [DEBUG] AutoUpdater: Using local update method
+2026-02-01T17:16:21.033Z [DEBUG] Layout engine: yoga
+2026-02-01T17:16:21.040Z [DEBUG] Layout engine: yoga
+2026-02-01T17:16:22.586Z [ERROR] Failed to save config with lock: Error: Lock file is already being held
+2026-02-01T17:16:22.593Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.80801.1769966182593
+2026-02-01T17:16:22.601Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T17:16:22.601Z [DEBUG] Temp file written successfully, size: 44252 bytes
+2026-02-01T17:16:22.602Z [DEBUG] Applied original permissions to temp file
+2026-02-01T17:16:22.602Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.80801.1769966182593 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T17:16:22.603Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T17:16:27.869Z [ERROR] Error: Error: 1P event logging: 1 events failed to export (status=404, code=ERR_BAD_REQUEST, Request failed with status code 404)
+    at p56.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:689:2315)
+    at async p56.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:689:1197)
+2026-02-01T17:16:27.874Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events (status=404, code=ERR_BAD_REQUEST, Request failed with status code 404)\n    at p56.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:689:1372)","message":"Failed to export 1 events (status=404, code=ERR_BAD_REQUEST, Request failed with status code 404)","name":"Error"}
+    at uC6.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2003:34863)
+    at aK6.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:684:7017)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:684:38042
+    at z79 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:684:38588)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:685:20245

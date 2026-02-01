@@ -254,3 +254,11 @@
 {"display":"/mcp ","pastedContents":{},"timestamp":1769687495324,"project":"/Users/kiranbiliyawala/.claude","sessionId":"54b47d2d-e247-4dda-b049-fb4e0214abed"}
 {"display":"/stats ","pastedContents":{},"timestamp":1769699948528,"project":"/Users/kiranbiliyawala/.claude","sessionId":"5f0909db-b4af-4c9b-8ba7-97ba02a26718"}
 {"display":"can you sum up last column the one with 8.99, 3.40 \n\n[Pasted text #1 +43 lines]","pastedContents":{"1":{"id":1,"type":"text","contentHash":"e4e915a8dfd709f9"}},"timestamp":1769707917823,"project":"/Users/kiranbiliyawala/.claude","sessionId":"5f0909db-b4af-4c9b-8ba7-97ba02a26718"}
+{"display":"check which all github profiles exist ","pastedContents":{},"timestamp":1769965654265,"project":"/Users/kiranbiliyawala/.claude","sessionId":"c898a47c-d5b5-4964-845c-b6702e207fea"}
+{"display":"i want to add my personal profile also in github profiles. ","pastedContents":{},"timestamp":1769965746509,"project":"/Users/kiranbiliyawala/.claude","sessionId":"c898a47c-d5b5-4964-845c-b6702e207fea"}
+{"display":"yes","pastedContents":{},"timestamp":1769965803584,"project":"/Users/kiranbiliyawala/.claude","sessionId":"c898a47c-d5b5-4964-845c-b6702e207fea"}
+{"display":"/clear ","pastedContents":{},"timestamp":1769965924891,"project":"/Users/kiranbiliyawala/.claude","sessionId":"c898a47c-d5b5-4964-845c-b6702e207fea"}
+{"display":"i've addded commands and skills directly in folders under ~/.claude/commands and skills directories. can you add relevant configurations if any to enable the same at user level","pastedContents":{},"timestamp":1769965950684,"project":"/Users/kiranbiliyawala","sessionId":"1e5f610a-5f89-46f5-800c-d21a1c013789"}
+{"display":"gh auth status","pastedContents":{},"timestamp":1769966049653,"project":"/Users/kiranbiliyawala/.claude","sessionId":"d1de243c-2161-4e25-9a63-3d77c968f764"}
+{"display":"add admin:public_key scope as well for kiranbiliyawala","pastedContents":{},"timestamp":1769966129304,"project":"/Users/kiranbiliyawala/.claude","sessionId":"d1de243c-2161-4e25-9a63-3d77c968f764"}
+{"display":"push the current changes to origin master","pastedContents":{},"timestamp":1769966207506,"project":"/Users/kiranbiliyawala/.claude","sessionId":"d1de243c-2161-4e25-9a63-3d77c968f764"}

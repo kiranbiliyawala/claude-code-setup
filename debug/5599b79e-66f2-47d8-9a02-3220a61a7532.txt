@@ -2346,3 +2346,20 @@ npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.np
     at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:666:39403
     at WU3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:666:39949)
     at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:667:20245
+2026-02-01T17:16:20.590Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-02-01T17:16:20.590Z [DEBUG] AutoUpdater: Using local update method
+2026-02-01T17:16:22.545Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.69054.1769966182545
+2026-02-01T17:16:22.545Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T17:16:22.546Z [DEBUG] Temp file written successfully, size: 44252 bytes
+2026-02-01T17:16:22.546Z [DEBUG] Applied original permissions to temp file
+2026-02-01T17:16:22.546Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.69054.1769966182545 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T17:16:22.547Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T17:16:27.867Z [ERROR] Error: Error: 1P event logging: 2 events failed to export
+    at C16.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:672:2042)
+    at async C16.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:672:1197)
+2026-02-01T17:16:27.872Z [ERROR] Error: Error: {"stack":"Error: Failed to export 2 events\n    at C16.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:672:1299)","message":"Failed to export 2 events","name":"Error"}
+    at IM6.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2324:34863)
+    at Qe1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:666:8378)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:666:39403
+    at WU3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:666:39949)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:667:20245

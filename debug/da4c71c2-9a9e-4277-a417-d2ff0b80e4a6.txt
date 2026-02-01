@@ -6734,3 +6734,25 @@ npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.np
     at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
     at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
     at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-02-01T17:16:20.785Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-02-01T17:16:20.789Z [DEBUG] AutoUpdater: Using local update method
+2026-02-01T17:16:22.241Z [ERROR] Error: Error: Failed to install Claude CLI package: npm error code ENOENT
+npm error syscall mkdir
+npm error path /Users/kiranbiliyawala/.claude/local/node_modules/@img/sharp-darwin-x64
+npm error errno -2
+npm error enoent ENOENT: no such file or directory, mkdir '/Users/kiranbiliyawala/.claude/local/node_modules/@img/sharp-darwin-x64'
+npm error enoent This is related to npm not being able to find a file.
+npm error enoent
+npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.npm/_logs/2026-02-01T17_16_21_305Z-debug-0.log
+    at vFA (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:3251:684)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async Object.current (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:5202:13399)
+2026-02-01T17:16:27.445Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-02-01T17:16:27.447Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 1 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245

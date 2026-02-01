@@ -4,19 +4,19 @@
     "github@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/d49ad3558669",
-        "version": "d49ad3558669",
+        "installPath": "/Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/github/27d2b86d72da",
+        "version": "27d2b86d72da",
         "installedAt": "2025-12-31T07:13:37.901Z",
-        "lastUpdated": "2026-01-29T10:53:49.202Z"
+        "lastUpdated": "2026-02-01T17:07:37.806Z"
       }
     ],
     "pr-review-toolkit@claude-plugins-official": [
       {
         "scope": "user",
-        "installPath": "/Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/d49ad3558669",
-        "version": "d49ad3558669",
+        "installPath": "/Users/kiranbiliyawala/.claude/plugins/cache/claude-plugins-official/pr-review-toolkit/27d2b86d72da",
+        "version": "27d2b86d72da",
         "installedAt": "2025-12-31T07:14:28.562Z",
-        "lastUpdated": "2026-01-29T10:53:49.212Z"
+        "lastUpdated": "2026-02-01T17:07:37.815Z"
       }
     ],
     "canvas@claude-canvas": [

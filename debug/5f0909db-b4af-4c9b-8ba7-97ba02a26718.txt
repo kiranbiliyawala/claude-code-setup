@@ -2644,3 +2644,12 @@ npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.np
 2026-02-01T16:46:21.295Z [DEBUG] Applied original permissions to temp file
 2026-02-01T16:46:21.295Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.3851.1769964381294 to /Users/kiranbiliyawala/.claude.json
 2026-02-01T16:46:21.295Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T17:16:20.573Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-02-01T17:16:20.574Z [DEBUG] AutoUpdater: Using local update method
+2026-02-01T17:16:22.525Z [ERROR] Failed to save config with lock: Error: Lock file is already being held
+2026-02-01T17:16:22.537Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.3851.1769966182537
+2026-02-01T17:16:22.537Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T17:16:22.537Z [DEBUG] Temp file written successfully, size: 44252 bytes
+2026-02-01T17:16:22.537Z [DEBUG] Applied original permissions to temp file
+2026-02-01T17:16:22.537Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.3851.1769966182537 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T17:16:22.537Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically

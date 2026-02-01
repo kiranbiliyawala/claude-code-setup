@@ -54,19 +54,6 @@
       "isSidechain": false
     },
     {
-      "sessionId": "378db8ac-e1fa-456a-8c0b-a0eec4e87ff0",
-      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/378db8ac-e1fa-456a-8c0b-a0eec4e87ff0.jsonl",
-      "fileMtime": 1769519131882,
-      "firstPrompt": "install firecrawl mcp",
-      "summary": "Firecrawl MCP Server Installation and Configuration",
-      "messageCount": 8,
-      "created": "2026-01-27T13:01:38.884Z",
-      "modified": "2026-01-27T13:03:16.503Z",
-      "gitBranch": "",
-      "projectPath": "/Users/kiranbiliyawala",
-      "isSidechain": false
-    },
-    {
       "sessionId": "5697f777-fa35-4412-a627-cd12d4360d40",
       "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/5697f777-fa35-4412-a627-cd12d4360d40.jsonl",
       "fileMtime": 1769522538342,
@@ -88,6 +75,32 @@
       "messageCount": 4,
       "created": "2026-01-27T14:02:16.901Z",
       "modified": "2026-01-27T14:04:05.198Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "378db8ac-e1fa-456a-8c0b-a0eec4e87ff0",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/378db8ac-e1fa-456a-8c0b-a0eec4e87ff0.jsonl",
+      "fileMtime": 1769686220323,
+      "firstPrompt": "install firecrawl mcp",
+      "summary": "Firecrawl MCP Server Installation and Configuration",
+      "messageCount": 8,
+      "created": "2026-01-27T13:01:38.884Z",
+      "modified": "2026-01-27T13:03:16.503Z",
+      "gitBranch": "",
+      "projectPath": "/Users/kiranbiliyawala",
+      "isSidechain": false
+    },
+    {
+      "sessionId": "8f4e6278-ad04-4988-95c2-500c808a15d8",
+      "fullPath": "/Users/kiranbiliyawala/.claude/projects/-Users-kiranbiliyawala/8f4e6278-ad04-4988-95c2-500c808a15d8.jsonl",
+      "fileMtime": 1769965952076,
+      "firstPrompt": "test",
+      "summary": "Claude Code CLI Introduction Test",
+      "messageCount": 1,
+      "created": "2026-01-29T11:16:10.263Z",
+      "modified": "2026-01-29T11:16:10.263Z",
       "gitBranch": "",
       "projectPath": "/Users/kiranbiliyawala",
       "isSidechain": false

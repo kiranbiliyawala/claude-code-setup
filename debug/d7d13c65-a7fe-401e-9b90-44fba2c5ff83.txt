@@ -7894,3 +7894,20 @@ npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.np
     at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
     at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
     at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245
+2026-02-01T17:16:20.115Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-02-01T17:16:20.116Z [DEBUG] AutoUpdater: Using local update method
+2026-02-01T17:16:21.316Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.89445.1769966181316
+2026-02-01T17:16:21.316Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T17:16:21.316Z [DEBUG] Temp file written successfully, size: 44252 bytes
+2026-02-01T17:16:21.317Z [DEBUG] Applied original permissions to temp file
+2026-02-01T17:16:21.317Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.89445.1769966181316 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T17:16:21.317Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T17:16:26.583Z [ERROR] Error: Error: 1P event logging: 1 events failed to export
+    at F10.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:2038)
+    at async F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1195)
+2026-02-01T17:16:26.584Z [ERROR] Error: Error: {"stack":"Error: Failed to export 1 events\n    at F10.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:670:1297)","message":"Failed to export 1 events","name":"Error"}
+    at Hz0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:2307:34862)
+    at _e1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:8377)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39402
+    at nu3 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:664:39948)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:665:20245

@@ -20451,3 +20451,24 @@ npm error A complete log of this run can be found in: /Users/kiranbiliyawala/.np
 2026-02-01T16:46:50.916Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (5.4ms)
 2026-02-01T16:50:22.171Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (15.4ms)
 2026-02-01T16:55:01.445Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (5.6ms)
+2026-02-01T17:16:20.813Z [DEBUG] AutoUpdater: Detected installation type: npm-local
+2026-02-01T17:16:20.814Z [DEBUG] AutoUpdater: Using local update method
+2026-02-01T17:16:22.612Z [DEBUG] Writing to temp file: /Users/kiranbiliyawala/.claude.json.tmp.6353.1769966182612
+2026-02-01T17:16:22.612Z [DEBUG] Preserving file permissions: 100644
+2026-02-01T17:16:22.624Z [DEBUG] [SLOW OPERATION DETECTED] fs.writeFileSync (11.2ms)
+2026-02-01T17:16:22.624Z [DEBUG] Temp file written successfully, size: 44252 bytes
+2026-02-01T17:16:22.624Z [DEBUG] Applied original permissions to temp file
+2026-02-01T17:16:22.624Z [DEBUG] Renaming /Users/kiranbiliyawala/.claude.json.tmp.6353.1769966182612 to /Users/kiranbiliyawala/.claude.json
+2026-02-01T17:16:22.625Z [DEBUG] File /Users/kiranbiliyawala/.claude.json written atomically
+2026-02-01T17:16:22.636Z [DEBUG] [SLOW OPERATION DETECTED] fs.readFileSync (7.5ms)
+2026-02-01T17:16:27.813Z [ERROR] Error: Error: 1P event logging: 2 events failed to export
+    at yp1.queueFailedEvents (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:39698)
+    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38794)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+2026-02-01T17:16:27.815Z [ERROR] Error: Error: {"stack":"Error: Failed to export 2 events\n    at yp1.doExport (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:38885)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)","message":"Failed to export 2 events","name":"Error"}
+    at rK0.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:1683:34862)
+    at sm1.error (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:33126)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64151
+    at ty8 (file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:239:64697)
+    at file:///Users/kiranbiliyawala/.claude/local/node_modules/@anthropic-ai/claude-code/cli.js:240:20245
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
